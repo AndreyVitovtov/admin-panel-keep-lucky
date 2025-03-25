@@ -32,12 +32,10 @@ class Route {
 	}
 
 	public static function handle(array $route) {
-		// Запускаем middleware
 		foreach ($route['middlewares'] as $middleware) {
 			(new $middleware())->handle();
 		}
 
-		// Запускаем контроллер
 		if (is_array($route['handler'])) {
 			[$class, $method] = $route['handler'];
 			return (new $class())->$method();
