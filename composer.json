@@ -12,10 +12,14 @@
     "psr-4": {
       "App\\Controllers\\": "app/controllers/",
       "App\\Models\\": "app/models/",
-      "App\\Core\\": "app/core/"
+      "App\\Core\\": "app/core/",
+      "App\\Utility\\": "app/utility/",
+      "App\\Routes\\": "app/routes/",
+      "App\\Middlewares\\": "app/middlewares/"
     },
     "files": [
       "app/core/config.php",
+      "app/core/routes.php",
       "app/core/functions.php"
     ]
   },
@@ -23,7 +27,7 @@
     "ext-json": "*",
     "ext-curl": "*",
     "ext-pdo": "*",
-    "php": "^7.3",
+    "php": "^8.2",
     "ext-mbstring": "*",
     "ext-openssl": "*"
   }

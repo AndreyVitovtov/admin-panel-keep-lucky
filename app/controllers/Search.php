@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use app\utility\Request;
+use App\Utility\Request;
 
 class Search extends Controller
 {

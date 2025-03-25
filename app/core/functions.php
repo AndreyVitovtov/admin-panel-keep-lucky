@@ -1,5 +1,7 @@
 <?php
 
+use App\Routes\Route;
+
 sessionStart();
 
 date_default_timezone_set(TIMEZONE);
@@ -84,6 +86,13 @@ function getControllerAndMethod(): array
 function handleRoute()
 {
 	isDev();
+
+	$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+	$requestMethod = $_SERVER['REQUEST_METHOD'];
+
+	if ($route = Route::match($requestUri, $requestMethod)) {
+		return Route::handle($route);
+	}
 
 	extract(getControllerAndMethod());
 

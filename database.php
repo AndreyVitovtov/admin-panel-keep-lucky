@@ -1,6 +1,6 @@
 <?php
 
-use App\Core\Database;
+use App\Utility\Database;
 
 require_once 'vendor/autoload.php';
 
