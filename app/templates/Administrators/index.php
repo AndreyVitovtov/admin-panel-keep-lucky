@@ -1,5 +1,3 @@
-<a href="/administrators/add" class="btn">Add</a>
-
 <table class="table table-bordered table-striped table-hover mt-3 rounded">
     <thead>
     <tr>

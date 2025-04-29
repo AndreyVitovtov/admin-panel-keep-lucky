@@ -12,34 +12,30 @@ $menu = [
 		'address' => '/users',
 		'controller' => 'Users'
 	], [
-		'title' => __('mailing'),
-		'icon' => 'mail',
-		'controller' => 'Mailing',
-        'forbid' => ['guest'],
-		'items' => [
-			[
-				'title' => __('add'),
-				'address' => '/mailing/add',
-				'method' => 'add'
-			], [
-				'title' => __('archive'),
-				'address' => '/mailing/archive',
-				'method' => 'archive'
-			]
-		]
+		'title' => __('traffic'),
+		'icon' => 'traffic-cone',
+		'address' => '/traffic',
+		'controller' => 'Traffic'
 	], [
 		'title' => __('administrators'),
 		'icon' => 'star',
-		'address' => '/administrators',
 		'controller' => 'Administrators',
-		'assets' => ['superadmin']
-	], [
-		'title' => __('settings'),
-		'icon' => 'cogs',
-		'address' => '/settings',
-		'controller' => 'Settings',
-		'assets' => [],
-		'forbid' => ['guest']
+		'assets' => ['superadmin'],
+		'items' => [
+			[
+				'title' => __('add'),
+				'address' => '/administrators/add',
+				'method' => 'add'
+			], [
+				'title' => __('all'),
+				'address' => '/administrators',
+				'method' => 'index'
+			], [
+				'title' => __('access'),
+				'address' => '/administrators/access',
+				'method' => 'access'
+			]
+		]
 	]
 ];
 ?>

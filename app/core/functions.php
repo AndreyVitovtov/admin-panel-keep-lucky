@@ -6,6 +6,8 @@ sessionStart();
 
 date_default_timezone_set(TIMEZONE);
 
+setDefaultApplication();
+
 function isDev(): void
 {
 	if (DEV) {
@@ -106,7 +108,7 @@ function handleRoute()
 	$controllerInstance = new $controllerClass();
 	if (method_exists($controllerInstance, $method)) {
 		$params[] = (new \App\Utility\Request());
-		$params = array_filter($params, function($v) {
+		$params = array_filter($params, function ($v) {
 			return !empty($v);
 		});
 		$controllerInstance->$method(...$params);
@@ -255,6 +257,8 @@ function checkAccess($access = [], $forbid = []): bool
 
 function menuItem($title, $icon, $address, $controller, $access = [], $forbid = []): string
 {
+	$accesses = getAccesses();
+	if (isAuth() && $_SESSION['role'] !== 'superadmin' && !in_array('index', $accesses[$controller] ?? [])) return '';
 	if (!checkAccess($access, $forbid)) return '';
 	return '<a href="' . $address . '">
         <div class="menu-item ' . menuIsActive($controller) . '">
@@ -267,11 +271,14 @@ function menuRoll($title, $icon, $controller, $items = [], $access = [], $forbid
 {
 	if (!checkAccess($access, $forbid)) return '';
 	$menuItems = '';
+	$accesses = getAccesses();
 	foreach ($items as $item) {
+		if (isAuth() && $_SESSION['role'] !== 'superadmin' && !in_array($item['method'], $accesses[$controller] ?? [])) continue;
 		$menuItems .= '<a href="' . $item['address'] . '" class="' . menuIsActive($controller, $item['method']) . '">
                 <div>' . $item['title'] . '</div>
             </a>';
 	}
+	if(empty($menuItems)) return '';
 	return '<div class="menu-item">
         <div class="flex-between">
             <span><i class="icon-' . $icon . '"></i> ' . $title . '</span>
@@ -300,4 +307,39 @@ function decryptData($data, $key)
 	$iv = substr($data, 0, $iv_length);
 	$data = substr($data, $iv_length);
 	return openssl_decrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+}
+
+function setDefaultApplication(): void
+{
+	$applications = getApplicationsByAccess();
+	if (empty($_SESSION['application']) && !empty($applications)) {
+		$_SESSION['application'] = $applications[0];
+	}
+}
+
+function getApplicationsByAccess(): array
+{
+	return (new \App\Models\Access())->query("
+		SELECT app.*
+		FROM `accesses` acc,
+		     `applications` app
+		WHERE acc.`application_id` = app.`id`
+		AND acc.`admin_id` = :adminId
+		GROUP BY app.`id`
+		ORDER BY app.`id`
+	", [
+		'adminId' => $_SESSION['id'] ?? 0
+	], true);
+}
+
+function getAccesses(): array
+{
+	$accesses = [];
+	foreach ((new \App\Models\Access())->get([
+		'application_id' => $_SESSION['application']['id'] ?? 0,
+		'admin_id' => $_SESSION['id'] ?? 0
+	]) as $access) {
+		$accesses[$access['controller']][] = $access['method'];
+	}
+	return $accesses;
 }

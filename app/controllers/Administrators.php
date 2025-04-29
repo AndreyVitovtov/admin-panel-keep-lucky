@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Models\Access;
 use App\Models\AdminModel;
 use App\Models\Model;
 use App\Models\Role;
+use App\Routes\Route;
 use App\Utility\Request;
 
 class Administrators extends Controller
@@ -18,7 +20,8 @@ class Administrators extends Controller
 				'save',
 				'delete',
 				'edit',
-				'update'
+				'update',
+				'access'
 			]
 		];
 	}
@@ -150,5 +153,75 @@ class Administrators extends Controller
 				'error' => __('send all required parameters')
 			]);
 		}
+	}
+
+	public function access(Request $request): void
+	{
+		$request = $request->get();
+		extract(getSessionParams(false));
+
+		if (!empty($request) || !empty($adminId) && !empty($applicationId)) {
+			$access = (new Access())->get([
+				'admin_id' => $request['admin'] ?? $adminId,
+				'application_id' => $request['application'] ?? $applicationId
+			]);
+			$accesses = [];
+			foreach ($access as $a) {
+				$accesses[$a['controller']][] = $a['method'];
+			}
+		}
+
+		$admins = (new AdminModel())->query("
+			SELECT a.`id`, a.`name`, a.`login`, r.`title`
+			FROM `admins` a,
+			     `roles` r
+			WHERE a.`role` = r.`id`
+		", [], true);
+
+		$applications = (new \App\Models\Application())->get();
+
+		$this->auth()->view('access', [
+			'title' => __('access'),
+			'pageTitle' => __('access'),
+			'admins' => $admins,
+			'assets' => [
+				'js' => 'access.js'
+			],
+			'adminId' => $adminId ?? $request['admin'] ?? null,
+			'applicationId' => $applicationId ?? $request['application'] ?? null,
+			'routes' => Route::getRoutes(),
+			'applications' => $applications,
+			'accesses' => $accesses ?? []
+		], false);
+	}
+
+	public function saveAccess(Request $request): void
+	{
+		$request = $request->get();
+
+		(new Access())->query("
+			DELETE FROM `accesses`
+			WHERE `admin_id` = :adminId 
+			  AND `application_id` = :applicationId
+		", [
+			'adminId' => $request['adminId'],
+			'applicationId' => $request['applicationId']
+		]);
+
+		foreach ($request['accesses'] as $item) {
+			$access = new Access();
+			$access->admin_id = $request['adminId'];
+			$access->application_id = $request['applicationId'];
+			$access->controller = $item['controller'];
+			$access->method = $item['method'];
+			$access->available = 1;
+			$access->insert();
+		}
+
+		redirect('/administrators/access', [
+			'adminId' => $request['adminId'],
+			'applicationId' => $request['applicationId'],
+			'message' => __('changes saved')
+		]);
 	}
 }

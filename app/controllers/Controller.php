@@ -23,7 +23,7 @@ class Controller
 	protected $access = [];
 	protected $forbid = [];
 
-	protected function view($template, $params = []): Controller
+	protected function view($template, $params = [], $clearSessionParams = true): Controller
 	{
 		if (!empty($this->auth) || !empty($this->access) || !empty($this->forbid)) {
 			$trace = debug_backtrace();
@@ -44,7 +44,7 @@ class Controller
 		$params['template'] = strtolower(array_reverse(preg_split('/[\/\\\\]/', get_called_class()))[0]) . '/' .
 			$template;
 		$params['theme'] = theme();
-		extract(getSessionParams());
+		extract(getSessionParams($clearSessionParams));
 		extract($params);
 		$template = ucfirst($template);
 		require_once 'app/templates/main.php';

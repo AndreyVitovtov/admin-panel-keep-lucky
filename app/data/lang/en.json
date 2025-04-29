@@ -39,6 +39,17 @@
   "are you sure you want to remove the administrator": "Are you sure you want to remove the administrator?",
   "deletion confirmation": "Deletion confirmation",
   "administrator deleted": "Administrator deleted",
-  "changes saved": "Changes saved"
+  "changes saved": "Changes saved",
+
+  "all": "All",
+  "access": "Access",
+  "ok": "Ok",
+  "select admin": "Select admin",
+  "select application": "Select application",
+  "controller": "Controller",
+  "method": "Method",
+  "available": "Available",
+  "no application": "No application",
+  "traffic": "Traffic"
 
 }

@@ -364,3 +364,7 @@ a.menu-item, div.menu-item, .menu-roll a div {
     width: 100%;
     text-align: center;
 }
+
+.dropdown-applications {
+    margin-right: 15px;
+}

@@ -23,8 +23,9 @@ class Model
 		return $this->properties[$name] ?? null;
 	}
 
-	public function __construct()
+	public function __construct($properties = [])
 	{
+		if (!empty($properties)) $this->properties = $properties;
 		$this->db = Database::instance()->getDbh();
 		$this->className = basename(get_called_class());
 		if (empty($this->table)) {
@@ -49,7 +50,7 @@ class Model
 	public function get($where = [], $separator = 'AND', $order = 'id', $direction = 'ASC', $offset = 0, $limit = null)
 	{
 		$sqlWhere = implode(" " . $separator . " ", array_map(function ($n) {
-			return $n . " = :" . $n;
+			return "`" . $n . "` = :" . $n;
 		}, array_keys($where)));
 		$stmt = $this->db->prepare("SELECT * FROM " . $this->table .
 			(!empty($sqlWhere) ? " WHERE " . $sqlWhere : "") .
@@ -58,6 +59,23 @@ class Model
 		);
 		$stmt->execute($where);
 		return $stmt->fetchAll();
+	}
+
+	public function getObjects($where = [], $separator = 'AND', $order = 'id', $direction = 'ASC', $offset = 0, $limit = null): array
+	{
+		$res = $this->get($where, $separator, $order, $direction, $offset, $limit);
+		$objects = [];
+		foreach ($res as $item) {
+			$objects[] = new $this->className($item);
+		}
+		return $objects;
+	}
+
+	public function getOneObject($where = [], $separator = 'AND', $order = 'id', $direction = 'ASC', $offset = 0, $limit = null)
+	{
+		$data = $this->get($where, $separator, $order, $direction, $offset, $limit);
+		if (empty($data[0])) return null;
+		return new $this->className($data[0]);
 	}
 
 	public function getOne($where = [], $separator = 'AND', $order = 'id', $direction = 'ASC', $offset = 0, $limit = null)
@@ -71,9 +89,9 @@ class Model
 		$stmt = $this->db->prepare("
 			UPDATE " . $this->table . " 
 				SET " . implode(", ", array_map(function ($n) {
-				return $n . " = :" . $n;
+				return "`" . $n . "` = :" . $n;
 			}, $this->fields)) . "
-			WHERE id = :id
+			WHERE `id` = :id
 		");
 
 		$stmt->execute(array_filter($this->properties, function ($v) {
@@ -86,12 +104,14 @@ class Model
 	{
 		try {
 			$stmt = $this->db->prepare("
-				INSERT INTO " . $this->table . " (" . implode(", ", $this->fields) . ") 
-					VALUES 
+				INSERT INTO " . $this->table . " (" . implode(", ", array_map(function ($v) {
+					return "`" . $v . "`";
+				}, array_keys($this->properties))) . ") 
+				VALUES 
 					(" . implode(", ",
 					array_map(function ($v) {
 						return ":" . $v;
-					}, $this->fields)) . ")");
+					}, array_keys($this->properties))) . ")");
 
 			$stmt->execute(array_filter($this->properties, function ($v) {
 				return $v != 'id';
