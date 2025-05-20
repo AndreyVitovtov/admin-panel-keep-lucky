@@ -1,11 +1,14 @@
 <?php
 
+use App\Models\AdminModel;
+use App\Models\Role;
 use App\Routes\Route;
 
 sessionStart();
 
 date_default_timezone_set(TIMEZONE);
 
+restoreSession();
 setDefaultApplication();
 
 function isDev(): void
@@ -278,7 +281,7 @@ function menuRoll($title, $icon, $controller, $items = [], $access = [], $forbid
                 <div>' . $item['title'] . '</div>
             </a>';
 	}
-	if(empty($menuItems)) return '';
+	if (empty($menuItems)) return '';
 	return '<div class="menu-item">
         <div class="flex-between">
             <span><i class="icon-' . $icon . '"></i> ' . $title . '</span>
@@ -342,4 +345,58 @@ function getAccesses(): array
 		$accesses[$access['controller']][] = $access['method'];
 	}
 	return $accesses;
+}
+
+function pagination(int $total, int $perPage, $page): string
+{
+	$pages = ceil($total / $perPage);
+	$current = isset($page) ? (int)$page : 1;
+	$current = max(1, min($current, $pages));
+
+	if ($pages <= 1) return '';
+
+	$html = '';
+
+	if ($current > 1) {
+		$html .= '<a href="?page=' . ($current - 1) . '"><i class="icon-left-open-mini"></i></a>';
+	}
+
+	for ($i = 1; $i <= $pages; $i++) {
+		if (
+			$i == 1 || $i == $pages ||
+			($i >= $current - 2 && $i <= $current + 2)
+		) {
+			if ($i == $current) {
+				$html .= '<span class="active">' . $i . '</span>';
+			} else {
+				$html .= '<a href="?page=' . $i . '">' . $i . '</a>';
+			}
+		} elseif (
+			$i == 2 && $current > 4 ||
+			$i == $pages - 1 && $current < $pages - 3
+		) {
+			$html .= '<span class="dots">...</span>';
+		}
+	}
+
+	if ($current < $pages) {
+		$html .= '<a href="?page=' . ($current + 1) . '"><i class="icon-right-open-mini"></i></a>';
+	}
+
+	return $html;
+}
+
+function restoreSession(): void
+{
+	if (!isAuth() && isset($_COOKIE['rememberid'])) {
+		$admin = new AdminModel();
+		$adminId = decryptData($_COOKIE['rememberid'], CIPHER);
+
+		$admin->find($adminId);
+		$_SESSION['id'] = $admin->id;
+		$_SESSION['login'] = $admin->login;
+		$_SESSION['name'] = $admin->name;
+		$_SESSION['role'] = (new Role)->find($admin->role)->title;
+		$_SESSION['avatar'] = $admin->avatar;
+	}
 }

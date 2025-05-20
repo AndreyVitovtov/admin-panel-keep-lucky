@@ -21,12 +21,13 @@ class Administrators extends Controller
 				'delete',
 				'edit',
 				'update',
-				'access'
+				'access',
+				'saveAccess'
 			]
 		];
 	}
 
-	public function index()
+	public function index(): void
 	{
 		$this->auth()->view('index', [
 			'title' => __('administrators'),
@@ -40,16 +41,19 @@ class Administrators extends Controller
 		]);
 	}
 
-	public function add()
+	public function add(): void
 	{
 		$this->auth()->view('add', [
 			'title' => __('add administrator'),
 			'pageTitle' => __('add administrator'),
-			'roles' => (new Role)->get([], '', 'title')
+			'roles' => (new Role)->get([], '', 'title'),
+			'assets' => [
+				'js' => 'administrators.js'
+			]
 		]);
 	}
 
-	public function save(Request $request)
+	public function save(Request $request): void
 	{
 		$this->auth();
 		if (!is_null($request->name) && !is_null($request->login) && !is_null($request->password) &&
@@ -61,6 +65,7 @@ class Administrators extends Controller
 					'login' => $request->login
 				]);
 			} else {
+				$referralCode = trim($request->referralCode);
 				$admin = new AdminModel();
 				if (!empty($admin->get([
 					'login' => $request->login
@@ -71,11 +76,12 @@ class Administrators extends Controller
 						'login' => $request->login
 					]);
 				} else {
-					$admin->name = $request->name;
-					$admin->login = $request->login;
-					$admin->password = md5($request->password);
-					$admin->role = $request->role;
+					$admin->name = trim($request->name);
+					$admin->login = trim($request->login);
+					$admin->password = md5(trim($request->password));
+					$admin->role = trim($request->role);
 					$admin->avatar = '';
+					$admin->referral_code = $referralCode ?? '';
 					$admin->insert();
 					redirect('/administrators', [
 						'message' => __('administrator added')
@@ -89,7 +95,7 @@ class Administrators extends Controller
 		}
 	}
 
-	public function delete()
+	public function delete(): void
 	{
 		$this->auth();
 		$id = Request::get('id');
@@ -102,7 +108,7 @@ class Administrators extends Controller
 		]);
 	}
 
-	public function edit($id)
+	public function edit($id): void
 	{
 		$admin = new AdminModel();
 		$admin = $admin->find($id)->toArray(['password']);
@@ -112,12 +118,15 @@ class Administrators extends Controller
 			$role = new Role();
 			$this->auth()->view('edit', array_merge([
 				'title' => __('edit administrator'),
-				'pageTitle' => __('edit administrator')
+				'pageTitle' => __('edit administrator'),
+				'assets' => [
+					'js' => 'administrators.js'
+				]
 			], $admin, ['roles' => $role->get([], '', 'title')]));
 		}
 	}
 
-	public function update($id, Request $request)
+	public function update($id, Request $request): void
 	{
 		$this->auth();
 
@@ -141,9 +150,11 @@ class Administrators extends Controller
 					}
 				}
 			}
-			$admin->name = $request->name;
-			$admin->login = $request->login;
-			$admin->role = $request->role;
+			$referralCode = trim($request->referralCode);
+			$admin->name = trim($request->name);
+			$admin->login = trim($request->login);
+			$admin->role = trim($request->role);
+			$admin->referral_code = $referralCode ?? '';
 			$admin->update();
 			redirect('/administrators', [
 				'message' => __('changes saved')

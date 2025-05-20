@@ -2,14 +2,17 @@
 
 namespace App\Controllers;
 
+use App\API\API;
 use App\Routes\Route;
 
 class Test extends Controller
 {
+	/**
+	 * @throws \Exception
+	 */
 	public function index()
 	{
-		echo json_encode([
-			''
-		]);
+		$api = new API();
+		echo json_encode($api->getTrafficStats());
 	}
 }

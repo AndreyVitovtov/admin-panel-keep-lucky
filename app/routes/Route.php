@@ -2,6 +2,8 @@
 
 namespace App\Routes;
 
+use App\Utility\Request;
+
 class Route
 {
 	private static array $routes = [];
@@ -29,7 +31,12 @@ class Route
 	public static function match(string $requestUri, string $requestMethod): ?array
 	{
 		foreach (self::$routes as $route) {
-			if ($route['path'] === $requestUri && $route['method'] === strtoupper($requestMethod)) {
+			$pattern = preg_replace('#\{[\w]+\}#', '([\w\-]+)', $route['path']);
+			$pattern = "#^" . $pattern . "$#";
+
+			if (preg_match($pattern, $requestUri, $matches) && $route['method'] === strtoupper($requestMethod)) {
+				array_shift($matches);
+				$route['params'] = $matches;
 				return $route;
 			}
 		}
@@ -48,9 +55,15 @@ class Route
 			(new $middleware())->handle();
 		}
 
+		$request = new Request();
+
 		if (is_array($route['handler'])) {
 			[$controller, $method] = $route['handler'];
-			return (new $controller())->$method();
+			$instance = new $controller();
+
+			return isset($route['params'])
+				? $instance->$method($request, ...$route['params'])
+				: $instance->$method($request);
 		}
 
 		return call_user_func($route['handler']);
@@ -66,6 +79,4 @@ class Route
 			];
 		}, self::$routes);
 	}
-
-
 }

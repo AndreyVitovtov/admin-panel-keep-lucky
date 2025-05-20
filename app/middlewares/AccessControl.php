@@ -8,7 +8,7 @@ use App\Models\Access;
 class AccessControl extends Middleware
 {
 
-	public function handle()
+	public function handle(): void
 	{
 		if (isAuth() && $_SESSION['role'] != 'superadmin') {
 			global $cName;
@@ -19,6 +19,7 @@ class AccessControl extends Middleware
 				'controller' => $cName,
 				'method' => $cMethod
 			]);
+
 			if (empty($access)) {
 				(new Errors())->error403();
 			}

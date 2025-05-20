@@ -12,17 +12,21 @@ CREATE TABLE `accesses`
 
 CREATE TABLE `applications`
 (
-    `id`      INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-    `title`   VARCHAR(255),
-    `url`     VARCHAR(255),
-    `token`   VARCHAR(255),
-    `added`   DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `updated` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    `id`       INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `title`    VARCHAR(255),
+    `url`      VARCHAR(255),
+    `username` VARCHAR(255),
+    `password` VARCHAR(255),
+    `added`    DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated`  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 ALTER TABLE `accesses`
     ADD COLUMN `application_id` INT UNSIGNED REFERENCES `applications` (`id`) ON UPDATE SET NULL ON DELETE SET NULL AFTER `admin_id`;
 
-INSERT INTO `applications` (`title`, `url`, `token`)
-VALUES ('Application 1', 'https://admin-panel.vytovtov.pro/test', 'test_token'),
-       ('Application 2', 'https://admin-panel.vytovtov.pro/test', 'test_token');
+INSERT INTO `applications` (`title`, `url`, `username`, `password`)
+VALUES ('Application 1', 'https://ipayday.stealthxrproject.com', 'test', 'test'),
+       ('Application 2', 'https://ipayday.stealthxrproject.com', 'test', 'test');
+
+ALTER TABLE `admins` ADD COLUMN `referral_code` VARCHAR(255) AFTER `avatar`;
+

@@ -1,3 +1,9 @@
+<script>
+    window.texts = {
+        "referralCode": "<?= __('referral code') ?>"
+    };
+</script>
+
 <form action="/administrators/save" method="POST">
     <div class="mb-3">
         <label for="name" class="form-label">*<?= __('name') ?>:</label>

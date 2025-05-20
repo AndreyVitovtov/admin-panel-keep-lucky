@@ -9,14 +9,41 @@ $menu = [
 	], [
 		'title' => __('users'),
 		'icon' => 'group',
-		'address' => '/users',
-		'controller' => 'Users'
+		'controller' => 'Users',
+		'items' => [
+			[
+				'title' => __('all'),
+				'address' => '/users/all',
+				'method' => 'all'
+			], [
+				'title' => __('search by login'),
+				'address' => '/users/searchByLogin',
+				'method' => 'searchByLogin'
+			], [
+				'title' => __('search by referral code'),
+				'address' => '/users/searchByRefCode',
+				'method' => 'searchByRefCode'
+			]
+		]
 	], [
 		'title' => __('traffic'),
 		'icon' => 'traffic-cone',
 		'address' => '/traffic',
 		'controller' => 'Traffic'
-	], [
+	],
+//    [
+//		'title' => __('traffic'),
+//		'icon' => 'traffic-cone',
+//		'controller' => 'Traffic',
+//		'items' => [
+//			[
+//				'title' => __('stats'),
+//				'address' => '/traffic/stats',
+//				'method' => 'stats'
+//			]
+//		]
+//	],
+	[
 		'title' => __('administrators'),
 		'icon' => 'star',
 		'controller' => 'Administrators',

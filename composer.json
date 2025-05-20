@@ -15,11 +15,12 @@
       "App\\Core\\": "app/core/",
       "App\\Utility\\": "app/utility/",
       "App\\Routes\\": "app/routes/",
-      "App\\Middlewares\\": "app/middlewares/"
+      "App\\Middlewares\\": "app/middlewares/",
+      "App\\API\\": "app/api/"
     },
     "files": [
       "app/core/config.php",
-      "app/core/routes.php",
+      "app/routes/routes.php",
       "app/core/functions.php"
     ]
   },

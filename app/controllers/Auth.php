@@ -8,7 +8,7 @@ use App\Utility\Request;
 
 class Auth extends Controller
 {
-	public function index()
+	public function index(): void
 	{
 		$this->notAuth();
 
@@ -21,6 +21,7 @@ class Auth extends Controller
 			$_SESSION['login'] = $admin->login;
 			$_SESSION['name'] = $admin->name;
 			$_SESSION['role'] = (new Role)->find($admin->role)->title;
+			$_SESSION['refCode'] = $admin->referral_code;
 			$_SESSION['avatar'] = $admin->avatar;
 			redirect('/');
 		}
@@ -55,6 +56,7 @@ class Auth extends Controller
 			$_SESSION['login'] = $adminData['login'];
 			$_SESSION['name'] = $adminData['name'];
 			$_SESSION['role'] = (new Role)->find($adminData['role'])->title;
+			$_SESSION['refCode'] = $adminData['referral_code'];
 			$_SESSION['avatar'] = $adminData['avatar'];
 			redirect('/');
 		}
