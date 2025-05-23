@@ -23,6 +23,14 @@ class API
 	/**
 	 * @throws Exception
 	 */
+	public function getUser($id): array
+	{
+		return $this->get('admin/users', $id);
+	}
+
+	/**
+	 * @throws Exception
+	 */
 	public function getUsersStats(string $country = '', string $referral_code = '', string $dateFilter = ''): array
 	{
 		if (!empty($dateFilter)) {

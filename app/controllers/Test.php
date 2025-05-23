@@ -13,6 +13,6 @@ class Test extends Controller
 	public function index()
 	{
 		$api = new API();
-		echo json_encode($api->getTrafficStats());
+		echo json_encode($api->getUser(2));
 	}
 }

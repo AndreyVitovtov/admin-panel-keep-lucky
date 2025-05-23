@@ -59,32 +59,32 @@
     <tr>
         <th><?= __('referral code') ?></th>
         <td>
-            <a href="/users/searchByRefCode/<?= $user['referral_code'] ?? 0 ?>"><?= $user['referral_code'] ?? 0 ?></a>
+            <a href="/users/searchByRefCode/<?= $userStats['referral_code'] ?? 0 ?>"><?= $userStats['referral_code'] ?? 0 ?></a>
         </td>
     </tr>
     <tr>
         <th><?= __('srxt balance') ?></th>
-        <td><?= $user['srxt_balance'] ?? 0 ?></td>
+        <td><?= $userStats['srxt_balance'] ?? 0 ?></td>
     </tr>
     <tr>
         <th><?= __('balance') ?></th>
-        <td><?= $user['balance'] ?? 0 ?></td>
+        <td><?= $userStats['balance'] ?? 0 ?></td>
     </tr>
     <tr>
         <th><?= __('country') ?></th>
-        <td><?= $user['country'] ?? '-' ?></td>
+        <td><?= (empty($userStats['country']) ? '-' : $userStats['country']) ?></td>
     </tr>
     <tr>
         <th><?= __('city') ?></th>
-        <td><?= $user['city'] ?? '-' ?></td>
+        <td><?= (empty($userStats['city']) ? '-' : $userStats['city']) ?></td>
     </tr>
     <tr>
         <th><?= __('price for one gb') ?></th>
-        <td><?= $user['price_for_one_gb'] ?? 0 ?></td>
+        <td><?= $userStats['price_for_one_gb'] ?? 0 ?></td>
     </tr>
     <tr>
         <th><?= __('traffic sold') ?></th>
-        <td><?= $user['traffic_sold'] ?? 0 ?></td>
+        <td><?= $userStats['traffic_sold'] ?? 0 ?></td>
     </tr>
     <tr>
         <th><?= __('is block') ?></th>
@@ -123,7 +123,7 @@
     </div>
 </form>
 
-<?php if (!empty($user['transactions'])): ?>
+<?php if (!empty($userStats['transactions'])): ?>
     <h4><?= __('transactions') ?></h4>
     <table class="table table-striped table-responsive table-hover mb-5">
         <thead>
@@ -138,7 +138,7 @@
         </tr>
         </thead>
         <tbody>
-		<?php foreach ($user['transactions'] ?? [] as $transaction): ?>
+		<?php foreach ($userStats['transactions'] ?? [] as $transaction): ?>
             <tr>
                 <td><?= $transaction['id'] ?></td>
                 <td><?= $transaction['user_id'] ?></td>

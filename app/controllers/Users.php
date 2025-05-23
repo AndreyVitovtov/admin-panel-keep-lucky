@@ -132,10 +132,15 @@ class Users extends Controller
 		if ($data['status'] == 200) {
 			$user = $data['response'];
 		}
+		$data = $api->getUser(intval($id));
+		if ($data['status'] == 200) {
+			$userInfo = $data['response'];
+		}
 		$this->view('details', [
-			'title' => __('user'),
-			'pageTitle' => __('user'),
-			'user' => $user ?? [],
+			'title' => $userInfo['username'] ?? __('user'),
+			'pageTitle' => $userInfo['username'] ?? __('user'),
+			'userStats' => $user ?? [],
+			'userInfo' => $userInfo['response'] ?? [],
 			'userId' => $id,
 			'assets' => [
 				'js' => 'userDetails.js'
