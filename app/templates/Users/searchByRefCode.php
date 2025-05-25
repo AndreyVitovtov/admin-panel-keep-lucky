@@ -4,7 +4,7 @@
     }
 </style>
 
-<form action="/users/searchByRefCode" method="POST">
+<form action="/users/searchByRefCode" method="GET">
     <div class="mb-3">
         <input type="checkbox" name="online" value="1" id="online" <?= (($online ?? '') ? 'checked' : '') ?> class="form-check-input">
         -

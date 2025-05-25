@@ -368,3 +368,8 @@ a.menu-item, div.menu-item, .menu-roll a div {
 .dropdown-applications {
     margin-right: 15px;
 }
+
+ul.application {
+    transform: translate(-15px, 42px)!important;
+    font-size: 15px;
+}

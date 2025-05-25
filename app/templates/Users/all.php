@@ -35,13 +35,26 @@
     }
 </style>
 
-<form method="POST" id="filter-form">
+<form method="GET" id="filter-form">
     <input type="hidden" name="page" value="<?= $page ?? 1 ?>">
     <div class="mb-3">
         <input type="checkbox" name="online" id="online" value="1"
                class="form-check-input" <?= $online ?? false ? 'checked' : '' ?>>
         -
         <label for="online" class="form-check-label"><?= __('online') ?></label>
+    </div>
+    <div class="mb-3">
+        <label for="country" class="form-label"><?= __('country') ?></label>
+        <select name="country" id="country" class="form-select">
+            <?php foreach ($country ?? [] as $country): ?>
+                <option value="<?= $country['id'] ?>" <?= ($countryId ?? 0) == $country['id'] ? 'selected' : '' ?>><?= $country['title'] ?></option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="city" class="form-label"><?= __('city') ?></label>
+        <select name="city" id="city" class="form-select">
+        </select>
     </div>
 </form>
 
@@ -52,24 +65,28 @@
         <th><?= __('username') ?></th>
         <th><?= __('email') ?></th>
         <th><?= __('referral code') ?></th>
+        <th><?= __('country') ?></th>
+        <th><?= __('city') ?></th>
         <th><?= __('is blocked') ?></th>
     </tr>
     </thead>
     <tbody>
-	<?php foreach ($users ?? [] as $user): ?>
+    <?php foreach ($users ?? [] as $user): ?>
         <tr data-id="<?= $user['id'] ?>">
             <td><?= $user['id'] ?></td>
             <td><?= $user['username'] ?></td>
             <td><?= $user['email'] ?></td>
             <td><?= $user['referral_code'] ?></td>
+            <td><?= (empty($user['country']) ? '-' : $user['country']) ?></td>
+            <td><?= (empty($user['city']) ? '-' : $user['city']) ?></td>
             <td><i class="icon-<?= ($user['is_blocked'] ? 'lock-1' : 'lock-open-1') ?>"></i></td>
         </tr>
-	<?php endforeach; ?>
+    <?php endforeach; ?>
     </tbody>
 </table>
 <?php
 if (($totalUsers ?? 0) > COUNT_PAGINATION) {
-	echo '<div class="pagination">' . pagination($totalUsers ?? 0, COUNT_PAGINATION, $page) . '</div>';
+    echo '<div class="pagination">' . pagination($totalUsers ?? 0, COUNT_PAGINATION, $page) . '</div>';
 }
 
 ?>

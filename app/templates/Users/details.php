@@ -59,7 +59,8 @@
     <tr>
         <th><?= __('referral code') ?></th>
         <td>
-            <a href="/users/searchByRefCode/<?= $userStats['referral_code'] ?? 0 ?>"><?= $userStats['referral_code'] ?? 0 ?></a>
+            <?= getRole() == 'admin3' ? $userStats['referral_code'] ?? '-' : '<a href="/users/searchByRefCode/' . ($userStats['referral_code'] ?? '-') .
+                '">' . ($userStats['referral_code'] ?? '-') . '</a>' ?>
         </td>
     </tr>
     <tr>
@@ -89,7 +90,8 @@
     <tr>
         <th><?= __('is block') ?></th>
         <td class="vertical-middle">
-            <div class="user-block unlock" data-id="<?= ($userId ?? 0) ?>">
+            <div class="user-block <?= (($userInfo['is_blocked'] ?? false) ? 'lock' : 'unlock') ?>"
+                 data-id="<?= ($userId ?? 0) ?>">
                 <div><i class="icon-lock-open-1"></i></div>
                 <div><i class="icon-lock-1"></i></div>
                 <div class="user-block-switcher"></div>
@@ -138,7 +140,7 @@
         </tr>
         </thead>
         <tbody>
-		<?php foreach ($userStats['transactions'] ?? [] as $transaction): ?>
+        <?php foreach ($userStats['transactions'] ?? [] as $transaction): ?>
             <tr>
                 <td><?= $transaction['id'] ?></td>
                 <td><?= $transaction['user_id'] ?></td>
@@ -148,7 +150,7 @@
                 <td><?= $transaction['currency_type'] ?></td>
                 <td><?= date('Y-m-d H:i:s', strtotime($transaction['created_at'])) ?></td>
             </tr>
-		<?php endforeach; ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
 <?php endif; ?>

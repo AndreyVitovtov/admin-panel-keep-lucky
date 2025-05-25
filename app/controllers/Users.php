@@ -31,7 +31,7 @@ class Users extends Controller
 		if ($responseUsers['status'] == 200) {
 			$users = $responseUsers['response'];
 		}
-		$usersStats = $api->getUsersStats();
+		$usersStats = $api->getUsersStats('', $refCode ?? '');
 		if ($usersStats['status'] == 200) {
 			$totalUsers = ($online ? $usersStats['response']['total_online_users'] : $usersStats['response']['total_users']);
 		}
@@ -45,7 +45,7 @@ class Users extends Controller
 				'js' => 'users.js'
 			],
 			'page' => $page,
-			'online' => $online,
+			'online' => $online
 		]);
 	}
 
@@ -140,7 +140,7 @@ class Users extends Controller
 			'title' => $userInfo['username'] ?? __('user'),
 			'pageTitle' => $userInfo['username'] ?? __('user'),
 			'userStats' => $user ?? [],
-			'userInfo' => $userInfo['response'] ?? [],
+			'userInfo' => $userInfo ?? [],
 			'userId' => $id,
 			'assets' => [
 				'js' => 'userDetails.js'

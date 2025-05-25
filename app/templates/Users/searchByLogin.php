@@ -4,7 +4,7 @@
     }
 </style>
 
-<form method="POST" class="mb-5">
+<form method="GET" class="mb-5">
     <div class="mb-3">
         <label for="login" class="form-label"><?= __('login') ?>:</label>
         <input type="text" name="login" value="<?= $login ?? '' ?>" class="form-control" id="login">

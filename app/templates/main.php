@@ -64,7 +64,7 @@
                              data-bs-toggle="dropdown">
 							<?= $_SESSION['application']['title'] ?? __('no application') ?>
                         </div>
-                        <ul class="dropdown-menu" aria-labelledby="application">
+                        <ul class="dropdown-menu application" aria-labelledby="application">
 							<?php foreach (getApplicationsByAccess() ?? [] as $application): ?>
                                 <li>
                                     <a class="dropdown-item"
