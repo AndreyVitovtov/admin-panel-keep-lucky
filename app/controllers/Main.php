@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\API\API;
+use Exception;
 
 class Main extends Controller
 {
@@ -14,7 +15,7 @@ class Main extends Controller
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function index(): void
 	{

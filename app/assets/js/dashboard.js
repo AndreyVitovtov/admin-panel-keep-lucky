@@ -60,4 +60,51 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         plugins: [ChartDataLabels]
     });
+
+    const ctx2 = document.getElementById('usersByLocation').getContext('2d');
+
+    const data = {
+        labels: ['США', 'Украина', 'Германия', 'Франция', 'Канада'],
+        datasets: [{
+            label: 'Пользователи по странам',
+            data: [120, 90, 75, 50, 30],
+            backgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#4BC0C0',
+                '#9966FF'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'pie',
+        data: data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            return `${label}: ${value}`;
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: window.texts.usersStats
+                }
+            }
+        }
+    };
+
+    new Chart(ctx2, config);
+
 });
