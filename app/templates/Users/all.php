@@ -43,19 +43,6 @@
         -
         <label for="online" class="form-check-label"><?= __('online') ?></label>
     </div>
-    <div class="mb-3">
-        <label for="country" class="form-label"><?= __('country') ?></label>
-        <select name="country" id="country" class="form-select">
-            <?php foreach ($country ?? [] as $country): ?>
-                <option value="<?= $country['id'] ?>" <?= ($countryId ?? 0) == $country['id'] ? 'selected' : '' ?>><?= $country['title'] ?></option>
-            <?php endforeach; ?>
-        </select>
-    </div>
-    <div class="mb-3">
-        <label for="city" class="form-label"><?= __('city') ?></label>
-        <select name="city" id="city" class="form-select">
-        </select>
-    </div>
 </form>
 
 <table class="table table-striped table-responsive table-hover">
