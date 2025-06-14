@@ -13,7 +13,7 @@ class Test extends Controller
 	public function index()
 	{
 		$api = new API();
-		echo json_encode($api->getUsersStats());
+		echo json_encode($api->filters());
 	}
 }
 //admin/users-stats - этот метод не плохо бы вернуть, так как уже работал в админке

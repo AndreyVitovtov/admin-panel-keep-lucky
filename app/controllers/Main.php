@@ -30,6 +30,13 @@ class Main extends Controller
 			$onlineUsers = $usersStats['response']['total_online_users'];
 		}
 
+		$filters = $api->filters();
+		if ($filters['status'] == 200) {
+			$usersByCountries = $filters['response']['country'];
+			$usersByRegions = $filters['response']['region'];
+			$usersByCities = $filters['response']['city'];
+		}
+
 		$this->view('dashboard', [
 			'title' => __('dashboard'),
 			'pageTitle' => __('dashboard'),
@@ -42,6 +49,9 @@ class Main extends Controller
 			],
 			'totalUsers' => $totalUsers ?? 0,
 			'onlineUsers' => $onlineUsers ?? 0,
+			'usersByCountries' => $usersByCountries ?? [],
+			'usersByRegions' => $usersByRegions ?? [],
+			'usersByCities' => $usersByCities ?? [],
 		]);
 	}
 }

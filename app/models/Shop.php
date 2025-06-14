@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-class Application extends Model
+class Shop extends Model
 {
-	protected $table = 'applications';
+	protected $table = 'shops';
 	protected $fields = [
 		'title', 'url', 'token'
 	];

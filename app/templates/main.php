@@ -1,4 +1,5 @@
-<?php use App\Utility\Request; ?>
+<?php use App\Models\Apk;
+use App\Utility\Request; ?>
 
 <!doctype html>
 <html lang="en">
@@ -62,13 +63,54 @@
                     <div class="dropdown dropdown-applications">
                         <div class="dropdown-toggle dropdown-admin flex-between" type="button" id="application"
                              data-bs-toggle="dropdown">
-							<?= $_SESSION['application']['title'] ?? __('no application') ?>
+							Shop
                         </div>
                         <ul class="dropdown-menu application" aria-labelledby="application">
+                            <li>
+                                <div>
+                                    <input type="checkbox" name="all" class="all-shops" id="all-shops">
+                                    <div>
+                                        <label for="all-shops"><?= __('all') ?></label>
+                                    </div>
+                                </div>
+                            </li>
 							<?php foreach (getApplicationsByAccess() ?? [] as $application): ?>
                                 <li>
-                                    <a class="dropdown-item"
-                                       href="/application/change/<?= $application['id'] ?>"><?= $application['title'] ?></a>
+                                    <div>
+                                        <input type="checkbox" name="shops[]" value="<?= $application['id'] ?>"
+                                               id="shop-<?= $application['id'] ?>">
+                                        <div>
+                                            <label for="shop-<?= $application['id'] ?>"><?= $application['title'] ?></label>
+                                        </div>
+                                    </div>
+                                </li>
+							<?php endforeach; ?>
+                        </ul>
+                    </div>
+
+                    <div class="dropdown dropdown-apk">
+                        <div class="dropdown-toggle dropdown-admin flex-between" type="button" id="apk"
+                             data-bs-toggle="dropdown">
+							Apk
+                        </div>
+                        <ul class="dropdown-menu apk" aria-labelledby="apk">
+                            <li>
+                                <div>
+                                    <input type="checkbox" name="all" class="all-apk" id="all-apk">
+                                    <div>
+                                        <label for="all-apk"><?= __('all') ?></label>
+                                    </div>
+                                </div>
+                            </li>
+							<?php foreach ((new Apk)->get() as $apk): ?>
+                                <li>
+                                    <div>
+                                        <input type="checkbox" name="apk[]" value="<?= $apk['id'] ?>"
+                                               id="apk-<?= $apk['id'] ?>">
+                                        <div>
+                                            <label for="apk-<?= $apk['id'] ?>"><?= $apk['title'] ?></label>
+                                        </div>
+                                    </div>
                                 </li>
 							<?php endforeach; ?>
                         </ul>

@@ -365,11 +365,33 @@ a.menu-item, div.menu-item, .menu-roll a div {
     text-align: center;
 }
 
-.dropdown-applications {
+.dropdown-applications, .dropdown-apk {
     margin-right: 15px;
 }
 
-ul.application {
-    transform: translate(-15px, 42px)!important;
+ul.application, ul.apk {
+    transform: translate(-32px, 42px) !important;
     font-size: 15px;
+}
+
+.dropdown-menu li {
+}
+
+.dropdown-menu li > div {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 5px 5px 10px;
+}
+
+.dropdown-menu li > div > div, .dropdown-menu li > div > input {
+    padding-left: 10px;
+}
+
+.dropdown-menu li > div > div > label::first-letter {
+    text-transform: uppercase;
+}
+
+.dropdown-menu li:hover > div {
+    background-color: var(--bg-hover-dropdown-menu);
 }

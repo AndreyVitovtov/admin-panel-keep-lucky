@@ -66,4 +66,36 @@ $(document).ready(() => {
     $('.theme').click(() => {
         $('.theme').toggleClass('dark').toggleClass('light');
     });
+    
+    function setupDropdownCheckboxes(allSelector, itemSelector, menuSelector) {
+        const allCheckbox = document.querySelector(allSelector);
+        const itemCheckboxes = document.querySelectorAll(itemSelector);
+
+        if (!allCheckbox) return;
+
+        allCheckbox.addEventListener('change', function () {
+            itemCheckboxes.forEach(cb => cb.checked = allCheckbox.checked);
+        });
+
+        itemCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (!cb.checked) {
+                    allCheckbox.checked = false;
+                } else {
+                    const allChecked = Array.from(itemCheckboxes).every(cb => cb.checked);
+                    allCheckbox.checked = allChecked;
+                }
+            });
+        });
+
+        const menu = document.querySelector(menuSelector);
+        if (menu) {
+            menu.addEventListener('click', function (e) {
+                e.stopPropagation();
+            });
+        }
+    }
+
+    setupDropdownCheckboxes('.all-shops', 'input[name="shops[]"]', '.dropdown-menu.application');
+    setupDropdownCheckboxes('.all-apk', 'input[name="apk[]"]', '.dropdown-menu.apk');
 });

@@ -91,5 +91,8 @@
   "stats": "Статистика",
   "traffic stats": "Статистика по траффику",
   "date from": "Дата от",
-  "date to": "Дата до"
+  "date to": "Дата до",
+  "users by countries": "Пользователей по странам",
+  "users by regions": "Пользователей по регионам",
+  "users by cities": "Пользователей по городам"
 }

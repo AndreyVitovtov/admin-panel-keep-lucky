@@ -61,50 +61,56 @@ document.addEventListener('DOMContentLoaded', () => {
         plugins: [ChartDataLabels]
     });
 
-    const ctx2 = document.getElementById('usersByLocation').getContext('2d');
+    function renderPieChart(canvasId, dataObj, titleText) {
+        const ctx = document.getElementById(canvasId)?.getContext('2d');
+        if (!ctx || !dataObj || Object.keys(dataObj).length === 0) return;
 
-    const data = {
-        labels: ['США', 'Украина', 'Германия', 'Франция', 'Канада'],
-        datasets: [{
-            label: 'Пользователи по странам',
-            data: [120, 90, 75, 50, 30],
-            backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56',
-                '#4BC0C0',
-                '#9966FF'
-            ],
-            borderWidth: 1
-        }]
-    };
+        const labels = Object.keys(dataObj);
+        const data = Object.values(dataObj);
 
-    const config = {
-        type: 'pie',
-        data: data,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            return `${label}: ${value}`;
+        const backgroundColors = [
+            '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0',
+            '#9966FF', '#FF9F40', '#C9CBCF', '#8FBC8F',
+            '#DC143C', '#00CED1'
+        ];
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: titleText,
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                return `${label}: ${value}`;
+                            }
                         }
+                    },
+                    title: {
+                        display: true,
+                        text: titleText
                     }
-                },
-                title: {
-                    display: true,
-                    text: window.texts.usersStats
                 }
             }
-        }
-    };
+        });
+    }
 
-    new Chart(ctx2, config);
+    renderPieChart('usersByCountry', window.usersByCountries, window.texts.usersByCountries);
+    renderPieChart('usersByRegion', window.usersByRegions, window.texts.usersByRegions);
+    renderPieChart('usersByCity', window.usersByCities, window.texts.usersByCities);
 
 });

@@ -323,13 +323,13 @@ function setDefaultApplication(): void
 function getApplicationsByAccess(): array
 {
 	return (new \App\Models\Access())->query("
-		SELECT app.*
+		SELECT s.*
 		FROM `accesses` acc,
-		     `applications` app
-		WHERE acc.`application_id` = app.`id`
+		     `shops` s
+		WHERE acc.`application_id` = s.`id`
 		AND acc.`admin_id` = :adminId
-		GROUP BY app.`id`
-		ORDER BY app.`id`
+		GROUP BY s.`id`
+		ORDER BY s.`id`
 	", [
 		'adminId' => $_SESSION['id'] ?? 0
 	], true);

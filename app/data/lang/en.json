@@ -91,5 +91,8 @@
   "stats": "Stats",
   "traffic stats": "Traffic stats",
   "date from": "Date from",
-  "date to": "Date to"
+  "date to": "Date to",
+  "users by countries": "Users by countries",
+  "users by regions": "Users by regions",
+  "users by cities": "Users by cities"
 }

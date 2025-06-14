@@ -189,7 +189,7 @@ class Administrators extends Controller
 			WHERE a.`role` = r.`id`
 		", [], true);
 
-		$applications = (new \App\Models\Application())->get();
+		$applications = (new \App\Models\Shop())->get();
 
 		$this->auth()->view('access', [
 			'title' => __('access'),
