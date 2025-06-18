@@ -2,7 +2,7 @@
 global $menu;
 $menu = [
 	[
-		'title' => __('dashboard'),
+		'title' => __('traffic'),
 		'icon' => 'chart-bar-1',
 		'address' => '/',
 		'controller' => 'Main'
@@ -25,12 +25,13 @@ $menu = [
 				'method' => 'searchByRefCode'
 			]
 		]
-	], [
-		'title' => __('traffic'),
-		'icon' => 'traffic-cone',
-		'address' => '/traffic',
-		'controller' => 'Traffic'
 	],
+// [
+//		'title' => __('traffic'),
+//		'icon' => 'traffic-cone',
+//		'address' => '/traffic',
+//		'controller' => 'Traffic'
+//	],
 //    [
 //		'title' => __('traffic'),
 //		'icon' => 'traffic-cone',

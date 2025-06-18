@@ -60,61 +60,68 @@ use App\Utility\Request; ?>
                     <i class="icon-menu"></i>
                 </div>
                 <div class="user flex-between">
-                    <div class="dropdown dropdown-applications">
-                        <div class="dropdown-toggle dropdown-admin flex-between" type="button" id="application"
-                             data-bs-toggle="dropdown">
-							Shop
-                        </div>
-                        <ul class="dropdown-menu application" aria-labelledby="application">
-                            <li>
-                                <div>
-                                    <input type="checkbox" name="all" class="all-shops" id="all-shops">
-                                    <div>
-                                        <label for="all-shops"><?= __('all') ?></label>
-                                    </div>
-                                </div>
-                            </li>
-							<?php foreach (getApplicationsByAccess() ?? [] as $application): ?>
-                                <li>
-                                    <div>
-                                        <input type="checkbox" name="shops[]" value="<?= $application['id'] ?>"
-                                               id="shop-<?= $application['id'] ?>">
-                                        <div>
-                                            <label for="shop-<?= $application['id'] ?>"><?= $application['title'] ?></label>
-                                        </div>
-                                    </div>
-                                </li>
-							<?php endforeach; ?>
-                        </ul>
-                    </div>
+                    <!--                    <div class="dropdown dropdown-applications">-->
+                    <!--                        <div class="dropdown-toggle dropdown-admin flex-between" type="button" id="application"-->
+                    <!--                             data-bs-toggle="dropdown">-->
+                    <!--							Shop-->
+                    <!--                        </div>-->
+                    <!--                        <ul class="dropdown-menu application" aria-labelledby="application">-->
+                    <!--                            <li>-->
+                    <!--                                <div>-->
+                    <!--                                    <input type="checkbox" name="all" class="all-shops" id="all-shops">-->
+                    <!--                                    <div>-->
+                    <!--                                        <label for="all-shops">-->
+					<?php //= __('all') ?><!--</label>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </li>-->
+                    <!--							--><?php //foreach (getApplicationsByAccess() ?? [] as $application): ?>
+                    <!--                                <li>-->
+                    <!--                                    <div>-->
+                    <!--                                        <input type="checkbox" name="shops[]" value="-->
+					<?php //= $application['id'] ?><!--"-->
+                    <!--                                               id="shop--->
+					<?php //= $application['id'] ?><!--">-->
+                    <!--                                        <div>-->
+                    <!--                                            <label for="shop--->
+					<?php //= $application['id'] ?><!--">--><?php //= $application['title'] ?><!--</label>-->
+                    <!--                                        </div>-->
+                    <!--                                    </div>-->
+                    <!--                                </li>-->
+                    <!--							--><?php //endforeach; ?>
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
 
-                    <div class="dropdown dropdown-apk">
-                        <div class="dropdown-toggle dropdown-admin flex-between" type="button" id="apk"
-                             data-bs-toggle="dropdown">
-							Apk
-                        </div>
-                        <ul class="dropdown-menu apk" aria-labelledby="apk">
-                            <li>
-                                <div>
-                                    <input type="checkbox" name="all" class="all-apk" id="all-apk">
-                                    <div>
-                                        <label for="all-apk"><?= __('all') ?></label>
-                                    </div>
-                                </div>
-                            </li>
-							<?php foreach ((new Apk)->get() as $apk): ?>
-                                <li>
-                                    <div>
-                                        <input type="checkbox" name="apk[]" value="<?= $apk['id'] ?>"
-                                               id="apk-<?= $apk['id'] ?>">
-                                        <div>
-                                            <label for="apk-<?= $apk['id'] ?>"><?= $apk['title'] ?></label>
-                                        </div>
-                                    </div>
-                                </li>
-							<?php endforeach; ?>
-                        </ul>
-                    </div>
+                    <!--                    <div class="dropdown dropdown-apk">-->
+                    <!--                        <div class="dropdown-toggle dropdown-admin flex-between" type="button" id="apk"-->
+                    <!--                             data-bs-toggle="dropdown">-->
+                    <!--							Apk-->
+                    <!--                        </div>-->
+                    <!--                        <ul class="dropdown-menu apk" aria-labelledby="apk">-->
+                    <!--                            <li>-->
+                    <!--                                <div>-->
+                    <!--                                    <input type="checkbox" name="all" class="all-apk" id="all-apk">-->
+                    <!--                                    <div>-->
+                    <!--                                        <label for="all-apk">-->
+					<?php //= __('all') ?><!--</label>-->
+                    <!--                                    </div>-->
+                    <!--                                </div>-->
+                    <!--                            </li>-->
+                    <!--							--><?php //foreach ((new Apk)->get() as $apk): ?>
+                    <!--                                <li>-->
+                    <!--                                    <div>-->
+                    <!--                                        <input type="checkbox" name="apk[]" value="-->
+					<?php //= $apk['id'] ?><!--"-->
+                    <!--                                               id="apk---><?php //= $apk['id'] ?><!--">-->
+                    <!--                                        <div>-->
+                    <!--                                            <label for="apk---><?php //= $apk['id'] ?><!--">-->
+					<?php //= $apk['title'] ?><!--</label>-->
+                    <!--                                        </div>-->
+                    <!--                                    </div>-->
+                    <!--                                </li>-->
+                    <!--							--><?php //endforeach; ?>
+                    <!--                        </ul>-->
+                    <!--                    </div>-->
 
                     <a href="/theme/change/<?= (theme() == 'dark' ? 'light' : 'dark') ?>/<?= getCurrentUrl(true) ?>">
                         <div class="theme <?= theme() ?>">

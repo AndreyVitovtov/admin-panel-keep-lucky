@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\API\API;
+use App\Models\Apk;
+use App\Models\Shop;
 use Exception;
 
 class Main extends Controller
@@ -37,9 +39,14 @@ class Main extends Controller
 			$usersByCities = $filters['response']['city'];
 		}
 
+
+		$apks = (new Apk())->getObjects();
+		$shops = (new Shop())->getObjects();
+
+
 		$this->view('dashboard', [
-			'title' => __('dashboard'),
-			'pageTitle' => __('dashboard'),
+			'title' => __('traffic'),
+			'pageTitle' => __('traffic'),
 			'assets' => [
 				'js' => [
 					'chart.umd.min.js',
@@ -52,6 +59,8 @@ class Main extends Controller
 			'usersByCountries' => $usersByCountries ?? [],
 			'usersByRegions' => $usersByRegions ?? [],
 			'usersByCities' => $usersByCities ?? [],
+			'shops' => $shops,
+			'apks' => $apks
 		]);
 	}
 }
