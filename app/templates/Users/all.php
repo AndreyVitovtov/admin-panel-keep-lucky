@@ -45,7 +45,7 @@
     </div>
 </form>
 
-<table class="table table-striped table-responsive table-hover">
+<table class="table table-striped table-responsive table-hover" id="table-users">
     <thead>
     <tr>
         <th><?= __('id') ?></th>
@@ -54,7 +54,7 @@
         <th><?= __('referral code') ?></th>
         <th><?= __('country') ?></th>
         <th><?= __('city') ?></th>
-        <th><?= __('is blocked') ?></th>
+<!--        <th>--><?php //= __('is blocked') ?><!--</th>-->
     </tr>
     </thead>
     <tbody>
@@ -66,7 +66,7 @@
             <td><?= $user['referral_code'] ?></td>
             <td><?= (empty($user['country']) ? '-' : $user['country']) ?></td>
             <td><?= (empty($user['city']) ? '-' : $user['city']) ?></td>
-            <td><i class="icon-<?= ($user['is_blocked'] ? 'lock-1' : 'lock-open-1') ?>"></i></td>
+<!--            <td><i class="icon---><?php //= ($user['is_blocked'] ? 'lock-1' : 'lock-open-1') ?><!--"></i></td>-->
         </tr>
     <?php endforeach; ?>
     </tbody>

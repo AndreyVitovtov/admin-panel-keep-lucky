@@ -400,3 +400,8 @@ function restoreSession(): void
 		$_SESSION['avatar'] = $admin->avatar;
 	}
 }
+
+function isRole($role): bool
+{
+	return (getRole() === $role);
+}

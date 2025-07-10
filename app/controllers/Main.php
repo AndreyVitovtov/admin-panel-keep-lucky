@@ -37,6 +37,9 @@ class Main extends Controller
 			$usersByCountries = $filters['response']['country'];
 			$usersByRegions = $filters['response']['region'];
 			$usersByCities = $filters['response']['city'];
+			$countries = array_keys($filters['response']['country']);
+			$regions = array_keys($filters['response']['region']);
+			$cities = array_keys($filters['response']['city']);
 		}
 
 
@@ -59,6 +62,9 @@ class Main extends Controller
 			'usersByCountries' => $usersByCountries ?? [],
 			'usersByRegions' => $usersByRegions ?? [],
 			'usersByCities' => $usersByCities ?? [],
+			'countries' => $countries ?? [],
+			'regions' => $regions ?? [],
+			'cities' => $cities ?? [],
 			'shops' => $shops,
 			'apks' => $apks
 		]);

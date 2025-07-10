@@ -94,5 +94,15 @@
   "date to": "Дата до",
   "users by countries": "Пользователей по странам",
   "users by regions": "Пользователей по регионам",
-  "users by cities": "Пользователей по городам"
+  "users by cities": "Пользователей по городам",
+  "shop": "Shop",
+  "apk": "APK",
+  "region": "Регион",
+  "volume of traffic sold": "Объём проданного трафика (ГБ)",
+  "total amount to be paid for traffic": "Общая сумма к выплате за трафик",
+  "number of users": "Количество пользователей",
+  "number of users online": "Количество онлайн-пользователей",
+  "select country": "Выберите страну",
+  "select region": "Выберите регион",
+  "select city": "Выберите город"
 }

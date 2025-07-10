@@ -94,5 +94,15 @@
   "date to": "Date to",
   "users by countries": "Users by countries",
   "users by regions": "Users by regions",
-  "users by cities": "Users by cities"
+  "users by cities": "Users by cities",
+  "shop": "Shop",
+  "apk": "APK",
+  "region": "Region",
+  "volume of traffic sold": "Volume of traffic sold (GB)",
+  "total amount to be paid for traffic": "Total amount to be paid for traffic",
+  "number of users": "Number of users",
+  "number of users online": "Number of users online",
+  "select country": "Select country",
+  "select region": "Select region",
+  "select city": "Select city"
 }

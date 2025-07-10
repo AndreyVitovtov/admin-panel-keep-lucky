@@ -11,12 +11,17 @@ class Users extends Controller
 	/**
 	 * @throws Exception
 	 */
-	public function all(Request $request): void
+	public function index($page = null, $online = null): void
 	{
 		$this->auth();
 
-		$page = $request->page ?? 1;
-		$online = boolval($request->online ?? false);
+		if (is_array($page)) $page = $page['page'] ?? 1;
+		else $page = 1;
+
+		if (is_array($online)) $online = $online['online'] ?? 1;
+		else $online = 0;
+
+		$online = boolval($online ?? false);
 		$skip = intval(($page - 1) * COUNT_PAGINATION);
 		$take = COUNT_PAGINATION;
 
@@ -42,7 +47,11 @@ class Users extends Controller
 			'users' => $users ?? [],
 			'totalUsers' => $totalUsers ?? 0,
 			'assets' => [
-				'js' => 'users.js'
+				'js' => [
+					'dataTables.min.js',
+					'users.js'
+				],
+				'css' => 'dataTables.dataTables.min.css'
 			],
 			'page' => $page,
 			'online' => $online
