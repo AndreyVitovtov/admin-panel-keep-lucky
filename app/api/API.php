@@ -17,7 +17,7 @@ class API
 			'take' => $take
 		];
 		if ($online) $params['online'] = 'true';
-		return $this->get('admin/users', $params);
+		return $this->get('admin/search/users', $params);
 	}
 
 	/**
@@ -25,7 +25,9 @@ class API
 	 */
 	public function getUser($id): array
 	{
-		return $this->get('admin/users', $id);
+		return $this->get('admin/search/users', [
+			'user_id' => $id
+		]);
 	}
 
 	/**
@@ -108,13 +110,17 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	public function getTrafficStats(string $country = '', string $region = '', string $city = '', string $referralCode = '', string $dateFilter = ''): array
+	public function getTrafficStats(string $country = '', string $region = '', string $city = '', string $referralCode = '',
+	                                string $dateFrom = '', string $dateTo = ''): array
 	{
-		$params = $this->getArr($dateFilter, $country);
+		$params = [];
+		if (!empty($country)) $params['country'] = $country;
 		if (!empty($region)) $params['region'] = $region;
 		if (!empty($city)) $params['city'] = $city;
 		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
-		return $this->get('admin/traffic-stats', $params);
+		if (!empty($dateFrom)) $params['DateFrom'] = $dateFrom;
+		if (!empty($dateTo)) $params['DateTo'] = $dateTo;
+		return $this->get('admin/stats/traffic', $params);
 	}
 
 	/**
@@ -200,7 +206,74 @@ class API
 	 */
 	public function filters(): array
 	{
-		return $this->get('admin/filters');
+		return $this->get('admin/search/filters');
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function createAdmin(string $login, string $password, string $role, array $apks, array $shops, array $referralCodes): array
+	{
+		return $this->post('admin/roles', json_encode([
+			'login' => $login,
+			'password' => $password,
+			'role' => $role,
+			'apks' => $apks,
+			'shops' => $shops,
+			'referral_codes' => $referralCodes
+		]));
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getAdmins(): array
+	{
+		return $this->get('admin/roles');
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function updateAdminAccess(int $id, array $apks, array $shops, array $referralCodes): array
+	{
+		return $this->patch("admin/roles/$id/access", json_encode([
+			'apks' => $apks,
+			'shops' => $shops,
+			'referral_codes' => $referralCodes
+		]));
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function deleteAdmin(int $id): array
+	{
+		return $this->delete("admin/roles/$id");
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getAdminAccess(): array
+	{
+		return $this->get('admin/roles/access');
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getAdminAccessApk(): array
+	{
+		return $this->get('admin/roles/access/apk');
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getAdminAccessShop(): array
+	{
+		return $this->get('admin/roles/access/shop');
 	}
 
 	/**
@@ -214,7 +287,7 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	protected function post(string $endpoint, array $params = [], array $headers = []): array
+	protected function post(string $endpoint, array|string $params = [], array $headers = []): array
 	{
 		return $this->makeRequest('POST', $endpoint, $params, $headers);
 	}
@@ -241,9 +314,17 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	protected function patch(string $endpoint, array $params = [], array $headers = []): array
+	protected function patch(string $endpoint, array|string $params = [], array $headers = []): array
 	{
 		return $this->makeRequest('PATCH', $endpoint, $params, $headers);
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	protected function delete(string $endpoint, array|string $params = [], array $headers = []): array
+	{
+		return $this->makeRequest('DELETE', $endpoint, $params, $headers);
 	}
 
 	/**
@@ -267,7 +348,12 @@ class API
 
 			case 'POST':
 			case 'PATCH':
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+			case 'DELETE':
+				if (is_string($params)) {
+					curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+				} else {
+					curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+				}
 				$headers[] = 'Content-Type: application/json';
 				break;
 
@@ -298,6 +384,12 @@ class API
 			'status' => $status,
 			'response' => json_decode($response, true),
 		];
+	}
+
+	private function setAuthorizationBasic(string $username, string $password): void
+	{
+		$_SESSION['application']['username'] = $username;
+		$_SESSION['application']['password'] = $password;
 	}
 
 	/**

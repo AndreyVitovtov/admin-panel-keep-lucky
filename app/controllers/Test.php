@@ -13,7 +13,9 @@ class Test extends Controller
 	public function index()
 	{
 		$api = new API();
-		echo json_encode($api->getTrafficStats("", "", "Bell Canada"));
+//		echo json_encode($api->createAdmin('testadmin2', 'testadmin2', 'ADMIN', ['apk1'], ['shop1'], ['referral1']));
+//		echo json_encode($api->deleteAdmin(3));
+		echo json_encode($api->getAdmins());
 	}
 }
 //admin/users-stats - этот метод не плохо бы вернуть, так как уже работал в админке
