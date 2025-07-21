@@ -104,5 +104,6 @@
   "number of users online": "Number of users online",
   "select country": "Select country",
   "select region": "Select region",
-  "select city": "Select city"
+  "select city": "Select city",
+  "clear filters": "Clear filters"
 }

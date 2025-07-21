@@ -33,10 +33,13 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	public function getUsersStats(string $referral_code = '', string $country = '', string $dateFilter = ''): array
+	public function getUsersStats(string $country = '', string $region = '', string $city = ''): array
 	{
-		$params = $this->getArr($dateFilter, $country);
-		return $this->get('admin/users-stats' . (!empty($referral_code) ? "/$referral_code" : ""), $params);
+		$params = [];
+		if (!empty($country)) $params['country'] = $country;
+		if (!empty($region)) $params['region'] = $region;
+		if (!empty($city)) $params['city'] = $city;
+		return $this->get('admin/stats/users', $params);
 	}
 
 	/**

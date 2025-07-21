@@ -104,5 +104,6 @@
   "number of users online": "Количество онлайн-пользователей",
   "select country": "Выберите страну",
   "select region": "Выберите регион",
-  "select city": "Выберите город"
+  "select city": "Выберите город",
+  "clear filters": "Очистить фильтры"
 }

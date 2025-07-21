@@ -46,6 +46,16 @@ class Main extends Controller
 		$apks = (new Apk())->getObjects();
 		$shops = (new Shop())->getObjects();
 
+		$selectedShops = $_SESSION['shops'] ?? [];
+		$selectedApks = $_SESSION['apk'] ?? [];
+		$referralCode = $_SESSION['referralCode'] ?? '';
+		$selectedCountry = $_SESSION['country'] ?? '';
+		$selectedRegion = $_SESSION['region'] ?? '';
+		$selectedCity = $_SESSION['city'] ?? '';
+		$dateFrom = $_SESSION['dateFrom'] ?? '';
+		$dateTo = $_SESSION['dateTo'] ?? '';
+
+		$dataForDashboard = (new \App\Controllers\Api())->getDataForDashboard(true);
 
 		$this->view('dashboard', [
 			'title' => __('traffic'),
@@ -66,7 +76,16 @@ class Main extends Controller
 			'regions' => $regions ?? [],
 			'cities' => $cities ?? [],
 			'shops' => $shops,
-			'apks' => $apks
+			'apks' => $apks,
+			'selectedShops' => $selectedShops,
+			'selectedApks' => $selectedApks,
+			'referralCode' => $referralCode,
+			'dataForDashboard' => $dataForDashboard,
+			'selectedCountry' => $selectedCountry ?? '',
+			'selectedRegion' => $selectedRegion ?? '',
+			'selectedCity' => $selectedCity ?? '',
+			'dateFrom' => $dateFrom ?? '',
+			'dateTo' => $dateTo ?? ''
 		]);
 	}
 }

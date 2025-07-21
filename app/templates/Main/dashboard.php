@@ -205,9 +205,13 @@
                 </div>
 				<?php foreach ($shops ?? [] as $shop): ?>
                     <div>
-                        <input type="checkbox" name="shop[]" value="<?= $shop->id ?>"
+                        <input type="checkbox"
+                               name="shop[]"
+                               value="<?= $shop->id ?>"
                                class="form-check-input shop-checkbox"
-                               id="shop-<?= $shop->id ?>">
+                               id="shop-<?= $shop->id ?>"
+						       <?php if (in_array($shop->id, $selectedShops ?? [])): ?>checked<?php endif; ?>
+                        >
                         <label for="shop-<?= $shop->id ?>" class="form-check-label"><?= $shop->title ?></label>
                     </div>
 				<?php endforeach; ?>
@@ -220,23 +224,23 @@
 
                 allCheckboxes.forEach(allCheckbox => {
                     const groupPrefix = allCheckbox.id.replace('-all', '');
-                    const groupSelector = `input[type="checkbox"][name="${groupPrefix}[]"]`; // по name
+                    const groupSelector = `input[type="checkbox"][name="${groupPrefix}[]"]`;
                     const groupCheckboxes = document.querySelectorAll(groupSelector);
 
                     allCheckbox.addEventListener('change', function () {
                         groupCheckboxes.forEach(cb => cb.checked = this.checked);
+                        if (groupPrefix === 'shop') updateShops();
+                        if (groupPrefix === 'apk') updateApk();
                     });
 
                     groupCheckboxes.forEach(cb => {
                         cb.addEventListener('change', function () {
-                            const allChecked = Array.from(groupCheckboxes).every(c => c.checked);
-                            allCheckbox.checked = allChecked;
+                            allCheckbox.checked = Array.from(groupCheckboxes).every(c => c.checked);
                         });
                     });
                 });
             });
         </script>
-
 
         <div class="filter-block">
             <h4 class="dropdown-toggle" onclick="toggleDropdown(this)">
@@ -254,8 +258,13 @@
                 </div>
 				<?php foreach ($apks ?? [] as $apk): ?>
                     <div>
-                        <input type="checkbox" name="apk[]" value="<?= $apk->id ?>" class="form-check-input"
-                               id="apk-<?= $apk->id ?>">
+                        <input type="checkbox"
+                               name="apk[]"
+                               value="<?= $apk->id ?>"
+                               class="form-check-input apk-checkbox"
+                               id="apk-<?= $apk->id ?>"
+						       <?php if (in_array($apk->id, $selectedApks ?? [])): ?>checked<?php endif; ?>
+                        >
                         <label for="apk-<?= $apk->id ?>" class="form-check-label"><?= $apk->title ?></label>
                     </div>
 				<?php endforeach; ?>
@@ -264,7 +273,8 @@
 
         <div class="filter-block">
             <h6><label for="referral-code"><?= __('referral code') ?></label></h6>
-            <input type="text" name="referral-code" class="form-control" id="referral-code">
+            <input type="text" name="referral-code" value="<?= ($referralCode ?? '') ?>" class="form-control"
+                   id="referral-code">
         </div>
     </div>
 <?php endif; ?>
@@ -396,7 +406,7 @@
         <select id="country" name="country" class="selectpicker form-select" data-live-search="true"
                 title="<?= __('select country') ?>">
 			<?php foreach ($countries ?? [] as $country): ?>
-                <option value="<?= htmlspecialchars($country) ?>"><?= htmlspecialchars($country) ?></option>
+                <option value="<?= htmlspecialchars($country) ?>" <?= ($selectedCountry ?? '' == htmlspecialchars($country) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
 			<?php endforeach; ?>
         </select>
     </div>
@@ -406,7 +416,7 @@
         <select id="region" name="region" class="selectpicker form-select" data-live-search="true"
                 title="<?= __('select region') ?>">
 			<?php foreach ($regions ?? [] as $region): ?>
-                <option value="<?= htmlspecialchars($region) ?>"><?= htmlspecialchars($region) ?></option>
+                <option value="<?= htmlspecialchars($region) ?>" <?= ($selectedRegion ?? '' == htmlspecialchars($region) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
 			<?php endforeach; ?>
         </select>
     </div>
@@ -416,7 +426,7 @@
         <select id="city" name="city" class="selectpicker form-select" data-live-search="true"
                 title="<?= __('select city') ?>">
 			<?php foreach ($cities ?? [] as $city): ?>
-                <option value="<?= htmlspecialchars($city) ?>"><?= htmlspecialchars($city) ?></option>
+                <option value="<?= htmlspecialchars($city) ?>" <?= ($selectedCity ?? '' == htmlspecialchars($city) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
 			<?php endforeach; ?>
         </select>
     </div>
@@ -441,31 +451,37 @@
 <div class="date-range-filters mt-5">
     <div class="date-filter-block">
         <label for="date-from"><?= __('date from') ?></label>
-        <input type="date" name="date-from" id="date-from" class="form-control">
+        <input type="date" name="date-from" value="<?= $dateFrom ?? '' ?>" id="date-from" class="form-control">
     </div>
     <div class="date-filter-block">
         <label for="date-to"><?= __('date to') ?></label>
-        <input type="date" name="date-to" id="date-to" class="form-control">
+        <input type="date" name="date-to" value="<?= $dateTo ?? '' ?>" id="date-to" class="form-control">
     </div>
+</div>
+
+<div class="text-end mt-3">
+    <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-filters">
+		<?= __('clear filters') ?>
+    </button>
 </div>
 
 <div class="mt-5">
     <table class="table table-striped table-hover table-bordered">
         <tr>
             <th><?= __('number of users') ?></th>
-            <td class="number-of-users"></td>
+            <td class="number-of-users"><?= $dataForDashboard['total_users'] ?? '-' ?></td>
         </tr>
         <tr>
             <th><?= __('number of users online') ?></th>
-            <td class="number-of-users-online"></td>
+            <td class="number-of-users-online"><?= $dataForDashboard['total_online_users'] ?? '-' ?></td>
         </tr>
         <tr>
             <th><?= __('volume of traffic sold') ?></th>
-            <td class="volume-of-traffic-sold"></td>
+            <td class="volume-of-traffic-sold"><?= $dataForDashboard['total_traffic'] ?? '-' ?></td>
         </tr>
         <tr>
             <th><?= __('total amount to be paid for traffic') ?></th>
-            <td class="total-amount-to-be-paid-for-traffic"></td>
+            <td class="total-amount-to-be-paid-for-traffic"><?= $dataForDashboard['total_cost'] ?? '-' ?></td>
         </tr>
     </table>
 </div>
