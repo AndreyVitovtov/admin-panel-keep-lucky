@@ -65,6 +65,9 @@ class Main extends Controller
 					'chart.umd.min.js',
 					'chartjs-plugin-datalabels.min.js',
 					'dashboard.js'
+				],
+				'css' => [
+					'loader.css'
 				]
 			],
 			'totalUsers' => $totalUsers ?? 0,

@@ -227,10 +227,16 @@
                     const groupSelector = `input[type="checkbox"][name="${groupPrefix}[]"]`;
                     const groupCheckboxes = document.querySelectorAll(groupSelector);
 
-                    allCheckbox.addEventListener('change', function () {
+                    allCheckbox.addEventListener('change', async function () {
                         groupCheckboxes.forEach(cb => cb.checked = this.checked);
-                        if (groupPrefix === 'shop') updateShops();
-                        if (groupPrefix === 'apk') updateApk();
+                        if (groupPrefix === 'shop') {
+                            await loader();
+                            updateShops();
+                        }
+                        if (groupPrefix === 'apk') {
+                            await loader();
+                            updateApk();
+                        }
                     });
 
                     groupCheckboxes.forEach(cb => {
@@ -398,6 +404,14 @@
         background-color: #fff;
     }
 
+    table th {
+        width: 70%;
+    }
+
+    table td {
+        width: 30%;
+    }
+
 </style>
 
 <div class="my-filter">
@@ -433,14 +447,12 @@
 </div>
 
 <script>
-    // Инициализируем bootstrap-select только внутри .my-filter
     document.addEventListener('DOMContentLoaded', () => {
         const container = document.querySelector('.my-filter');
         if (!container) return;
 
         const selects = container.querySelectorAll('select.selectpicker');
         selects.forEach(select => {
-            // Если нужно, повторная инициализация
             if (typeof bootstrap.Selectpicker === 'function') {
                 bootstrap.Selectpicker.getOrCreateInstance(select);
             }
