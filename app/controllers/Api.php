@@ -129,4 +129,33 @@ class Api extends Controller
 
 		return ((!$array) ? json_encode($data) : $data);
 	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function getShopsAndApk(Request $request): void
+	{
+		$adminId = $request->get('adminId') ?? 0;
+
+		$api = new \App\API\API();
+
+		$apks = $api->getAdminAccessApk();
+		if ($apks['status'] == 200) $apks = $apks['response'];
+		else $apks = [];
+
+		$shops = $api->getAdminAccessShop();
+		if ($shops['status'] == 200) $shops = $shops['response'];
+		else $shops = [];
+
+		// TODO: Get selected APK and Shops $selectedShops, $selectedApk
+		//  get admin by id
+
+		echo json_encode([
+			'shops' => $shops,
+			'apk' => $apks,
+			'selectedShops' => $selectedShops ?? [],
+			'selectedApk' => $selectedApk ?? [],
+			'adminId' => $adminId ?? ''
+		]);
+	}
 }

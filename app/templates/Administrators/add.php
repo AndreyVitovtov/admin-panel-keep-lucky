@@ -29,7 +29,7 @@
 			<?php endforeach; ?>
         </select>
     </div>
-    <div class="mb-3">
+    <div class="mt-3 mb-3">
         <input type="submit" value="<?= __('save') ?>" class="btn">
     </div>
 </form>

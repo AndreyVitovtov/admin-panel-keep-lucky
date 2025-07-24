@@ -207,12 +207,12 @@
                     <div>
                         <input type="checkbox"
                                name="shop[]"
-                               value="<?= $shop->id ?>"
+                               value="<?= $shop ?>"
                                class="form-check-input shop-checkbox"
-                               id="shop-<?= $shop->id ?>"
-						       <?php if (in_array($shop->id, $selectedShops ?? [])): ?>checked<?php endif; ?>
+                               id="shop-<?= $shop ?>"
+						       <?php if (in_array($shop, $selectedShops ?? [])): ?>checked<?php endif; ?>
                         >
-                        <label for="shop-<?= $shop->id ?>" class="form-check-label"><?= $shop->title ?></label>
+                        <label for="shop-<?= $shop ?>" class="form-check-label"><?= $shop ?></label>
                     </div>
 				<?php endforeach; ?>
             </div>
@@ -266,12 +266,12 @@
                     <div>
                         <input type="checkbox"
                                name="apk[]"
-                               value="<?= $apk->id ?>"
+                               value="<?= $apk ?>"
                                class="form-check-input apk-checkbox"
-                               id="apk-<?= $apk->id ?>"
-						       <?php if (in_array($apk->id, $selectedApks ?? [])): ?>checked<?php endif; ?>
+                               id="apk-<?= $apk ?>"
+						       <?php if (in_array($apk, $selectedApks ?? [])): ?>checked<?php endif; ?>
                         >
-                        <label for="apk-<?= $apk->id ?>" class="form-check-label"><?= $apk->title ?></label>
+                        <label for="apk-<?= $apk ?>" class="form-check-label"><?= $apk ?></label>
                     </div>
 				<?php endforeach; ?>
             </div>

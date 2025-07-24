@@ -77,7 +77,7 @@ try {
 	echo 'add other roles ....';
 	$stmt = $dbh->prepare("
 		INSERT INTO `roles` (`title`) 
-		VALUES ('admin'), ('guest'), ('manager');
+		VALUES ('admin');
 	");
 	$stmt->execute();
 	echo '.... ok' . br(3);

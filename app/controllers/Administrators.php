@@ -56,6 +56,8 @@ class Administrators extends Controller
 	public function save(Request $request): void
 	{
 		$this->auth();
+		$apk = $request->apk ?? [];
+		$shops = $request->shops ?? [];
 		if (!is_null($request->name) && !is_null($request->login) && !is_null($request->password) &&
 			!is_null($request->repeatPassword) && !is_null($request->role)) {
 			if ($request->password != $request->repeatPassword) {
@@ -65,7 +67,10 @@ class Administrators extends Controller
 					'login' => $request->login
 				]);
 			} else {
-				$referralCode = trim($request->referralCode);
+				$referralCode = trim($request->referralCode ?? '');
+				if (!empty($referralCode)) $arrReferralCode = [$referralCode];
+				else $arrReferralCode = [];
+
 				$admin = new AdminModel();
 				if (!empty($admin->get([
 					'login' => $request->login
@@ -76,16 +81,31 @@ class Administrators extends Controller
 						'login' => $request->login
 					]);
 				} else {
-					$admin->name = trim($request->name);
-					$admin->login = trim($request->login);
-					$admin->password = md5(trim($request->password));
-					$admin->role = trim($request->role);
-					$admin->avatar = '';
-					$admin->referral_code = $referralCode ?? '';
-					$admin->insert();
-					redirect('/administrators', [
-						'message' => __('administrator added')
-					]);
+					$roleId = trim($request->role);
+					$role = (new Role)->getOne(['id' => $roleId]);
+					$role = ($role['title'] == 'admin' ? 'ADMIN' : ($role['title'] == 'superadmin' ? 'SUPER_ADMIN' : 'ADMIN'));
+
+					$api = new \App\API\API();
+					$res = $api->createAdmin(trim($request->login), md5(trim($request->password)), $role, $apk, $shops, $arrReferralCode);
+					if ($res['status'] != 201) {
+						redirect('/administrators/add', [
+							'error' => $res['response']['message']
+						]);
+					} else {
+						$adminId = $res['response']['id'];
+
+						$admin->name = trim($request->name);
+						$admin->login = trim($request->login);
+						$admin->password = md5(trim($request->password));
+						$admin->role = trim($request->role);
+						$admin->avatar = '';
+						$admin->admin_id = $adminId;
+						$admin->referral_code = $referralCode;
+						$admin->insert();
+						redirect('/administrators', [
+							'message' => __('administrator added')
+						]);
+					}
 				}
 			}
 		} else {
@@ -95,12 +115,20 @@ class Administrators extends Controller
 		}
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function delete(): void
 	{
 		$this->auth();
 		$id = Request::get('id');
 		if (!empty($id)) {
 			$admin = new AdminModel();
+			$admin = $admin->find($id);
+
+			$api = new \App\API\API();
+			$api->deleteAdmin($admin->admin_id);
+
 			$admin->delete($id);
 		}
 		redirect('/administrators', [
@@ -116,6 +144,7 @@ class Administrators extends Controller
 			redirect('/404');
 		} else {
 			$role = new Role();
+
 			$this->auth()->view('edit', array_merge([
 				'title' => __('edit administrator'),
 				'pageTitle' => __('edit administrator'),

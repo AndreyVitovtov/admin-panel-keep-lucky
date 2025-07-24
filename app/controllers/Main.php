@@ -24,9 +24,26 @@ class Main extends Controller
 		$this->auth();
 		$api = new API();
 
-		if (getRole() == 'admin3') $refCode = $_SESSION['refCode'];
+		if (getRole() == 'admin') {
+			$adminAccess = $api->getAdminAccess();
+			if ($adminAccess['status'] == 200) {
+				$selectedShops = $adminAccess['response']['shops'];
+				$_SESSION['shops'] = $selectedShops;
 
-		$usersStats = $api->getUsersStats('', $refCode ?? '');
+				$selectedApks = $adminAccess['response']['apks'];
+				$_SESSION['apks'] = $selectedApks;
+
+				$referralCode = $adminAccess['response']['referral_codes'][0] ?? '';
+				$_SESSION['referralCode'] = $referralCode;
+				//TODO: Referral codes array?
+			}
+		} else {
+			$selectedShops = $_SESSION['shops'] ?? [];
+			$selectedApks = $_SESSION['apks'] ?? [];
+			$referralCode = $_SESSION['referralCode'] ?? '';
+		}
+
+		$usersStats = $api->getUsersStats($_SESSION['country'] ?? '', $_SESSION['region'] ?? '', $_SESSION['city'] ?? '');
 		if ($usersStats['status'] == 200) {
 			$totalUsers = $usersStats['response']['total_users'];
 			$onlineUsers = $usersStats['response']['total_online_users'];
@@ -42,13 +59,14 @@ class Main extends Controller
 			$cities = array_keys($filters['response']['city']);
 		}
 
+		$apks = $api->getAdminAccessApk();
+		if ($apks['status'] == 200) $apks = $apks['response'];
+		else $apks = [];
 
-		$apks = (new Apk())->getObjects();
-		$shops = (new Shop())->getObjects();
+		$shops = $api->getAdminAccessShop();
+		if ($shops['status'] == 200) $shops = $shops['response'];
+		else $shops = [];
 
-		$selectedShops = $_SESSION['shops'] ?? [];
-		$selectedApks = $_SESSION['apk'] ?? [];
-		$referralCode = $_SESSION['referralCode'] ?? '';
 		$selectedCountry = $_SESSION['country'] ?? '';
 		$selectedRegion = $_SESSION['region'] ?? '';
 		$selectedCity = $_SESSION['city'] ?? '';

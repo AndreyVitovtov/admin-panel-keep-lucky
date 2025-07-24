@@ -23,7 +23,7 @@
     </div>
     <div class="mb-3">
         <label for="role" class="form-label">*<?= __('role') ?>:</label>
-        <select name="role" id="role" class="form-control" required>
+        <select name="role" id="role" class="form-control" data-admin_id="<?= $admin_id ?? 0 ?>" required>
 			<?php foreach ($roles ?? [] as $r): ?>
                 <option value="<?= $r['id'] ?>" <?= ((($role ?? '') == $r['id']) ? 'selected' : '') ?> ><?= $r['title'] ?></option>
 			<?php endforeach; ?>
@@ -36,7 +36,7 @@
                    id="referral-code" required>
         </div>
 	<?php endif; ?>
-    <div class="mb-3">
+    <div class="mt-3 mb-3">
         <input type="submit" value="<?= __('save') ?>" class="btn">
     </div>
 </form>

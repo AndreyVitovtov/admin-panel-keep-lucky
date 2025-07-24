@@ -145,6 +145,7 @@ class Users extends Controller
 		if ($data['status'] == 200) {
 			$userInfo = $data['response'];
 		}
+
 		$this->view('details', [
 			'title' => $userInfo['username'] ?? __('user'),
 			'pageTitle' => $userInfo['username'] ?? __('user'),

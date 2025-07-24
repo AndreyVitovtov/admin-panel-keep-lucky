@@ -57,3 +57,5 @@ VALUES ('apk 1', ''),
        ('apk 4', ''),
        ('apk 5', '');
 
+ALTER TABLE `admins`
+    ADD COLUMN `admin_id` INT UNSIGNED NULL AFTER `avatar`;

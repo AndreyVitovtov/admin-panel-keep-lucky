@@ -71,7 +71,7 @@ class API
 	 */
 	public function getUserStats(int $userId): array
 	{
-		return $this->get('admin/user-stats', $userId);
+		return $this->get('admin/stats/users', $userId);
 	}
 
 	/**
@@ -121,8 +121,8 @@ class API
 		if (!empty($region)) $params['region'] = $region;
 		if (!empty($city)) $params['city'] = $city;
 		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
-		if (!empty($dateFrom)) $params['DateFrom'] = $dateFrom;
-		if (!empty($dateTo)) $params['DateTo'] = $dateTo;
+		if (!empty($dateFrom)) $params['DateFrom'] = $dateFrom . ' 00:00:00';
+		if (!empty($dateTo)) $params['DateTo'] = $dateTo . ' 23:59:59';
 		return $this->get('admin/stats/traffic', $params);
 	}
 
