@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     checkbox.value = shop;
                     checkbox.id = 'shop-' + k;
                     checkbox.classList.add('form-check-input', 'mt-0');
-                    if (shops.includes(shop)) checkbox.checked = true;
+                    if (data.selectedShops.includes(shop)) checkbox.checked = true;
 
                     const label = document.createElement('label');
                     label.setAttribute('for', checkbox.id);
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     checkbox.value = apk;
                     checkbox.id = 'apk-' + k;
                     checkbox.classList.add('form-check-input', 'mt-0');
-                    if (apks.includes(apk)) checkbox.checked = true;
+                    if (data.selectedApk.includes(apk)) checkbox.checked = true;
 
                     const label = document.createElement('label');
                     label.setAttribute('for', checkbox.id);
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
             referralInput.id = 'referralCode';
             referralInput.name = 'referralCode';
             referralInput.classList.add('form-control');
-            referralInput.value = referralCode;
+            referralInput.value = data.referralCode ?? '';
 
             referralDiv.appendChild(referralLabel);
             referralDiv.appendChild(referralInput);

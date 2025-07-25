@@ -136,6 +136,9 @@ class Administrators extends Controller
 		]);
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function edit($id): void
 	{
 		$admin = new AdminModel();
@@ -145,9 +148,19 @@ class Administrators extends Controller
 		} else {
 			$role = new Role();
 
+			$api = new \App\API\API();
+			$adminApi = $api->getAdminById($admin['admin_id']);
+			$selectedApks = $adminApi['apks'];
+			$selectedShops = $adminApi['shops'];
+			$selectedReferralCode = $adminApi['referral_codes'][0] ?? '';
+			//TODO: Referral codes array?
+
 			$this->auth()->view('edit', array_merge([
 				'title' => __('edit administrator'),
 				'pageTitle' => __('edit administrator'),
+				'selectedApks' => $selectedApks,
+				'selectedShops' => $selectedShops,
+				'selectedReferralCode' => $selectedReferralCode,
 				'assets' => [
 					'js' => 'administrators.js'
 				]
@@ -155,39 +168,55 @@ class Administrators extends Controller
 		}
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function update($id, Request $request): void
 	{
 		$this->auth();
-
 		$admin = new AdminModel();
 		$admin->find($id);
 		if (!is_null($request->name) && !is_null($request->login) && !is_null($request->role)) {
-			if (!is_null($request->password)) {
-				if (is_null($request->repeatPassword)) {
-					redirect('/administrators/edit/' . $id, [
-						'error' => __('send all required parameters')
-					]);
-					exit;
-				} else {
-					if ($request->password != $request->repeatPassword) {
+			$api = new \App\API\API();
+			$res = $api->updateAdminAccess(
+				$admin->admin_id,
+				$request->apk ?? [],
+				$request->shop ?? [],
+				[$request->referralCode ?? '']
+			);
+			if ($res['status'] != 200) {
+				redirect('/administrators/edit/' . $id, [
+					'error' => $res['response']['message'] ?? 'Update failed'
+				]);
+			} else {
+
+				if (!is_null($request->password)) {
+					if (is_null($request->repeatPassword)) {
 						redirect('/administrators/edit/' . $id, [
-							'error' => __('password mismatch')
+							'error' => __('send all required parameters')
 						]);
 						exit;
 					} else {
-						$admin->password = $request->password;
+						if ($request->password != $request->repeatPassword) {
+							redirect('/administrators/edit/' . $id, [
+								'error' => __('password mismatch')
+							]);
+							exit;
+						} else {
+							$admin->password = $request->password;
+						}
 					}
 				}
+				$referralCode = trim($request->referralCode);
+				$admin->name = trim($request->name);
+				$admin->login = trim($request->login);
+				$admin->role = trim($request->role);
+				$admin->referral_code = $referralCode ?? '';
+				$admin->update();
+				redirect('/administrators', [
+					'message' => __('changes saved')
+				]);
 			}
-			$referralCode = trim($request->referralCode);
-			$admin->name = trim($request->name);
-			$admin->login = trim($request->login);
-			$admin->role = trim($request->role);
-			$admin->referral_code = $referralCode ?? '';
-			$admin->update();
-			redirect('/administrators', [
-				'message' => __('changes saved')
-			]);
 		} else {
 			redirect('/administrators/edit/' . $id, [
 				'error' => __('send all required parameters')

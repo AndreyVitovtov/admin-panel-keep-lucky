@@ -240,7 +240,7 @@ class API
 	 */
 	public function updateAdminAccess(int $id, array $apks, array $shops, array $referralCodes): array
 	{
-		return $this->patch("admin/roles/$id/access", json_encode([
+		return $this->put("admin/roles/$id/access", json_encode([
 			'apks' => $apks,
 			'shops' => $shops,
 			'referral_codes' => $referralCodes
@@ -277,6 +277,18 @@ class API
 	public function getAdminAccessShop(): array
 	{
 		return $this->get('admin/roles/access/shop');
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function getAdminById(int $adminId): array
+	{
+		$admins = $this->getAdmins();
+		if($admins['status'] != 200) return [];
+		$admins = $admins['response'] ?? [];
+		$admins = array_combine(array_column($admins, 'id'), $admins);
+		return $admins[$adminId] ?? [];
 	}
 
 	/**
@@ -325,6 +337,14 @@ class API
 	/**
 	 * @throws Exception
 	 */
+	protected function put(string $endpoint, array|string $params = [], array $headers = []): array
+	{
+		return $this->makeRequest('PUT', $endpoint, $params, $headers);
+	}
+
+	/**
+	 * @throws Exception
+	 */
 	protected function delete(string $endpoint, array|string $params = [], array $headers = []): array
 	{
 		return $this->makeRequest('DELETE', $endpoint, $params, $headers);
@@ -351,6 +371,7 @@ class API
 
 			case 'POST':
 			case 'PATCH':
+			case 'PUT':
 			case 'DELETE':
 				if (is_string($params)) {
 					curl_setopt($ch, CURLOPT_POSTFIELDS, $params);

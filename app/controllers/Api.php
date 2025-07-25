@@ -147,14 +147,17 @@ class Api extends Controller
 		if ($shops['status'] == 200) $shops = $shops['response'];
 		else $shops = [];
 
-		// TODO: Get selected APK and Shops $selectedShops, $selectedApk
-		//  get admin by id
+		$admin = $api->getAdminById($adminId);
+		$selectedShops = $admin['shops'] ?? [];
+		$selectedApk = $admin['apks'] ?? [];
+		$referralCode = $admin['referral_codes'][0] ?? '';
 
 		echo json_encode([
 			'shops' => $shops,
 			'apk' => $apks,
 			'selectedShops' => $selectedShops ?? [],
 			'selectedApk' => $selectedApk ?? [],
+			'referralCode' => $referralCode ?? '',
 			'adminId' => $adminId ?? ''
 		]);
 	}

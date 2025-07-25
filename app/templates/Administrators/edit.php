@@ -29,13 +29,6 @@
 			<?php endforeach; ?>
         </select>
     </div>
-	<?php if (!empty($referral_code)): ?>
-        <div class="mb-3" id="referral-code-wrapper">
-            <label for="referral-code" class="form-label">*<?= __('referral code') ?>:</label>
-            <input type="text" name="referralCode" value="<?= $referral_code ?? '' ?>" class="form-control"
-                   id="referral-code" required>
-        </div>
-	<?php endif; ?>
     <div class="mt-3 mb-3">
         <input type="submit" value="<?= __('save') ?>" class="btn">
     </div>
