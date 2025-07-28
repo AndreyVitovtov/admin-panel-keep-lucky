@@ -6,11 +6,26 @@ use App\Utility\Request;
 
 class Api extends Controller
 {
+	/**
+	 * @throws \Exception
+	 */
 	public function updateShops(Request $request): void
 	{
 		$shops = $request->get('shops') ?? [];
 		$_SESSION['shops'] = $shops;
 
+		$api = new \App\API\API();
+
+		$res = $api->getAdminAccessApk();
+		if ($res['status'] == 200) {
+			$apks = $res['response'];
+		}
+
+		$referralCode = $_SESSION['referralCode'] ?? null;
+		$referralCode = is_null($referralCode) ? [] : [$referralCode];
+
+		$api->updateAdminAccess($_SESSION['adminId'], $apks ?? $_SESSION['apks'] ?? [], $shops, $referralCode);
+
 		try {
 			echo $this->getDataForDashboard();
 		} catch (\Exception $e) {
@@ -20,10 +35,25 @@ class Api extends Controller
 		}
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function updateApk(Request $request): void
 	{
-		$apk = $request->get('apk') ?? [];
-		$_SESSION['apk'] = $apk;
+		$apks = $request->get('apk') ?? [];
+		$_SESSION['apks'] = $apks;
+
+		$api = new \App\API\API();
+
+		$res = $api->getAdminAccessShop();
+		if ($res['status'] == 200) {
+			$shops = $res['response'];
+		}
+
+		$referralCode = $_SESSION['referralCode'] ?? null;
+		$referralCode = is_null($referralCode) ? [] : [$referralCode];
+
+		$api->updateAdminAccess($_SESSION['adminId'], $apks, $shops ?? $_SESSION['shops'] ?? [], $referralCode);
 
 		try {
 			echo $this->getDataForDashboard();
@@ -34,10 +64,27 @@ class Api extends Controller
 		}
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function updateReferralCode(Request $request): void
 	{
 		$referralCode = $request->get('referralCode') ?? '';
 		$_SESSION['referralCode'] = $referralCode;
+
+		$api = new \App\API\API();
+
+		$res = $api->getAdminAccessApk();
+		if ($res['status'] == 200) {
+			$apks = $res['response'];
+		}
+
+		$res = $api->getAdminAccessShop();
+		if ($res['status'] == 200) {
+			$shops = $res['response'];
+		}
+
+		$api->updateAdminAccess($_SESSION['adminId'], $apks ?? [], $shops ?? [], [$referralCode] ?? []);
 
 		try {
 			echo $this->getDataForDashboard();

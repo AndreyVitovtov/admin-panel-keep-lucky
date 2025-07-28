@@ -16,6 +16,12 @@ class API
 			'skip' => $skip,
 			'take' => $take
 		];
+
+		$shops = implode(',', $_SESSION['shops'] ?? []);
+		$apks = implode(',', $_SESSION['apks'] ?? []);
+		if (!empty($shops)) $params = array_merge($params, ['shop' => $shops]);
+		if (!empty($apks)) $params = array_merge($params, ['apk' => $apks]);
+
 		if ($online) $params['online'] = 'true';
 		return $this->get('admin/search/users', $params);
 	}
@@ -39,6 +45,12 @@ class API
 		if (!empty($country)) $params['country'] = $country;
 		if (!empty($region)) $params['region'] = $region;
 		if (!empty($city)) $params['city'] = $city;
+
+		$shops = implode(',', $_SESSION['shops'] ?? []);
+		$apks = implode(',', $_SESSION['apks'] ?? []);
+		if (!empty($shops)) $params = array_merge($params, ['shop' => $shops]);
+		if (!empty($apks)) $params = array_merge($params, ['apk' => $apks]);
+
 		return $this->get('admin/stats/users', $params);
 	}
 
@@ -71,7 +83,13 @@ class API
 	 */
 	public function getUserStats(int $userId): array
 	{
-		return $this->get('admin/stats/users', $userId);
+		$params = [];
+		$shops = implode(',', $_SESSION['shops'] ?? []);
+		$apks = implode(',', $_SESSION['apks'] ?? []);
+		if (!empty($shops)) $params = array_merge($params, ['shop' => $shops]);
+		if (!empty($apks)) $params = array_merge($params, ['apk' => $apks]);
+
+		return $this->get('admin/stats/users', $userId, $params);
 	}
 
 	/**
@@ -123,6 +141,11 @@ class API
 		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
 		if (!empty($dateFrom)) $params['DateFrom'] = $dateFrom . ' 00:00:00';
 		if (!empty($dateTo)) $params['DateTo'] = $dateTo . ' 23:59:59';
+
+		$shops = implode(',', $_SESSION['shops'] ?? []);
+		$apks = implode(',', $_SESSION['apks'] ?? []);
+		if (!empty($shops)) $params = array_merge($params, ['shop' => $shops]);
+		if (!empty($apks)) $params = array_merge($params, ['apk' => $apks]);
 		return $this->get('admin/stats/traffic', $params);
 	}
 
@@ -285,7 +308,7 @@ class API
 	public function getAdminById(int $adminId): array
 	{
 		$admins = $this->getAdmins();
-		if($admins['status'] != 200) return [];
+		if ($admins['status'] != 200) return [];
 		$admins = $admins['response'] ?? [];
 		$admins = array_combine(array_column($admins, 'id'), $admins);
 		return $admins[$adminId] ?? [];

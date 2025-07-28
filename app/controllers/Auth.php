@@ -58,6 +58,7 @@ class Auth extends Controller
 			$_SESSION['role'] = (new Role)->find($adminData['role'])->title;
 			$_SESSION['refCode'] = $adminData['referral_code'];
 			$_SESSION['avatar'] = $adminData['avatar'];
+			$_SESSION['adminId'] = $adminData['admin_id'];
 			redirect('/');
 		}
 	}
