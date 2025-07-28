@@ -378,7 +378,7 @@ class API
 	 */
 	private function makeRequest(string $method, string $endpoint, array|string $params = [], array $headers = []): array
 	{
-		$url = $_SESSION['application']['url'] . '/' . $endpoint;
+		$url = BASE_URL_API . '/' . $endpoint;
 
 		$ch = curl_init();
 

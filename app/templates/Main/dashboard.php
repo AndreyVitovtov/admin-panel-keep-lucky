@@ -420,7 +420,7 @@
         <select id="country" name="country" class="selectpicker form-select" data-live-search="true"
                 title="<?= __('select country') ?>">
 			<?php foreach ($countries ?? [] as $country): ?>
-                <option value="<?= htmlspecialchars($country) ?>" <?= ($selectedCountry ?? '' == htmlspecialchars($country) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
+                <option value="<?= htmlspecialchars($country) ?>" <?= ((($selectedCountry ?? '') == htmlspecialchars($country)) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
 			<?php endforeach; ?>
         </select>
     </div>
@@ -430,7 +430,7 @@
         <select id="region" name="region" class="selectpicker form-select" data-live-search="true"
                 title="<?= __('select region') ?>">
 			<?php foreach ($regions ?? [] as $region): ?>
-                <option value="<?= htmlspecialchars($region) ?>" <?= ($selectedRegion ?? '' == htmlspecialchars($region) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
+                <option value="<?= htmlspecialchars($region) ?>" <?= ((($selectedRegion ?? '') == htmlspecialchars($region)) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
 			<?php endforeach; ?>
         </select>
     </div>
@@ -440,7 +440,7 @@
         <select id="city" name="city" class="selectpicker form-select" data-live-search="true"
                 title="<?= __('select city') ?>">
 			<?php foreach ($cities ?? [] as $city): ?>
-                <option value="<?= htmlspecialchars($city) ?>" <?= ($selectedCity ?? '' == htmlspecialchars($city) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
+                <option value="<?= htmlspecialchars($city) ?>" <?= ((($selectedCity ?? '') == htmlspecialchars($city)) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
 			<?php endforeach; ?>
         </select>
     </div>
