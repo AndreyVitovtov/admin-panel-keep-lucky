@@ -105,5 +105,14 @@
   "select country": "Select country",
   "select region": "Select region",
   "select city": "Select city",
-  "clear filters": "Clear filters"
+  "clear filters": "Clear filters",
+  "section": "Section",
+  "option": "Option",
+  "shops": "Shops",
+  "apks": "Apks",
+  "referral_code": "Referral code",
+  "filters": "Filters",
+  "details": "Details",
+  "top_up_balance": "Top up balance",
+  "write_off_balance": "Write off balance"
 }

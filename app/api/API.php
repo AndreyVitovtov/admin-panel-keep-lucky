@@ -2,6 +2,7 @@
 
 namespace App\API;
 
+use App\Models\AdminModel;
 use Exception;
 use InvalidArgumentException;
 
@@ -19,8 +20,10 @@ class API
 
 		$shops = implode(',', $_SESSION['shops'] ?? []);
 		$apks = implode(',', $_SESSION['apks'] ?? []);
+		$referralCode = $_SESSION['referralCode'] ?? '';
 		if (!empty($shops)) $params = array_merge($params, ['shop' => $shops]);
 		if (!empty($apks)) $params = array_merge($params, ['apk' => $apks]);
+		if (!empty($referralCode)) $params = array_merge($params, ['referral_code' => $referralCode]);
 
 		if ($online) $params['online'] = 'true';
 		return $this->get('admin/search/users', $params);
@@ -139,8 +142,8 @@ class API
 		if (!empty($region)) $params['region'] = $region;
 		if (!empty($city)) $params['city'] = $city;
 		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
-		if (!empty($dateFrom)) $params['DateFrom'] = $dateFrom . ' 00:00:00';
-		if (!empty($dateTo)) $params['DateTo'] = $dateTo . ' 23:59:59';
+		if (!empty($dateFrom)) $params['date_from'] = $dateFrom . ' 00:00:00';
+		if (!empty($dateTo)) $params['date_to'] = $dateTo . ' 23:59:59';
 
 		$shops = implode(',', $_SESSION['shops'] ?? []);
 		$apks = implode(',', $_SESSION['apks'] ?? []);
@@ -408,6 +411,14 @@ class API
 				throw new Exception("Unsupported HTTP method: $method");
 		}
 
+//		if($endpoint == 'admin/stats/users') {
+//			dd($params);
+//		}
+
+//		if($endpoint == 'admin/stats/traffic') {
+//			dd($params);
+//		}
+
 		$headers[] = 'Authorization: Basic ' . $this->getAuthorizationBasic();
 
 		curl_setopt_array($ch, [
@@ -444,8 +455,21 @@ class API
 	 */
 	private function getAuthorizationBasic(): string
 	{
-		if (!empty($_SESSION['application']['username']) && !empty($_SESSION['application']['password'])) {
-			return base64_encode($_SESSION['application']['username'] . ':' . $_SESSION['application']['password']);
+		if (!empty($_SESSION['id'])) {
+			$admin = (new AdminModel())->find($_SESSION['id']);
+			$username = $admin->login;
+
+			// TODO: Edit password for Admin API !!!!!!
+			if ($_SESSION['id'] == 1) {
+				$password = 'admin';
+			} else {
+				$password = $admin->password;
+			}
+			// TODO: END Edit password for Admin API !!!!!!
+
+			if (!empty($username) && !empty($password)) {
+				return base64_encode($username . ':' . $password);
+			}
 		}
 		throw new Exception('Application not selected');
 	}

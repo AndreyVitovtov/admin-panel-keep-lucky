@@ -15,14 +15,6 @@
 			<?php endforeach; ?>
         </select>
     </div>
-    <div class="mb-3">
-        <label for="applicationId" class="form-label"><?= __('select application') ?>:</label>
-        <select name="application" id="applicationId" class="form-select">
-			<?php foreach ($applications ?? [] as $application): ?>
-                <option value="<?= $application['id'] ?>" <?= (($applicationId ?? 0) == $application['id'] ? 'selected' : '') ?>><?= $application['title'] ?></option>
-			<?php endforeach; ?>
-        </select>
-    </div>
     <div class="mb-5">
         <input type="submit" value="<?= __('ok') ?>" class="btn">
     </div>
@@ -33,19 +25,19 @@
         <table class="table table-striped table-hover mb-3">
             <thead>
             <tr>
-                <th><?= __('controller') ?></th>
-                <th><?= __('method') ?></th>
+                <th><?= __('section') ?></th>
+                <th><?= __('option') ?></th>
                 <th><?= __('available') ?></th>
             </tr>
             </thead>
             <tbody>
-			<?php foreach ($routes ?? [] as $key => $route): ?>
+			<?php foreach ($accessesOptions ?? [] as $key => $option): ?>
                 <tr>
-                    <td><label for="<?= $key ?>"><?= $route['controller'] ?></label></td>
-                    <td><label for="<?= $key ?>"><?= $route['method'] ?></label></td>
+                    <td><label for="<?= $key ?>"><?= __($option['section']) ?></label></td>
+                    <td><label for="<?= $key ?>"><?= __($option['title']) ?></label></td>
                     <td>
-                        <input type="checkbox" <?= (in_array($route['method'], ($accesses[$route['controller']] ?? [])) ? 'checked' : '') ?>
-                               data-controller="<?= $route['controller'] ?>" data-method="<?= $route['method'] ?>"
+                        <input type="checkbox" <?= (in_array($option['title'], ($accessesSelected[$option['section']] ?? [])) ? 'checked' : '') ?>
+                               data-section="<?= $option['section'] ?>" data-option="<?= $option['title'] ?>"
                                id="<?= $key ?>">
                     </td>
                 </tr>

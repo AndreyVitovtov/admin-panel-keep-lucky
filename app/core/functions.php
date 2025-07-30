@@ -9,7 +9,6 @@ sessionStart();
 date_default_timezone_set(TIMEZONE);
 
 restoreSession();
-setDefaultApplication();
 
 function isDev(): void
 {
@@ -258,10 +257,10 @@ function checkAccess($access = [], $forbid = []): bool
 	return true;
 }
 
-function menuItem($title, $icon, $address, $controller, $access = [], $forbid = []): string
+function menuItem($title, $icon, $address, $controller, $access = [], $forbid = [], $section = ''): string
 {
 	$accesses = getAccesses();
-	if (isAuth() && $_SESSION['role'] !== 'superadmin' && !in_array('index', $accesses[$controller] ?? [])) return '';
+	if (isAuth() && $_SESSION['role'] !== 'superadmin' && !isset($accesses[$section])) return '';
 	if (!checkAccess($access, $forbid)) return '';
 	return '<a href="' . $address . '">
         <div class="menu-item ' . menuIsActive($controller) . '">
@@ -270,13 +269,13 @@ function menuItem($title, $icon, $address, $controller, $access = [], $forbid = 
     </a>';
 }
 
-function menuRoll($title, $icon, $controller, $items = [], $access = [], $forbid = []): string
+function menuRoll($title, $icon, $controller, $items = [], $access = [], $forbid = [], $section = ''): string
 {
 	if (!checkAccess($access, $forbid)) return '';
 	$menuItems = '';
 	$accesses = getAccesses();
 	foreach ($items as $item) {
-		if (isAuth() && $_SESSION['role'] !== 'superadmin' && !in_array($item['method'], $accesses[$controller] ?? [])) continue;
+		if (isAuth() && $_SESSION['role'] !== 'superadmin' && !isset($accesses[$section][$item['option']])) continue;
 		$menuItems .= '<a href="' . $item['address'] . '" class="' . menuIsActive($controller, $item['method']) . '">
                 <div>' . $item['title'] . '</div>
             </a>';
@@ -312,13 +311,13 @@ function decryptData($data, $key)
 	return openssl_decrypt($data, $cipher, $key, OPENSSL_RAW_DATA, $iv);
 }
 
-function setDefaultApplication(): void
-{
-	$applications = getApplicationsByAccess();
-	if (empty($_SESSION['application']) && !empty($applications)) {
-		$_SESSION['application'] = $applications[0];
-	}
-}
+//function setDefaultApplication(): void
+//{
+//	$applications = getApplicationsByAccess();
+//	if (empty($_SESSION['application']) && !empty($applications)) {
+//		$_SESSION['application'] = $applications[0];
+//	}
+//}
 
 function getApplicationsByAccess(): array
 {
@@ -326,8 +325,7 @@ function getApplicationsByAccess(): array
 		SELECT s.*
 		FROM `accesses` acc,
 		     `shops` s
-		WHERE acc.`application_id` = s.`id`
-		AND acc.`admin_id` = :adminId
+		WHERE acc.`admin_id` = :adminId
 		GROUP BY s.`id`
 		ORDER BY s.`id`
 	", [
@@ -337,13 +335,19 @@ function getApplicationsByAccess(): array
 
 function getAccesses(): array
 {
+	$accessesRes = (new \App\Models\AccessesSelected())->query("
+		SELECT o.`section`, o.`title`
+		FROM `accesses_selected` s,
+		     `accesses_options` o
+		WHERE s.`access_id` = o.`id`
+		AND s.`admin_id` = :adminId
+	", ['adminId' => $_SESSION['id'] ?? 0], true);
+
 	$accesses = [];
-	foreach ((new \App\Models\Access())->get([
-		'application_id' => $_SESSION['application']['id'] ?? 0,
-		'admin_id' => $_SESSION['id'] ?? 0
-	]) as $access) {
-		$accesses[$access['controller']][] = $access['method'];
+	foreach ($accessesRes as $a) {
+		$accesses[$a['section']][$a['title']] = true;
 	}
+
 	return $accesses;
 }
 

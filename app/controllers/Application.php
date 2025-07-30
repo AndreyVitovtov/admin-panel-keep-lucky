@@ -8,11 +8,11 @@ class Application extends Controller
 	{
 		$this->auth();
 		if (!is_string($appId)) $appId = 0;
-		$applications = getApplicationsByAccess();
-		$applications = array_combine(array_column($applications, 'id'), $applications);
-		if (isset($applications[$appId])) {
-			$_SESSION['application'] = $applications[$appId];
-		}
+//		$applications = getApplicationsByAccess();
+//		$applications = array_combine(array_column($applications, 'id'), $applications);
+//		if (isset($applications[$appId])) {
+//			$_SESSION['application'] = $applications[$appId];
+//		}
 		redirect('/');
 	}
 }

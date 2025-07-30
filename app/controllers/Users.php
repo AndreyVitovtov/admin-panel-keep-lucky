@@ -11,18 +11,13 @@ class Users extends Controller
 	/**
 	 * @throws Exception
 	 */
-	public function index($page = null, $online = null): void
+	public function index(Request $request): void
 	{
 		$this->auth();
-
-		if (is_array($page)) $page = $page['page'] ?? 1;
-		else $page = 1;
-
-		if (is_array($online)) $online = $online['online'] ?? 1;
-		else $online = 0;
+		$online = $request->get('online');
 
 		$online = boolval($online ?? false);
-		$skip = intval(($page - 1) * COUNT_PAGINATION);
+		$skip = 0;
 		$take = COUNT_PAGINATION;
 
 		$api = new API();
@@ -41,6 +36,10 @@ class Users extends Controller
 			$totalUsers = ($online ? $usersStats['response']['total_online_users'] : $usersStats['response']['total_users']);
 		}
 
+		if (getRole() == 'admin') {
+			$accesses = getAccesses();
+		}
+
 		$this->view('all', [
 			'title' => __('users'),
 			'pageTitle' => __('users'),
@@ -53,8 +52,8 @@ class Users extends Controller
 				],
 				'css' => 'dataTables.dataTables.min.css'
 			],
-			'page' => $page,
-			'online' => $online
+			'online' => $online,
+			'accesses' => $accesses ?? []
 		]);
 	}
 
@@ -124,38 +123,39 @@ class Users extends Controller
 	{
 		$this->auth();
 
-		$api = new API();
+		$accesses = getAccesses();
+		if (isRole('admin') && !isset($accesses['users']['details'])) (new Errors())->error403();
+		else {
 
-		if (getRole() == 'admin3') {
-			$refCode = $_SESSION['refCode'];
-			$users = $api->getUsersByReferralCode($refCode ?? '0');
-			if ($users['status'] == 200) {
-				$usersIds = array_column(($users['response'] ?? []), 'id');
-				if (!in_array(intval($id), $usersIds)) (new Errors())->error403();
+			$api = new API();
+
+			$data = $api->getUserStats(intval($id));
+			if ($data['status'] == 200) {
+				$user = $data['response'];
+			}
+			$data = $api->getUser(intval($id));
+			if ($data['status'] == 200) {
+				$userInfo = $data['response'];
+			}
+
+			if (isRole('admin') && !empty($_SESSION['referralCode']) && $_SESSION['referralCode'] != $user['referral_code'] ?? '') {
+				(new Errors())->error403();
 			} else {
-				throw new Exception($users['response']['message']);
+				if (isRole('admin')) $accesses = getAccesses();
+
+				$this->view('details', [
+					'title' => $userInfo['username'] ?? __('user'),
+					'pageTitle' => $userInfo['username'] ?? __('user'),
+					'userStats' => $user ?? [],
+					'userInfo' => $userInfo ?? [],
+					'userId' => $id,
+					'assets' => [
+						'js' => 'userDetails.js'
+					],
+					'accesses' => $accesses ?? []
+				]);
 			}
 		}
-
-		$data = $api->getUserStats(intval($id));
-		if ($data['status'] == 200) {
-			$user = $data['response'];
-		}
-		$data = $api->getUser(intval($id));
-		if ($data['status'] == 200) {
-			$userInfo = $data['response'];
-		}
-
-		$this->view('details', [
-			'title' => $userInfo['username'] ?? __('user'),
-			'pageTitle' => $userInfo['username'] ?? __('user'),
-			'userStats' => $user ?? [],
-			'userInfo' => $userInfo ?? [],
-			'userId' => $id,
-			'assets' => [
-				'js' => 'userDetails.js'
-			]
-		]);
 	}
 
 	/**
@@ -178,22 +178,26 @@ class Users extends Controller
 	{
 		$this->auth();
 
-		$amount = $request->amount ?? 0;
-		$id = $request->id ?? 0;
+		$accesses = getAccesses();
+		if (isRole('admin') && !isset($accesses['users']['top_up_balance'])) (new Errors())->error403();
+		else {
+			$amount = $request->amount ?? 0;
+			$id = $request->id ?? 0;
 
-		if (!empty($amount) && !empty($id)) {
-			$api = new API();
-			$result = $api->addBalance(intval($request->id), floatval($request->amount));
-			if ($result['status'] == 201) {
-				$message = __('balance successfully replenished');
-			} else {
-				$message = $result['response']['message'];
+			if (!empty($amount) && !empty($id)) {
+				$api = new API();
+				$result = $api->addBalance(intval($request->id), floatval($request->amount));
+				if ($result['status'] == 201) {
+					$message = __('balance successfully replenished');
+				} else {
+					$message = $result['response']['message'];
+				}
 			}
-		}
 
-		redirect('/users/details/' . $id, [
-			'message' => ($message ?? 'please send all required parameters')
-		]);
+			redirect('/users/details/' . $id, [
+				'message' => ($message ?? 'please send all required parameters')
+			]);
+		}
 	}
 
 	/**
@@ -203,20 +207,24 @@ class Users extends Controller
 	{
 		$this->auth();
 
-		$amount = $request->amount ?? 0;
-		$id = $request->id ?? 0;
+		$accesses = getAccesses();
+		if (isRole('admin') && !isset($accesses['users']['write_off_balance'])) (new Errors())->error403();
+		else {
+			$amount = $request->amount ?? 0;
+			$id = $request->id ?? 0;
 
-		if (!empty($amount) && !empty($id)) {
-			$api = new API();
-			$result = $api->writeOffBalance(intval($request->id), floatval($request->amount));
-			if ($result['status'] == 201) {
-				$message = __('balance was successfully written off');
-			} else {
-				$message = $result['response']['message'];
+			if (!empty($amount) && !empty($id)) {
+				$api = new API();
+				$result = $api->writeOffBalance(intval($request->id), floatval($request->amount));
+				if ($result['status'] == 201) {
+					$message = __('balance was successfully written off');
+				} else {
+					$message = $result['response']['message'];
+				}
 			}
+			redirect('/users/details/' . $id, [
+				'message' => ($message ?? 'please send all required parameters')
+			]);
 		}
-		redirect('/users/details/' . $id, [
-			'message' => ($message ?? 'please send all required parameters')
-		]);
 	}
 }

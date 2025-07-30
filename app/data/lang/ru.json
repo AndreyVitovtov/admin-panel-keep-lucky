@@ -105,5 +105,14 @@
   "select country": "Выберите страну",
   "select region": "Выберите регион",
   "select city": "Выберите город",
-  "clear filters": "Очистить фильтры"
+  "clear filters": "Очистить фильтры",
+  "section": "Раздел",
+  "option": "Опция",
+  "shops": "Shops",
+  "apks": "Apks",
+  "referral_code": "Referral code",
+  "filters": "Фильтры",
+  "details": "Подробнее",
+  "top_up_balance": "Пополнить баланс",
+  "write_off_balance": "Снять с баланса"
 }

@@ -25,6 +25,8 @@ class Main extends Controller
 		$api = new API();
 
 		if (getRole() == 'admin') {
+			$accesses = getAccesses();
+
 			$adminAccess = $api->getAdminAccess();
 			if ($adminAccess['status'] == 200) {
 				$selectedShops = $adminAccess['response']['shops'];
@@ -106,7 +108,8 @@ class Main extends Controller
 			'selectedRegion' => $selectedRegion ?? '',
 			'selectedCity' => $selectedCity ?? '',
 			'dateFrom' => $dateFrom ?? '',
-			'dateTo' => $dateTo ?? ''
+			'dateTo' => $dateTo ?? '',
+			'accesses' => $accesses ?? []
 		]);
 	}
 }

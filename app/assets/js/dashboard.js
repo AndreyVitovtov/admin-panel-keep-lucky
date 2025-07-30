@@ -38,10 +38,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    document.querySelector('#referral-code').addEventListener('blur', async function () {
-        await loader();
-        updateReferralCode();
-    });
+    let inputReferralCode = document.querySelector('#referral-code');
+    if (inputReferralCode) {
+        inputReferralCode.addEventListener('blur', async function () {
+            await loader();
+            updateReferralCode();
+        });
+    }
 
     document.getElementById('clear-filters').addEventListener('click', async function () {
         await loader();

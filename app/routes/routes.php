@@ -3,10 +3,12 @@
 use App\Routes\Route;
 
 Route::get('/', [\App\Controllers\Main::class, 'index'], [\App\Middlewares\AccessControl::class]);
+Route::get('/users', [\App\Controllers\Users::class, 'index'], [\App\Middlewares\AccessControl::class]);
+Route::get('/users/details/{id}', [\App\Controllers\Users::class, 'details'], [\App\Middlewares\AccessControl::class]);
+
 Route::get('/users/all', [\App\Controllers\Users::class, 'all'], [\App\Middlewares\AccessControl::class]);
 Route::get('/users/searchByLogin', [\App\Controllers\Users::class, 'searchByLogin'], [\App\Middlewares\AccessControl::class]);
 Route::get('/users/searchByRefCode', [\App\Controllers\Users::class, 'searchByRefCode'], [\App\Middlewares\AccessControl::class]);
-Route::get('/users/details/{id}', [\App\Controllers\Users::class, 'details'], [\App\Middlewares\AccessControl::class]);
 Route::post('/users/block', [\App\Controllers\Users::class, 'block'], [\App\Middlewares\AccessControl::class]);
 Route::post('/users/topUpBalance', [\App\Controllers\Users::class, 'topUpBalance'], [\App\Middlewares\AccessControl::class]);
 Route::post('/users/writeOffBalance', [\App\Controllers\Users::class, 'writeOffBalance'], [\App\Middlewares\AccessControl::class]);

@@ -59,3 +59,36 @@ VALUES ('apk 1', ''),
 
 ALTER TABLE `admins`
     ADD COLUMN `admin_id` INT UNSIGNED NULL AFTER `avatar`;
+
+ALTER TABLE `accesses`
+    DROP COLUMN `application_id`;
+
+CREATE TABLE `accesses_options`
+(
+    `id`      INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `section` VARCHAR(255),
+    `title`   VARCHAR(255)
+);
+
+INSERT INTO `accesses_options` (`section`, `title`)
+VALUES ('traffic', 'filters'),
+       ('users', 'all'),
+       ('users', 'details'),
+       ('users', 'top_up_balance'),
+       ('users', 'write_off_balance'),
+       ('users', 'transactions'),
+       ('administrators', 'add'),
+       ('administrators', 'all'),
+       ('administrators', 'access');
+
+CREATE TABLE `accesses_selected`
+(
+    `id`        INT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
+    `admin_id`  INT UNSIGNED,
+    `access_id` INT UNSIGNED,
+    `available` BOOLEAN  DEFAULT 1,
+    `added`     DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `updated`   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON UPDATE SET NULL ON DELETE SET NULL,
+    FOREIGN KEY (`access_id`) REFERENCES `accesses_options` (`id`) ON UPDATE SET NULL ON DELETE SET NULL
+);

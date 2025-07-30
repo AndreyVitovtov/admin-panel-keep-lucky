@@ -5,12 +5,14 @@ $menu = [
 		'title' => __('traffic'),
 		'icon' => 'chart-bar-1',
 		'address' => '/',
-		'controller' => 'Main'
+		'controller' => 'Main',
+        'section' => 'traffic'
 	], [
 		'title' => __('users'),
 		'icon' => 'group',
 		'address' => '/users',
-		'controller' => 'Users'
+		'controller' => 'Users',
+        'section' => 'users'
 	],
 //    [
 //		'title' => __('users'),
@@ -59,17 +61,21 @@ $menu = [
 			[
 				'title' => __('add'),
 				'address' => '/administrators/add',
-				'method' => 'add'
+				'method' => 'add',
+                'option' => 'add'
 			], [
 				'title' => __('all'),
 				'address' => '/administrators',
-				'method' => 'index'
+				'method' => 'index',
+				'option' => 'all'
 			], [
 				'title' => __('access'),
 				'address' => '/administrators/access',
-				'method' => 'access'
+				'method' => 'access',
+				'option' => 'access'
 			]
-		]
+		],
+        'section' => 'administrators'
 	]
 ];
 ?>
@@ -83,7 +89,7 @@ $menu = [
 	<?= implode('', array_map(function ($i) {
 		extract($i);
 		return isset($items) ?
-			menuRoll($title, $icon, $controller, $items, $access ?? [], $forbid ?? []) :
-			menuItem($title, $icon, $address, $controller, $assets ?? [], $forbid ?? []);
+			menuRoll($title, $icon, $controller, $items, $access ?? [], $forbid ?? [], $section) :
+			menuItem($title, $icon, $address, $controller, $assets ?? [], $forbid ?? [], $section);
 	}, $menu)) ?>
 </div>

@@ -414,68 +414,70 @@
 
 </style>
 
-<div class="my-filter">
-    <div class="filter-block">
-        <label for="country" class="form-label"><?= __('country') ?></label>
-        <select id="country" name="country" class="selectpicker form-select" data-live-search="true"
-                title="<?= __('select country') ?>">
-			<?php foreach ($countries ?? [] as $country): ?>
-                <option value="<?= htmlspecialchars($country) ?>" <?= ((($selectedCountry ?? '') == htmlspecialchars($country)) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
-			<?php endforeach; ?>
-        </select>
+<?php if (isRole('superadmin') || isset($accesses['traffic']['filters'])): ?>
+    <div class="my-filter">
+        <div class="filter-block">
+            <label for="country" class="form-label"><?= __('country') ?></label>
+            <select id="country" name="country" class="selectpicker form-select" data-live-search="true"
+                    title="<?= __('select country') ?>">
+				<?php foreach ($countries ?? [] as $country): ?>
+                    <option value="<?= htmlspecialchars($country) ?>" <?= ((($selectedCountry ?? '') == htmlspecialchars($country)) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
+				<?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="filter-block">
+            <label for="region" class="form-label"><?= __('region') ?></label>
+            <select id="region" name="region" class="selectpicker form-select" data-live-search="true"
+                    title="<?= __('select region') ?>">
+				<?php foreach ($regions ?? [] as $region): ?>
+                    <option value="<?= htmlspecialchars($region) ?>" <?= ((($selectedRegion ?? '') == htmlspecialchars($region)) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
+				<?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="filter-block">
+            <label for="city" class="form-label"><?= __('city') ?></label>
+            <select id="city" name="city" class="selectpicker form-select" data-live-search="true"
+                    title="<?= __('select city') ?>">
+				<?php foreach ($cities ?? [] as $city): ?>
+                    <option value="<?= htmlspecialchars($city) ?>" <?= ((($selectedCity ?? '') == htmlspecialchars($city)) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
+				<?php endforeach; ?>
+            </select>
+        </div>
     </div>
 
-    <div class="filter-block">
-        <label for="region" class="form-label"><?= __('region') ?></label>
-        <select id="region" name="region" class="selectpicker form-select" data-live-search="true"
-                title="<?= __('select region') ?>">
-			<?php foreach ($regions ?? [] as $region): ?>
-                <option value="<?= htmlspecialchars($region) ?>" <?= ((($selectedRegion ?? '') == htmlspecialchars($region)) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
-			<?php endforeach; ?>
-        </select>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.querySelector('.my-filter');
+            if (!container) return;
 
-    <div class="filter-block">
-        <label for="city" class="form-label"><?= __('city') ?></label>
-        <select id="city" name="city" class="selectpicker form-select" data-live-search="true"
-                title="<?= __('select city') ?>">
-			<?php foreach ($cities ?? [] as $city): ?>
-                <option value="<?= htmlspecialchars($city) ?>" <?= ((($selectedCity ?? '') == htmlspecialchars($city)) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
-			<?php endforeach; ?>
-        </select>
-    </div>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.querySelector('.my-filter');
-        if (!container) return;
-
-        const selects = container.querySelectorAll('select.selectpicker');
-        selects.forEach(select => {
-            if (typeof bootstrap.Selectpicker === 'function') {
-                bootstrap.Selectpicker.getOrCreateInstance(select);
-            }
+            const selects = container.querySelectorAll('select.selectpicker');
+            selects.forEach(select => {
+                if (typeof bootstrap.Selectpicker === 'function') {
+                    bootstrap.Selectpicker.getOrCreateInstance(select);
+                }
+            });
         });
-    });
-</script>
+    </script>
 
-<div class="date-range-filters mt-5">
-    <div class="date-filter-block">
-        <label for="date-from"><?= __('date from') ?></label>
-        <input type="date" name="date-from" value="<?= $dateFrom ?? '' ?>" id="date-from" class="form-control">
+    <div class="date-range-filters mt-5">
+        <div class="date-filter-block">
+            <label for="date-from"><?= __('date from') ?></label>
+            <input type="date" name="date-from" value="<?= $dateFrom ?? '' ?>" id="date-from" class="form-control">
+        </div>
+        <div class="date-filter-block">
+            <label for="date-to"><?= __('date to') ?></label>
+            <input type="date" name="date-to" value="<?= $dateTo ?? '' ?>" id="date-to" class="form-control">
+        </div>
     </div>
-    <div class="date-filter-block">
-        <label for="date-to"><?= __('date to') ?></label>
-        <input type="date" name="date-to" value="<?= $dateTo ?? '' ?>" id="date-to" class="form-control">
-    </div>
-</div>
 
-<div class="text-end mt-3">
-    <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-filters">
-		<?= __('clear filters') ?>
-    </button>
-</div>
+    <div class="text-end mt-3">
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-filters">
+			<?= __('clear filters') ?>
+        </button>
+    </div>
+<?php endif; ?>
 
 <div class="mt-5">
     <table class="table table-striped table-hover table-bordered">
