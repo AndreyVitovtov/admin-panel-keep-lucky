@@ -101,6 +101,9 @@ function updateReferralCode() {
         {referralCode},
         async function (data) {
             await updateDataTraffic(data);
+            renderChart('countryChart', usersByCountries, data['usersByCountries']);
+            renderChart('regionChart', usersByRegions, data['usersByRegions']);
+            renderChart('cityChart', usersByCities, data['usersByCities']);
         }
     );
 }

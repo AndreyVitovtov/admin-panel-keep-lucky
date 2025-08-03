@@ -3,6 +3,51 @@
       rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 
+<script>
+    let charts = {};
+    let lastTitle = '';
+    let usersByCountries = <?= json_encode($usersByCountries ?? []); ?>;
+    let usersByRegions = <?= json_encode($usersByRegions ?? []); ?>;
+    let usersByCities = <?= json_encode($usersByCities ?? []); ?>;
+
+    function renderChart(ctxId, dataObject, title = '') {
+        const labels = Object.keys(dataObject);
+        const data = Object.values(dataObject);
+        const bgColors = labels.map((_, i) => `hsl(${i * 30 % 360}, 70%, 60%)`);
+
+        if (charts[ctxId]) {
+            lastTitle = charts[ctxId].options.plugins.title.text || lastTitle;
+
+            charts[ctxId].destroy();
+        }
+
+        const chartTitle = title || lastTitle || '';
+
+        charts[ctxId] = new Chart(document.getElementById(ctxId), {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: data,
+                    backgroundColor: bgColors
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    },
+                    title: {
+                        display: true,
+                        text: chartTitle
+                    }
+                }
+            }
+        });
+    }
+</script>
+
 <style>
     .traffic-filter {
         display: flex;
@@ -185,13 +230,18 @@
             flex-direction: column;
         }
     }
+
+    canvas {
+        width: 100% !important;
+        /*max-height: 300px;*/
+    }
 </style>
 
 <?php if (isRole('superadmin')): ?>
     <div class="traffic-filter">
         <div class="filter-block">
             <h4 class="dropdown-toggle" onclick="toggleDropdown(this)">
-				<?= __('shop') ?>
+                <?= __('shop') ?>
                 <span class="arrow" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" fill="black">
                     <path d="M1 3 L5 7 L9 3 Z"/>
@@ -203,18 +253,18 @@
                     <input type="checkbox" class="form-check-input" id="shop-all">
                     <label for="shop-all" class="form-check-label"><?= __('all') ?></label>
                 </div>
-				<?php foreach ($shops ?? [] as $shop): ?>
+                <?php foreach ($shops ?? [] as $shop): ?>
                     <div>
                         <input type="checkbox"
                                name="shop[]"
                                value="<?= $shop ?>"
                                class="form-check-input shop-checkbox"
                                id="shop-<?= $shop ?>"
-						       <?php if (in_array($shop, $selectedShops ?? [])): ?>checked<?php endif; ?>
+                               <?php if (in_array($shop, $selectedShops ?? [])): ?>checked<?php endif; ?>
                         >
                         <label for="shop-<?= $shop ?>" class="form-check-label"><?= $shop ?></label>
                     </div>
-				<?php endforeach; ?>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -250,7 +300,7 @@
 
         <div class="filter-block">
             <h4 class="dropdown-toggle" onclick="toggleDropdown(this)">
-				<?= __('apk') ?>
+                <?= __('apk') ?>
                 <span class="arrow" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" fill="black">
                     <path d="M1 3 L5 7 L9 3 Z"/>
@@ -262,18 +312,18 @@
                     <input type="checkbox" class="form-check-input" id="apk-all">
                     <label for="apk-all" class="form-check-label"><?= __('all') ?></label>
                 </div>
-				<?php foreach ($apks ?? [] as $apk): ?>
+                <?php foreach ($apks ?? [] as $apk): ?>
                     <div>
                         <input type="checkbox"
                                name="apk[]"
                                value="<?= $apk ?>"
                                class="form-check-input apk-checkbox"
                                id="apk-<?= $apk ?>"
-						       <?php if (in_array($apk, $selectedApks ?? [])): ?>checked<?php endif; ?>
+                               <?php if (in_array($apk, $selectedApks ?? [])): ?>checked<?php endif; ?>
                         >
                         <label for="apk-<?= $apk ?>" class="form-check-label"><?= $apk ?></label>
                     </div>
-				<?php endforeach; ?>
+                <?php endforeach; ?>
             </div>
         </div>
 
@@ -420,9 +470,9 @@
             <label for="country" class="form-label"><?= __('country') ?></label>
             <select id="country" name="country" class="selectpicker form-select" data-live-search="true"
                     title="<?= __('select country') ?>">
-				<?php foreach ($countries ?? [] as $country): ?>
+                <?php foreach ($countries ?? [] as $country): ?>
                     <option value="<?= htmlspecialchars($country) ?>" <?= ((($selectedCountry ?? '') == htmlspecialchars($country)) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
-				<?php endforeach; ?>
+                <?php endforeach; ?>
             </select>
         </div>
 
@@ -430,9 +480,9 @@
             <label for="region" class="form-label"><?= __('region') ?></label>
             <select id="region" name="region" class="selectpicker form-select" data-live-search="true"
                     title="<?= __('select region') ?>">
-				<?php foreach ($regions ?? [] as $region): ?>
+                <?php foreach ($regions ?? [] as $region): ?>
                     <option value="<?= htmlspecialchars($region) ?>" <?= ((($selectedRegion ?? '') == htmlspecialchars($region)) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
-				<?php endforeach; ?>
+                <?php endforeach; ?>
             </select>
         </div>
 
@@ -440,9 +490,9 @@
             <label for="city" class="form-label"><?= __('city') ?></label>
             <select id="city" name="city" class="selectpicker form-select" data-live-search="true"
                     title="<?= __('select city') ?>">
-				<?php foreach ($cities ?? [] as $city): ?>
+                <?php foreach ($cities ?? [] as $city): ?>
                     <option value="<?= htmlspecialchars($city) ?>" <?= ((($selectedCity ?? '') == htmlspecialchars($city)) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
-				<?php endforeach; ?>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>
@@ -474,7 +524,7 @@
 
     <div class="text-end mt-3">
         <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-filters">
-			<?= __('clear filters') ?>
+            <?= __('clear filters') ?>
         </button>
     </div>
 <?php endif; ?>
@@ -499,3 +549,23 @@
         </tr>
     </table>
 </div>
+
+<div class="container my-4">
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <canvas id="countryChart"></canvas>
+        </div>
+        <div class="col-md-4 mb-4">
+            <canvas id="regionChart"></canvas>
+        </div>
+        <div class="col-md-4 mb-4">
+            <canvas id="cityChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    renderChart('countryChart', usersByCountries, '<?= __('users by countries') ?>');
+    renderChart('regionChart', usersByRegions, '<?= __('users by regions') ?>');
+    renderChart('cityChart', usersByCities, '<?= __('users by cities') ?>');
+</script>

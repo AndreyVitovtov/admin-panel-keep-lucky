@@ -235,7 +235,20 @@ class API
 	 */
 	public function filters(): array
 	{
-		return $this->get('admin/search/filters');
+        $params = [];
+        $shops = implode(',', $_SESSION['shops'] ?? []);
+        $apks = implode(',', $_SESSION['apks'] ?? []);
+        $referralCode = $_SESSION['referralCode'] ?? '';
+        $dateFrom = $_SESSION['dateFrom'] ?? '';
+        $dateTo = $_SESSION['dateTo'] ?? '';
+
+        if (!empty($referralCode)) $params['referral_code'] = $referralCode;
+        if (!empty($shops)) $params['shops'] = $shops;
+        if (!empty($apks)) $params['apks'] = $apks;
+        if (!empty($dateFrom)) $params['date_from'] = $dateFrom;
+        if (!empty($dateTo)) $params['date_to'] = $dateTo;
+
+		return $this->get('admin/search/filters', $params);
 	}
 
 	/**
@@ -411,7 +424,7 @@ class API
 				throw new Exception("Unsupported HTTP method: $method");
 		}
 
-//		if($endpoint == 'admin/stats/users') {
+//		if($endpoint == 'admin/search/filters') {
 //			dd($params);
 //		}
 

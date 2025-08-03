@@ -163,6 +163,7 @@ class Api extends Controller
 		$api = new \App\API\API();
 		$trafficStats = $api->getTrafficStats($country ?? '', $region ?? '', $city ?? '', $referralCode ?? '', $dateFrom ?? '', $dateTo ?? '');
 		$usersStats = $api->getUsersStats($country ?? '', $region ?? '', $city ?? '');
+        $filters = $api->filters();
 
 		$data = [];
 
@@ -173,6 +174,13 @@ class Api extends Controller
 		if ($usersStats['status'] == 200) {
 			$data = array_merge($data, $usersStats['response']);
 		}
+
+        if($filters['status'] == 200) {
+            $filters = $filters['response'];
+            $data['usersByCountries'] = $filters['country'];
+            $data['usersByRegions'] = $filters['region'];
+            $data['usersByCities'] = $filters['city'];
+        }
 
 		return ((!$array) ? json_encode($data) : $data);
 	}
