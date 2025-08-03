@@ -74,6 +74,7 @@ class Main extends Controller
 		$selectedCity = $_SESSION['city'] ?? '';
 		$dateFrom = $_SESSION['dateFrom'] ?? '';
 		$dateTo = $_SESSION['dateTo'] ?? '';
+		$trafficSortedBy = $_SESSION['trafficSortedBy'] ?? '';
 
 		$dataForDashboard = (new \App\Controllers\Api())->getDataForDashboard(true);
 
@@ -109,7 +110,8 @@ class Main extends Controller
 			'selectedCity' => $selectedCity ?? '',
 			'dateFrom' => $dateFrom ?? '',
 			'dateTo' => $dateTo ?? '',
-			'accesses' => $accesses ?? []
+			'accesses' => $accesses ?? [],
+			'trafficSortedBy' => $trafficSortedBy ?? ''
 		]);
 	}
 }

@@ -92,3 +92,12 @@ CREATE TABLE `accesses_selected`
     FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON UPDATE SET NULL ON DELETE SET NULL,
     FOREIGN KEY (`access_id`) REFERENCES `accesses_options` (`id`) ON UPDATE SET NULL ON DELETE SET NULL
 );
+
+
+
+#####
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Plb^6KU{$–}27Hc';
+# CREATE USER 'admin_panel'@'localhost' IDENTIFIED BY '–BR(6Y34s9B{.iE';
+# CREATE DATABASE `admin_panel` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+# USE `admin_panel`;
+# GRANT ALL PRIVILEGES ON `admin_panel`.* TO 'admin_panel'@'localhost';

@@ -114,5 +114,9 @@
   "filters": "Фильтры",
   "details": "Подробнее",
   "top_up_balance": "Пополнить баланс",
-  "write_off_balance": "Снять с баланса"
+  "write_off_balance": "Снять с баланса",
+  "summary": "Сводка",
+  "by days": "По дням",
+  "by months": "По месяцам",
+  "by years": "По годам"
 }

@@ -65,8 +65,8 @@
                 <td><?= $user['username'] ?></td>
                 <td><?= $user['email'] ?></td>
                 <td><?= $user['referral_code'] ?></td>
-                <td><?= (empty($user['country']) ? '-' : $user['country']) ?></td>
-                <td><?= (empty($user['city']) ? '-' : $user['city']) ?></td>
+                <td><?= $user['ipAddressInfo']['country'] ?? '-' ?></td>
+                <td><?= $user['ipAddressInfo']['city'] ?? '-' ?></td>
                 <!--            <td><i class="icon--->
 				<?php //= ($user['is_blocked'] ? 'lock-1' : 'lock-open-1') ?><!--"></i></td>-->
             </tr>

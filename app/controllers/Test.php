@@ -16,7 +16,7 @@ class Test extends Controller
 //		echo json_encode($api->createAdmin('TestAdmin', 'testadmin2', 'ADMIN', ['apk1'], ['shop1'], ['referral1']));
 //		echo json_encode($api->deleteAdmin(11));
 //		echo json_encode($api->getAdminAccessShop());
-		echo json_encode($api->filters());
+		echo json_encode($api->getTrafficStats('', '', '', '', '2025-01-01', '2025-08-03', 'DAY'));
 	}
 }
 //admin/users-stats - этот метод не плохо бы вернуть, так как уже работал в админке

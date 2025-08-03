@@ -95,6 +95,18 @@ class Api extends Controller
 		}
 	}
 
+	public function updateSorted(Request $request): void
+	{
+		$_SESSION['trafficSortedBy'] = $request->get('sortedBy') ?? '';
+		try {
+			echo $this->getDataForDashboard();
+		} catch (\Exception $e) {
+			echo json_encode([
+				'error' => $e->getMessage()
+			]);
+		}
+	}
+
 	public function getDataForUpdateDashboard(): void
 	{
 		try {
@@ -159,11 +171,13 @@ class Api extends Controller
 		if (!empty($_SESSION['referralCode'])) $referralCode = trim(rtrim($_SESSION['referralCode'], "\"'"));
 		if (!empty($_SESSION['dateFrom'])) $dateFrom = trim(rtrim($_SESSION['dateFrom'], "\"'"));
 		if (!empty($_SESSION['dateTo'])) $dateTo = trim(rtrim($_SESSION['dateTo'], "\"'"));
+		if (!empty($_SESSION['trafficSortedBy'])) $sortedBy = trim(rtrim($_SESSION['trafficSortedBy'], "\"'"));
 
 		$api = new \App\API\API();
-		$trafficStats = $api->getTrafficStats($country ?? '', $region ?? '', $city ?? '', $referralCode ?? '', $dateFrom ?? '', $dateTo ?? '');
+		$trafficStats = $api->getTrafficStats($country ?? '', $region ?? '', $city ?? '',
+			$referralCode ?? '', $dateFrom ?? '', $dateTo ?? '', $sortedBy ?? '');
 		$usersStats = $api->getUsersStats($country ?? '', $region ?? '', $city ?? '');
-        $filters = $api->filters();
+		$filters = $api->filters();
 
 		$data = [];
 
@@ -175,12 +189,12 @@ class Api extends Controller
 			$data = array_merge($data, $usersStats['response']);
 		}
 
-        if($filters['status'] == 200) {
-            $filters = $filters['response'];
-            $data['usersByCountries'] = $filters['country'];
-            $data['usersByRegions'] = $filters['region'];
-            $data['usersByCities'] = $filters['city'];
-        }
+		if ($filters['status'] == 200) {
+			$filters = $filters['response'];
+			$data['usersByCountries'] = $filters['country'];
+			$data['usersByRegions'] = $filters['region'];
+			$data['usersByCities'] = $filters['city'];
+		}
 
 		return ((!$array) ? json_encode($data) : $data);
 	}

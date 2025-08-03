@@ -241,7 +241,7 @@
     <div class="traffic-filter">
         <div class="filter-block">
             <h4 class="dropdown-toggle" onclick="toggleDropdown(this)">
-                <?= __('shop') ?>
+				<?= __('shop') ?>
                 <span class="arrow" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" fill="black">
                     <path d="M1 3 L5 7 L9 3 Z"/>
@@ -253,18 +253,18 @@
                     <input type="checkbox" class="form-check-input" id="shop-all">
                     <label for="shop-all" class="form-check-label"><?= __('all') ?></label>
                 </div>
-                <?php foreach ($shops ?? [] as $shop): ?>
+				<?php foreach ($shops ?? [] as $shop): ?>
                     <div>
                         <input type="checkbox"
                                name="shop[]"
                                value="<?= $shop ?>"
                                class="form-check-input shop-checkbox"
                                id="shop-<?= $shop ?>"
-                               <?php if (in_array($shop, $selectedShops ?? [])): ?>checked<?php endif; ?>
+						       <?php if (in_array($shop, $selectedShops ?? [])): ?>checked<?php endif; ?>
                         >
                         <label for="shop-<?= $shop ?>" class="form-check-label"><?= $shop ?></label>
                     </div>
-                <?php endforeach; ?>
+				<?php endforeach; ?>
             </div>
         </div>
 
@@ -300,7 +300,7 @@
 
         <div class="filter-block">
             <h4 class="dropdown-toggle" onclick="toggleDropdown(this)">
-                <?= __('apk') ?>
+				<?= __('apk') ?>
                 <span class="arrow" aria-hidden="true">
                 <svg width="12" height="12" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg" fill="black">
                     <path d="M1 3 L5 7 L9 3 Z"/>
@@ -312,18 +312,18 @@
                     <input type="checkbox" class="form-check-input" id="apk-all">
                     <label for="apk-all" class="form-check-label"><?= __('all') ?></label>
                 </div>
-                <?php foreach ($apks ?? [] as $apk): ?>
+				<?php foreach ($apks ?? [] as $apk): ?>
                     <div>
                         <input type="checkbox"
                                name="apk[]"
                                value="<?= $apk ?>"
                                class="form-check-input apk-checkbox"
                                id="apk-<?= $apk ?>"
-                               <?php if (in_array($apk, $selectedApks ?? [])): ?>checked<?php endif; ?>
+						       <?php if (in_array($apk, $selectedApks ?? [])): ?>checked<?php endif; ?>
                         >
                         <label for="apk-<?= $apk ?>" class="form-check-label"><?= $apk ?></label>
                     </div>
-                <?php endforeach; ?>
+				<?php endforeach; ?>
             </div>
         </div>
 
@@ -462,6 +462,25 @@
         width: 30%;
     }
 
+    .btn-check:checked + .btn {
+        background-color: #6c757d;
+        color: #fff;
+        border-color: #6c757d;
+    }
+
+    .btn {
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    .btn:focus,
+    .btn:focus-visible,
+    .btn:focus-within,
+    .btn-check:focus + .btn {
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
 </style>
 
 <?php if (isRole('superadmin') || isset($accesses['traffic']['filters'])): ?>
@@ -470,9 +489,9 @@
             <label for="country" class="form-label"><?= __('country') ?></label>
             <select id="country" name="country" class="selectpicker form-select" data-live-search="true"
                     title="<?= __('select country') ?>">
-                <?php foreach ($countries ?? [] as $country): ?>
+				<?php foreach ($countries ?? [] as $country): ?>
                     <option value="<?= htmlspecialchars($country) ?>" <?= ((($selectedCountry ?? '') == htmlspecialchars($country)) ? 'selected' : '') ?>><?= htmlspecialchars($country) ?></option>
-                <?php endforeach; ?>
+				<?php endforeach; ?>
             </select>
         </div>
 
@@ -480,9 +499,9 @@
             <label for="region" class="form-label"><?= __('region') ?></label>
             <select id="region" name="region" class="selectpicker form-select" data-live-search="true"
                     title="<?= __('select region') ?>">
-                <?php foreach ($regions ?? [] as $region): ?>
+				<?php foreach ($regions ?? [] as $region): ?>
                     <option value="<?= htmlspecialchars($region) ?>" <?= ((($selectedRegion ?? '') == htmlspecialchars($region)) ? 'selected' : '') ?>><?= htmlspecialchars($region) ?></option>
-                <?php endforeach; ?>
+				<?php endforeach; ?>
             </select>
         </div>
 
@@ -490,9 +509,9 @@
             <label for="city" class="form-label"><?= __('city') ?></label>
             <select id="city" name="city" class="selectpicker form-select" data-live-search="true"
                     title="<?= __('select city') ?>">
-                <?php foreach ($cities ?? [] as $city): ?>
+				<?php foreach ($cities ?? [] as $city): ?>
                     <option value="<?= htmlspecialchars($city) ?>" <?= ((($selectedCity ?? '') == htmlspecialchars($city)) ? 'selected' : '') ?>><?= htmlspecialchars($city) ?></option>
-                <?php endforeach; ?>
+				<?php endforeach; ?>
             </select>
         </div>
     </div>
@@ -508,6 +527,14 @@
                     bootstrap.Selectpicker.getOrCreateInstance(select);
                 }
             });
+
+            const radioFilterTraffic = document.querySelectorAll('input[name="filterTraffic"]');
+            radioFilterTraffic.forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const value = radio.value;
+                    updateSorted(value);
+                })
+            })
         });
     </script>
 
@@ -524,9 +551,25 @@
 
     <div class="text-end mt-3">
         <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-filters">
-            <?= __('clear filters') ?>
+			<?= __('clear filters') ?>
         </button>
     </div>
+
+    <div class="btn-group" role="group">
+        <input type="radio" class="btn-check" name="filterTraffic" id="filter-all" value="SUMMARY" <?= ((($trafficSortedBy ?? '') == 'SUMMARY') || (empty($trafficSortedBy ?? '')) ? 'checked' : '') ?>>
+        <label class="btn btn-outline-secondary" for="filter-all"><?= __('summary') ?></label>
+
+        <input type="radio" class="btn-check" name="filterTraffic" id="filter-days" value="DAY" <?= (($trafficSortedBy ?? '') == 'DAY' ? 'checked' : '') ?>>
+        <label class="btn btn-outline-secondary" for="filter-days"><?= __('by days') ?></label>
+
+        <input type="radio" class="btn-check" name="filterTraffic" id="filter-months" value="MONTH" <?= (($trafficSortedBy ?? '') == 'MONTH' ? 'checked' : '') ?>>
+        <label class="btn btn-outline-secondary" for="filter-months"><?= __('by months') ?></label>
+
+        <input type="radio" class="btn-check" name="filterTraffic" id="filter-years" value="YEAR" <?= (($trafficSortedBy ?? '') == 'YEAR' ? 'checked' : '') ?>>
+        <label class="btn btn-outline-secondary" for="filter-years"><?= __('by years') ?></label>
+    </div>
+
+
 <?php endif; ?>
 
 <div class="mt-5">

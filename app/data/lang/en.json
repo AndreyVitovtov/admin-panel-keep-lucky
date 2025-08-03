@@ -114,5 +114,9 @@
   "filters": "Filters",
   "details": "Details",
   "top_up_balance": "Top up balance",
-  "write_off_balance": "Write off balance"
+  "write_off_balance": "Write off balance",
+  "summary": "Summary",
+  "by days": "By days",
+  "by months": "By months",
+  "by years": "By years"
 }

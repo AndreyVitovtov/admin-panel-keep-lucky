@@ -135,7 +135,7 @@ class API
 	 * @throws Exception
 	 */
 	public function getTrafficStats(string $country = '', string $region = '', string $city = '', string $referralCode = '',
-	                                string $dateFrom = '', string $dateTo = ''): array
+	                                string $dateFrom = '', string $dateTo = '', string $sortedBy = null): array
 	{
 		$params = [];
 		if (!empty($country)) $params['country'] = $country;
@@ -144,6 +144,7 @@ class API
 		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
 		if (!empty($dateFrom)) $params['date_from'] = $dateFrom . ' 00:00:00';
 		if (!empty($dateTo)) $params['date_to'] = $dateTo . ' 23:59:59';
+		if (!empty($sortedBy)) $params['group_by'] = $sortedBy;
 
 		$shops = implode(',', $_SESSION['shops'] ?? []);
 		$apks = implode(',', $_SESSION['apks'] ?? []);
@@ -235,18 +236,18 @@ class API
 	 */
 	public function filters(): array
 	{
-        $params = [];
-        $shops = implode(',', $_SESSION['shops'] ?? []);
-        $apks = implode(',', $_SESSION['apks'] ?? []);
-        $referralCode = $_SESSION['referralCode'] ?? '';
-        $dateFrom = $_SESSION['dateFrom'] ?? '';
-        $dateTo = $_SESSION['dateTo'] ?? '';
+		$params = [];
+		$shops = implode(',', $_SESSION['shops'] ?? []);
+		$apks = implode(',', $_SESSION['apks'] ?? []);
+		$referralCode = $_SESSION['referralCode'] ?? '';
+		$dateFrom = $_SESSION['dateFrom'] ?? '';
+		$dateTo = $_SESSION['dateTo'] ?? '';
 
-        if (!empty($referralCode)) $params['referral_code'] = $referralCode;
-        if (!empty($shops)) $params['shops'] = $shops;
-        if (!empty($apks)) $params['apks'] = $apks;
-        if (!empty($dateFrom)) $params['date_from'] = $dateFrom;
-        if (!empty($dateTo)) $params['date_to'] = $dateTo;
+		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
+		if (!empty($shops)) $params['shops'] = $shops;
+		if (!empty($apks)) $params['apks'] = $apks;
+		if (!empty($dateFrom)) $params['date_from'] = $dateFrom;
+		if (!empty($dateTo)) $params['date_to'] = $dateTo;
 
 		return $this->get('admin/search/filters', $params);
 	}

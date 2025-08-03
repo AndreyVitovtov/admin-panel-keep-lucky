@@ -65,6 +65,16 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
+function updateSorted(value) {
+    $.post(
+        '/api/updateSorted',
+        {sortedBy: value},
+        async function (data) {
+            await updateDataTraffic(data);
+        }
+    );
+}
+
 function updateShops() {
     let shops = [];
     document.querySelectorAll('.shop-checkbox').forEach((el) => {
@@ -75,6 +85,9 @@ function updateShops() {
         {shops},
         async function (data) {
             await updateDataTraffic(data);
+            renderChart('countryChart', usersByCountries, data['usersByCountries']);
+            renderChart('regionChart', usersByRegions, data['usersByRegions']);
+            renderChart('cityChart', usersByCities, data['usersByCities']);
         }
     );
 }
@@ -89,6 +102,9 @@ function updateApk() {
         {apk},
         async function (data) {
             await updateDataTraffic(data);
+            renderChart('countryChart', usersByCountries, data['usersByCountries']);
+            renderChart('regionChart', usersByRegions, data['usersByRegions']);
+            renderChart('cityChart', usersByCities, data['usersByCities']);
         }
     );
 }
