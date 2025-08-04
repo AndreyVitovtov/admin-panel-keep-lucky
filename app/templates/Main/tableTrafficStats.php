@@ -15,7 +15,12 @@
     </tr>
     </thead>
     <tbody>
-	<?php foreach ($response ?? [] as $row): ?>
+	<?php foreach ($response ?? [] as $row):
+		if (!empty($row['total_traffic'])) {
+			$bytes = $row['total_traffic'];
+			$gigabytes = round(($bytes / 1073741824), 2) . ' ' . __('gb');
+		}
+		?>
         <tr>
 			<?php if (isset($row['date_from']) && isset($row['date_to'])): ?>
 				<?php if (date('Y-m-d', strtotime($row['date_from'])) ==
@@ -26,9 +31,11 @@
                     <td><?= date('Y-m-d', strtotime($row['date_to'])) ?></td>
 				<?php endif; ?>
 			<?php endif; ?>
-            <td><?= $row['total_traffic'] ?? '-' ?></td>
+            <td><?= $gigabytes ?? '-' ?></td>
             <td><?= $row['total_cost'] ?? '-' ?></td>
         </tr>
-	<?php endforeach; ?>
+		<?php
+		unset($gigabytes);
+	endforeach; ?>
     </tbody>
 </table>
