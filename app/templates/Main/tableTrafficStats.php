@@ -18,7 +18,8 @@
 	<?php foreach ($response ?? [] as $row): ?>
         <tr>
 			<?php if (isset($row['date_from']) && isset($row['date_to'])): ?>
-				<?php if (date('Y-m-d', strtotime($row['date_from'])) == date('Y-m-d', strtotime($row['date_to']))): ?>
+				<?php if (date('Y-m-d', strtotime($row['date_from'])) ==
+					date('Y-m-d', strtotime($row['date_to']))): ?>
                     <td><?= date('Y-m-d', strtotime($row['date_from'])) ?></td>
 				<?php else: ?>
                     <td><?= date('Y-m-d', strtotime($row['date_from'])) ?></td>
