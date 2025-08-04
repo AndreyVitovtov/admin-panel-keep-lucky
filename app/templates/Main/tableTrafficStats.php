@@ -1,0 +1,33 @@
+<table class="table table-striped table-responsive table-hover table-bordered">
+    <thead>
+    <tr>
+		<?php if (isset($response[0]['date_from']) && isset($response[0]['date_to'])): ?>
+			<?php if (date('Y-m-d', strtotime($response[0]['date_from'])) ==
+				date('Y-m-d', strtotime($response[0]['date_to']))): ?>
+                <th><?= __('date') ?></th>
+			<?php else: ?>
+                <th><?= __('date from') ?></th>
+                <th><?= __('date to') ?></th>
+			<?php endif; ?>
+		<?php endif; ?>
+        <th><?= __('traffic') ?></th>
+        <th><?= __('cost') ?></th>
+    </tr>
+    </thead>
+    <tbody>
+	<?php foreach ($response ?? [] as $row): ?>
+        <tr>
+			<?php if (isset($row['date_from']) && isset($row['date_to'])): ?>
+				<?php if (date('Y-m-d', strtotime($row['date_from'])) == date('Y-m-d', strtotime($row['date_to']))): ?>
+                    <td><?= date('Y-m-d', strtotime($row['date_from'])) ?></td>
+				<?php else: ?>
+                    <td><?= date('Y-m-d', strtotime($row['date_from'])) ?></td>
+                    <td><?= date('Y-m-d', strtotime($row['date_to'])) ?></td>
+				<?php endif; ?>
+			<?php endif; ?>
+            <td><?= $row['total_traffic'] ?? '-' ?></td>
+            <td><?= $row['total_cost'] ?? '-' ?></td>
+        </tr>
+	<?php endforeach; ?>
+    </tbody>
+</table>

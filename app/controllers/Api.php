@@ -182,7 +182,7 @@ class Api extends Controller
 		$data = [];
 
 		if ($trafficStats['status'] == 200) {
-			$data = array_merge($data, $trafficStats['response']);
+			$data['tableTrafficStats'] = html('Main/tableTrafficStats.php', $trafficStats);
 		}
 
 		if ($usersStats['status'] == 200) {

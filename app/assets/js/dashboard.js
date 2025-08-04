@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function updateSorted(value) {
+    loader();
     $.post(
         '/api/updateSorted',
         {sortedBy: value},
@@ -168,16 +169,14 @@ async function updateDataTraffic(data) {
     console.log(data);
     let elNumberOfUsers = document.querySelector('.number-of-users');
     let elNumberOfUsersOnline = document.querySelector('.number-of-users-online');
-    let elVolumeOfTrafficSold = document.querySelector('.volume-of-traffic-sold');
-    let elTotalAmountToBePaidForTraffic = document.querySelector('.total-amount-to-be-paid-for-traffic');
+    let elTableTrafficStats = document.querySelector('.table-traffic-stats');
 
     elNumberOfUsers.innerHTML = data.total_users ?? '-';
     elNumberOfUsersOnline.innerHTML = data.total_online_users ?? '-';
-    elVolumeOfTrafficSold.innerHTML = data.total_traffic ?? '-';
-    elTotalAmountToBePaidForTraffic.innerHTML = data.total_cost ?? '-';
+    elTableTrafficStats.innerHTML = data.tableTrafficStats ?? '-';
 }
 
-async function loader() {
+async function loader(elements = []) {
     function createLoader() {
         let divLoader = document.createElement('div');
         divLoader.className = 'loader';
@@ -189,19 +188,22 @@ async function loader() {
         return divLoader;
     }
 
-    let elNumberOfUsers = document.querySelector('.number-of-users');
-    elNumberOfUsers.innerHTML = '';
-    elNumberOfUsers.appendChild(createLoader());
+    if (elements.length === 0) {
+        let elNumberOfUsers = document.querySelector('.number-of-users');
+        elNumberOfUsers.innerHTML = '';
+        elNumberOfUsers.appendChild(createLoader());
 
-    let elNumberOfUsersOnline = document.querySelector('.number-of-users-online');
-    elNumberOfUsersOnline.innerHTML = '';
-    elNumberOfUsersOnline.appendChild(createLoader());
+        let elNumberOfUsersOnline = document.querySelector('.number-of-users-online');
+        elNumberOfUsersOnline.innerHTML = '';
+        elNumberOfUsersOnline.appendChild(createLoader());
 
-    let elVolumeOfTrafficSold = document.querySelector('.volume-of-traffic-sold');
-    elVolumeOfTrafficSold.innerHTML = '';
-    elVolumeOfTrafficSold.appendChild(createLoader());
-
-    let elTotalAmountToBePaidForTraffic = document.querySelector('.total-amount-to-be-paid-for-traffic');
-    elTotalAmountToBePaidForTraffic.innerHTML = '';
-    elTotalAmountToBePaidForTraffic.appendChild(createLoader());
+        let elTableTrafficStats = document.querySelector('.table-traffic-stats');
+        elTableTrafficStats.innerHTML = '';
+        elTableTrafficStats.appendChild(createLoader());
+    } else {
+        elements.forEach(el => {
+            el.innerHTML = '';
+            el.appendChild(createLoader());
+        });
+    }
 }

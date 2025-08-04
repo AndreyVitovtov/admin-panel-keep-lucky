@@ -555,24 +555,10 @@
         </button>
     </div>
 
-    <div class="btn-group" role="group">
-        <input type="radio" class="btn-check" name="filterTraffic" id="filter-all" value="SUMMARY" <?= ((($trafficSortedBy ?? '') == 'SUMMARY') || (empty($trafficSortedBy ?? '')) ? 'checked' : '') ?>>
-        <label class="btn btn-outline-secondary" for="filter-all"><?= __('summary') ?></label>
-
-        <input type="radio" class="btn-check" name="filterTraffic" id="filter-days" value="DAY" <?= (($trafficSortedBy ?? '') == 'DAY' ? 'checked' : '') ?>>
-        <label class="btn btn-outline-secondary" for="filter-days"><?= __('by days') ?></label>
-
-        <input type="radio" class="btn-check" name="filterTraffic" id="filter-months" value="MONTH" <?= (($trafficSortedBy ?? '') == 'MONTH' ? 'checked' : '') ?>>
-        <label class="btn btn-outline-secondary" for="filter-months"><?= __('by months') ?></label>
-
-        <input type="radio" class="btn-check" name="filterTraffic" id="filter-years" value="YEAR" <?= (($trafficSortedBy ?? '') == 'YEAR' ? 'checked' : '') ?>>
-        <label class="btn btn-outline-secondary" for="filter-years"><?= __('by years') ?></label>
-    </div>
-
-
 <?php endif; ?>
 
-<div class="mt-5">
+<div class="mt-2">
+    <h5><?= __('users stats') ?></h5>
     <table class="table table-striped table-hover table-bordered">
         <tr>
             <th><?= __('number of users') ?></th>
@@ -581,14 +567,6 @@
         <tr>
             <th><?= __('number of users online') ?></th>
             <td class="number-of-users-online"><?= $dataForDashboard['total_online_users'] ?? '-' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('volume of traffic sold') ?></th>
-            <td class="volume-of-traffic-sold"><?= $dataForDashboard['total_traffic'] ?? '-' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('total amount to be paid for traffic') ?></th>
-            <td class="total-amount-to-be-paid-for-traffic"><?= $dataForDashboard['total_cost'] ?? '-' ?></td>
         </tr>
     </table>
 </div>
@@ -612,3 +590,25 @@
     renderChart('regionChart', usersByRegions, '<?= __('users by regions') ?>');
     renderChart('cityChart', usersByCities, '<?= __('users by cities') ?>');
 </script>
+
+<h5><?= __('traffic stats') ?></h5>
+<div class="btn-group" role="group">
+    <input type="radio" class="btn-check" name="filterTraffic" id="filter-all"
+           value="SUMMARY" <?= ((($trafficSortedBy ?? '') == 'SUMMARY') || (empty($trafficSortedBy ?? '')) ? 'checked' : '') ?>>
+    <label class="btn btn-outline-secondary" for="filter-all"><?= __('summary') ?></label>
+
+    <input type="radio" class="btn-check" name="filterTraffic" id="filter-days"
+           value="DAY" <?= (($trafficSortedBy ?? '') == 'DAY' ? 'checked' : '') ?>>
+    <label class="btn btn-outline-secondary" for="filter-days"><?= __('by days') ?></label>
+
+    <input type="radio" class="btn-check" name="filterTraffic" id="filter-months"
+           value="MONTH" <?= (($trafficSortedBy ?? '') == 'MONTH' ? 'checked' : '') ?>>
+    <label class="btn btn-outline-secondary" for="filter-months"><?= __('by months') ?></label>
+
+    <input type="radio" class="btn-check" name="filterTraffic" id="filter-years"
+           value="YEAR" <?= (($trafficSortedBy ?? '') == 'YEAR' ? 'checked' : '') ?>>
+    <label class="btn btn-outline-secondary" for="filter-years"><?= __('by years') ?></label>
+</div>
+<div class="mt-3 table-traffic-stats">
+	<?= html('Main/tableTrafficStats.php', $trafficStats ?? []) ?>
+</div>

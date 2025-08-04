@@ -144,7 +144,7 @@ class API
 		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
 		if (!empty($dateFrom)) $params['date_from'] = $dateFrom . ' 00:00:00';
 		if (!empty($dateTo)) $params['date_to'] = $dateTo . ' 23:59:59';
-		if (!empty($sortedBy)) $params['group_by'] = $sortedBy;
+		if (!empty($sortedBy) && $sortedBy != 'SUMMARY') $params['group_by'] = $sortedBy;
 
 		$shops = implode(',', $_SESSION['shops'] ?? []);
 		$apks = implode(',', $_SESSION['apks'] ?? []);

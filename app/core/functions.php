@@ -87,6 +87,15 @@ function getControllerAndMethod(): array
 	];
 }
 
+function html(string $path, array $variables = []): string
+{
+	if (!file_exists(PATH_TEMPLATES . $path)) return 'Page not found';
+	ob_start();
+	extract($variables);
+	require PATH_TEMPLATES . $path;
+	return ob_get_clean();
+}
+
 function handleRoute()
 {
 	isDev();

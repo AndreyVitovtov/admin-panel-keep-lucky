@@ -75,8 +75,13 @@ class Main extends Controller
 		$dateFrom = $_SESSION['dateFrom'] ?? '';
 		$dateTo = $_SESSION['dateTo'] ?? '';
 		$trafficSortedBy = $_SESSION['trafficSortedBy'] ?? '';
+		$referralCode = $_SESSION['referralCode'] ?? '';
 
 		$dataForDashboard = (new \App\Controllers\Api())->getDataForDashboard(true);
+
+		$api = new \App\API\API();
+		$resTrafficStats = $api->getTrafficStats($selectedCountry ?? '', $selectedRegion ?? '', $selectedCity ?? '',
+			$referralCode ?? '', $dateFrom ?? '', $dateTo ?? '', $trafficSortedBy ?? '');
 
 		$this->view('dashboard', [
 			'title' => __('traffic'),
@@ -111,7 +116,8 @@ class Main extends Controller
 			'dateFrom' => $dateFrom ?? '',
 			'dateTo' => $dateTo ?? '',
 			'accesses' => $accesses ?? [],
-			'trafficSortedBy' => $trafficSortedBy ?? ''
+			'trafficSortedBy' => $trafficSortedBy ?? '',
+			'trafficStats' => $resTrafficStats
 		]);
 	}
 }
