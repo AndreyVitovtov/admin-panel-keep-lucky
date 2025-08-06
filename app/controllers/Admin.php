@@ -15,6 +15,9 @@ class Admin extends Controller
 		]);
 	}
 
+	/**
+	 * @throws \Exception
+	 */
 	public function save(Request $request)
 	{
 		$admin = new AdminModel();
@@ -96,6 +99,10 @@ class Admin extends Controller
 			}
 
 			$admin->update();
+
+			$api = new \App\API\API();
+			$res = $api->updateAdminLoginPassword($admin->admin_id, $admin->login, $admin->password);
+dd($res);
 			sessionUpdate([
 				'login' => $admin->login,
 				'name' => $admin->name,

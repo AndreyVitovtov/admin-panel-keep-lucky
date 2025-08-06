@@ -24,7 +24,7 @@ class Api extends Controller
 		$referralCode = $_SESSION['referralCode'] ?? null;
 		$referralCode = is_null($referralCode) ? [] : [$referralCode];
 
-		$api->updateAdminAccess($_SESSION['adminId'], $apks ?? $_SESSION['apks'] ?? [], $shops, $referralCode);
+		$api->updateAdmin($_SESSION['adminId'], $apks ?? $_SESSION['apks'] ?? [], $shops, $referralCode);
 
 		try {
 			echo $this->getDataForDashboard();
@@ -53,7 +53,7 @@ class Api extends Controller
 		$referralCode = $_SESSION['referralCode'] ?? null;
 		$referralCode = is_null($referralCode) ? [] : [$referralCode];
 
-		$api->updateAdminAccess($_SESSION['adminId'], $apks, $shops ?? $_SESSION['shops'] ?? [], $referralCode);
+		$api->updateAdmin($_SESSION['adminId'], $apks, $shops ?? $_SESSION['shops'] ?? [], $referralCode);
 
 		try {
 			echo $this->getDataForDashboard();
@@ -84,7 +84,7 @@ class Api extends Controller
 			$shops = $res['response'];
 		}
 
-		$api->updateAdminAccess($_SESSION['adminId'], $apks ?? [], $shops ?? [], [$referralCode] ?? []);
+		$api->updateAdmin($_SESSION['adminId'], $apks ?? [], $shops ?? [], [$referralCode] ?? []);
 
 		try {
 			echo $this->getDataForDashboard();
@@ -216,7 +216,9 @@ class Api extends Controller
 		if ($shops['status'] == 200) $shops = $shops['response'];
 		else $shops = [];
 
-		$admin = $api->getAdminById($adminId);
+		$resAdmin = $api->getAdminById($adminId);
+		if ($resAdmin['status'] == 200) $admin = $resAdmin['response'];
+		else $admin = [];
 		$selectedShops = $admin['shops'] ?? [];
 		$selectedApk = $admin['apks'] ?? [];
 		$referralCode = $admin['referral_codes'][0] ?? '';

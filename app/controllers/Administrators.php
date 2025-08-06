@@ -182,7 +182,9 @@ class Administrators extends Controller
 				$role = new Role();
 
 				$api = new \App\API\API();
-				$adminApi = $api->getAdminById($admin['admin_id']);
+				$resAdmin = $api->getAdminById($admin['admin_id']);
+				if ($resAdmin['status'] == 200) $adminApi = $resAdmin['response'];
+				else $admin = [];
 				$selectedApks = $adminApi['apks'] ?? [];
 				$selectedShops = $adminApi['shops'] ?? [];
 				$selectedReferralCode = $adminApi['referral_codes'][0] ?? '';
@@ -216,7 +218,7 @@ class Administrators extends Controller
 			$admin->find($id);
 			if (!is_null($request->name) && !is_null($request->login) && !is_null($request->role)) {
 				$api = new \App\API\API();
-				$res = $api->updateAdminAccess(
+				$res = $api->updateAdmin(
 					$admin->admin_id,
 					$request->apk ?? [],
 					$request->shop ?? [],
@@ -227,7 +229,6 @@ class Administrators extends Controller
 						'error' => $res['response']['message'] ?? 'Update failed'
 					]);
 				} else {
-
 					if (!is_null($request->password)) {
 						if (is_null($request->repeatPassword)) {
 							redirect('/administrators/edit/' . $id, [
@@ -241,16 +242,25 @@ class Administrators extends Controller
 								]);
 								exit;
 							} else {
-								$admin->password = $request->password;
+								$password = md5($request->password);
+								$admin->password = $password;
 							}
 						}
 					}
-					$referralCode = trim($request->referralCode);
+					$referralCode = trim($request->referralCode ?? '');
 					$admin->name = trim($request->name);
 					$admin->login = trim($request->login);
 					$admin->role = trim($request->role);
 					$admin->referral_code = $referralCode ?? '';
 					$admin->update();
+
+					$resApi = $api->updateAdminLoginPassword($admin->admin_id, trim($request->login), $password ?? '');
+					if ($resApi['status'] != 200) {
+						redirect('/administrators', [
+							'error' => 'Update failed2'
+						]);
+					}
+
 					redirect('/administrators', [
 						'message' => __('changes saved')
 					]);

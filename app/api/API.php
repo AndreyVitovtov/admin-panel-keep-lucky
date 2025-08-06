@@ -278,13 +278,36 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	public function updateAdminAccess(int $id, array $apks, array $shops, array $referralCodes): array
+	public function updateAdmin(int $id, array $apks, array $shops, array $referralCodes, string $login = '', string $password = ''): array
 	{
-		return $this->put("admin/roles/$id/access", json_encode([
+		$params = [
 			'apks' => $apks,
 			'shops' => $shops,
 			'referral_codes' => $referralCodes
-		]));
+		];
+
+		if (!empty($login)) {
+			$params['login'] = $login;
+		}
+
+		if (!empty($password)) {
+			$params['password'] = $password;
+		}
+
+		return $this->patch("admin/roles/$id", json_encode($params));
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function updateAdminLoginPassword(int $id, string $login = '', string $password = ''): ?array
+	{
+		if (!empty($login)) $params['login'] = $login;
+		if (!empty($password)) $params['password'] = $password;
+		if (isset($params)) {
+			return $this->patch("admin/roles/$id", json_encode($params));
+		}
+		return null;
 	}
 
 	/**
@@ -322,13 +345,9 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	public function getAdminById(int $adminId): array
+	public function getAdminById(int $id): array
 	{
-		$admins = $this->getAdmins();
-		if ($admins['status'] != 200) return [];
-		$admins = $admins['response'] ?? [];
-		$admins = array_combine(array_column($admins, 'id'), $admins);
-		return $admins[$adminId] ?? [];
+		return $this->get("admin/roles/$id");
 	}
 
 	/**
@@ -472,14 +491,7 @@ class API
 		if (!empty($_SESSION['id'])) {
 			$admin = (new AdminModel())->find($_SESSION['id']);
 			$username = $admin->login;
-
-			// TODO: Edit password for Admin API !!!!!!
-			if ($_SESSION['id'] == 1) {
-				$password = 'admin';
-			} else {
-				$password = $admin->password;
-			}
-			// TODO: END Edit password for Admin API !!!!!!
+			$password = $admin->password;
 
 			if (!empty($username) && !empty($password)) {
 				return base64_encode($username . ':' . $password);
