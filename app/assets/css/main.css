@@ -395,3 +395,11 @@ ul.application, ul.apk {
 .dropdown-menu li:hover > div {
     background-color: var(--bg-hover-dropdown-menu);
 }
+
+.dt-length label {
+    margin-left: 5px;
+}
+
+.dt-search label {
+    margin-right: 5px;
+}

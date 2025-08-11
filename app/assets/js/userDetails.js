@@ -19,6 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('.table-transactions').DataTable({
-        pageLength: 20
+        pageLength: 10
     });
 });
