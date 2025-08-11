@@ -234,7 +234,7 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	public function filters(): array
+	public function filters(string $country = '', string $region = '', string $city = ''): array
 	{
 		$params = [];
 		$shops = implode(',', $_SESSION['shops'] ?? []);
@@ -248,6 +248,9 @@ class API
 		if (!empty($apks)) $params['apks'] = $apks;
 		if (!empty($dateFrom)) $params['date_from'] = $dateFrom;
 		if (!empty($dateTo)) $params['date_to'] = $dateTo;
+		if (!empty($country)) $params['country'] = $country;
+		if (!empty($region)) $params['region'] = $region;
+		if (!empty($city)) $params['city'] = $city;
 
 		return $this->get('admin/search/filters', $params);
 	}

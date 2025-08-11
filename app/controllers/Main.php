@@ -51,14 +51,23 @@ class Main extends Controller
 			$onlineUsers = $usersStats['response']['total_online_users'];
 		}
 
+		if (!empty($_SESSION['country'])) $country = $_SESSION['country'];
+		if (!empty($_SESSION['region'])) $region = $_SESSION['region'];
+
 		$filters = $api->filters();
 		if ($filters['status'] == 200) {
+			$countries = array_keys($filters['response']['country']);
+
+			$filters = $api->filters($country ?? '');
+			$regions = array_keys($filters['response']['region']);
+
+			$filters = $api->filters($country ?? '', $region ?? '');
+			$cities = array_keys($filters['response']['city']);
+
+			$filters = $api->filters($country ?? '', $region ?? '');
 			$usersByCountries = $filters['response']['country'];
 			$usersByRegions = $filters['response']['region'];
 			$usersByCities = $filters['response']['city'];
-			$countries = array_keys($filters['response']['country']);
-			$regions = array_keys($filters['response']['region']);
-			$cities = array_keys($filters['response']['city']);
 		}
 
 		$apks = $api->getAdminAccessApk();

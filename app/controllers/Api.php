@@ -177,7 +177,7 @@ class Api extends Controller
 		$trafficStats = $api->getTrafficStats($country ?? '', $region ?? '', $city ?? '',
 			$referralCode ?? '', $dateFrom ?? '', $dateTo ?? '', $sortedBy ?? '');
 		$usersStats = $api->getUsersStats($country ?? '', $region ?? '', $city ?? '');
-		$filters = $api->filters();
+		$filters = $api->filters($country ?? '', $region ?? '');
 
 		$data = [];
 
@@ -231,5 +231,40 @@ class Api extends Controller
 			'referralCode' => $referralCode ?? '',
 			'adminId' => $adminId ?? ''
 		]);
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function getRegionsCitiesByCountry(Request $request): void
+	{
+		$country = $request->get('country') ?? '';
+		$region = $request->get('region') ?? '';
+
+		$api = new \App\API\API();
+
+		if (empty($country) && empty($region)) {
+			$res = $api->filters();
+		} else {
+			if (!empty($region)) {
+				$res = $api->filters('', $region);
+			} else {
+				$res = $api->filters($country);
+			}
+		}
+
+		if ($res['status'] == 200) {
+			echo json_encode([
+				'regions' => array_keys($res['response']['region']),
+				'cities' => array_keys($res['response']['city']),
+				'country' => $country,
+				'region' => $region
+			]);
+		} else {
+			echo json_encode([
+				'regions' => [],
+				'cities' => []
+			]);
+		}
 	}
 }

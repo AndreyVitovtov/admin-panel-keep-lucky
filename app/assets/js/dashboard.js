@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await loader();
         $('#region').val('').selectpicker('val', '');
         $('#city').val('').selectpicker('val', '');
+        updateRegionsByCountry($(inputCountry).val(), '');
         await updateLocation();
     });
 
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         await loader();
         $('#country').val('').selectpicker('val', '');
         $('#city').val('').selectpicker('val', '');
+        updateRegionsByCountry('', $(inputRegion).val());
         await updateLocation();
     });
 
@@ -53,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $('#city').val('').selectpicker('val', '');
         document.getElementById('date-from').value = '';
         document.getElementById('date-to').value = '';
+        updateRegionsByCountry('', '');
         await updateLocation();
     });
 
@@ -64,6 +67,43 @@ document.addEventListener('DOMContentLoaded', function () {
         await updateDate();
     });
 });
+
+function updateRegionsByCountry(country, region) {
+    const $region = $('#region');
+    if (region.length === 0) {
+        $region.selectpicker('destroy');
+        $region.empty();
+        $region.selectpicker();
+        $region.selectpicker('val', '');
+    }
+
+    const $city = $('#city');
+    $city.selectpicker('destroy');
+    $city.empty();
+    $city.selectpicker();
+    $city.selectpicker('val', '');
+
+    $.post(
+        '/api/getRegionsCitiesByCountry',
+        {
+            country: country,
+            region: region
+        },
+        function (data) {
+            data = typeof data === 'string' ? JSON.parse(data) : data;
+            if (region.length === 0) {
+                data.regions.forEach(region => {
+                    $region.append(new Option(region, region));
+                });
+                $region.selectpicker('refresh');
+            }
+
+            data.cities.forEach(city => {
+                $city.append(new Option(city, city));
+            });
+            $city.selectpicker('refresh');
+        });
+}
 
 function updateSorted(value) {
     loader();
@@ -139,6 +179,11 @@ async function updateLocation() {
         {country, region, city},
         await function (data) {
             updateDataTraffic(data);
+            data = JSON.parse(data);
+            console.log(usersByCountries);
+            renderChart('countryChart', data['usersByCountries']);
+            renderChart('regionChart', data['usersByRegions'],);
+            renderChart('cityChart', data['usersByCities']);
         }
     );
 }
