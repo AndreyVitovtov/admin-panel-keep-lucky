@@ -25,6 +25,7 @@ use App\Utility\Request; ?>
         window.languages.lengthMenu = '<?= __('lengthMenu') ?>';
         window.languages.info = '<?= __('showing') ?>';
         window.languages.by = '<?= __('by') ?>';
+        window.languages.all = '<?= __('on all') ?>';
     </script>
 
 	<?php

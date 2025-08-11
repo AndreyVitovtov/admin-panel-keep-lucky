@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let columns = table.columns().header().toArray().map(h => $(h).text());
 
         let select = $('<select id="columnSelect"></select>')
-            .append('<option value="all">All</option>');
+            .append('<option value="all">' + window.languages.all + '</option>');
 
         columns.forEach((name, index) => {
             select.append(`<option value="${index}">${name}</option>`);

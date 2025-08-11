@@ -123,5 +123,6 @@
   "gb": "Гб",
   "lengthMenu": "_MENU_ записей на странице",
   "by": "по",
-  "showing": "Показано с _START_ по _END_ из _TOTAL_ записей"
+  "showing": "Показано с _START_ по _END_ из _TOTAL_ записей",
+  "on all": "Всем"
 }
