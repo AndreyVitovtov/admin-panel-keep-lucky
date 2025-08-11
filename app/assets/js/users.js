@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
             select.append(`<option value="${index}">${name}</option>`);
         });
 
+        let by = $('<span class="search-by">by</span>');
+
+        $('.dt-search').append(by);
         $('.dt-search').append(select);
 
         function applySearch() {

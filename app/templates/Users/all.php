@@ -41,6 +41,10 @@
             justify-content: flex-end;
         }
 
+        .search-by {
+            margin-left: 10px;
+        }
+
         #columnSelect {
             border: 1px solid #aaa;
             border-radius: 3px;
