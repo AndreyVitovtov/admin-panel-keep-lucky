@@ -21,44 +21,44 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    $(document).ready(function () {
-        let table = $('#table-users').DataTable({
-            pageLength: 100,
-            language: {
-                search: window.languages.search,
-                lengthMenu: window.languages.lengthMenu,
-                info: window.languages.info,
-            }
-        });
 
-        let columns = table.columns().header().toArray().map(h => $(h).text());
-
-        let select = $('<select id="columnSelect"></select>')
-            .append('<option value="all">' + window.languages.all + '</option>');
-
-        columns.forEach((name, index) => {
-            select.append(`<option value="${index}">${name}</option>`);
-        });
-
-        let by = $('<span class="search-by">' + window.languages.by + '</span>');
-
-        $('.dt-search').append(by);
-        $('.dt-search').append(select);
-
-        function applySearch() {
-            let searchVal = $('.dt-search input').val();
-            let col = $('#columnSelect').val();
-
-            if (col === "all") {
-                table.columns().search('');
-                table.search(searchVal).draw();
-            } else {
-                table.columns().search('');
-                table.column(col).search(searchVal).draw();
-            }
+    let table = $('#table-users').DataTable({
+        pageLength: 100,
+        language: {
+            search: window.languages.search,
+            lengthMenu: window.languages.lengthMenu,
+            info: window.languages.info,
         }
-
-        $('.dt-search input').off().on('input', applySearch);
-        $('#columnSelect').on('change', applySearch);
     });
+
+    let columns = table.columns().header().toArray().map(h => $(h).text());
+
+    let select = $('<select id="columnSelect"></select>')
+        .append('<option value="all">' + window.languages.all + '</option>');
+
+    columns.forEach((name, index) => {
+        select.append(`<option value="${index}">${name}</option>`);
+    });
+
+    let by = $('<span class="search-by">' + window.languages.by + '</span>');
+    let dtSearch = $('.dt-search');
+
+    dtSearch.append(by);
+    dtSearch.append(select);
+
+    function applySearch() {
+        let searchVal = $('.dt-search input').val();
+        let col = $('#columnSelect').val();
+
+        if (col === "all") {
+            table.columns().search('');
+            table.search(searchVal).draw();
+        } else {
+            table.columns().search('');
+            table.column(col).search(searchVal).draw();
+        }
+    }
+
+    dtSearch.find('input').off().on('input', applySearch);
+    $('#columnSelect').on('change', applySearch);
 });
