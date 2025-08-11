@@ -22,8 +22,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     $(document).ready(function () {
-        $('#table-users').DataTable({
+        let table = $('#table-users').DataTable({
             pageLength: 100
         });
+
+        let columns = table.columns().header().toArray().map(h => $(h).text());
+
+        let select = $('<select id="columnSelect"></select>')
+            .append('<option value="all">All</option>');
+
+        columns.forEach((name, index) => {
+            select.append(`<option value="${index}">${name}</option>`);
+        });
+
+        $('.dt-search').append(select);
+
+        function applySearch() {
+            let searchVal = $('.dt-search input').val();
+            let col = $('#columnSelect').val();
+
+            if (col === "all") {
+                table.columns().search('');
+                table.search(searchVal).draw();
+            } else {
+                table.columns().search('');
+                table.column(col).search(searchVal).draw();
+            }
+        }
+
+        $('.dt-search input').off().on('input', applySearch);
+        $('#columnSelect').on('change', applySearch);
     });
 });

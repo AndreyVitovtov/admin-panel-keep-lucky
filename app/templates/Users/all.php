@@ -34,6 +34,21 @@
         tr:hover {
             cursor: pointer;
         }
+
+        .dt-search {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        #columnSelect {
+            border: 1px solid #aaa;
+            border-radius: 3px;
+            padding: 6.7px;
+            background-color: transparent;
+            color: inherit;
+            margin-left: 10px;
+        }
     </style>
 
     <form method="GET" id="filter-form">

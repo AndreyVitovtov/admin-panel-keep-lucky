@@ -150,7 +150,11 @@ class Users extends Controller
 					'userInfo' => $userInfo ?? [],
 					'userId' => $id,
 					'assets' => [
-						'js' => 'userDetails.js'
+						'js' => [
+							'dataTables.min.js',
+							'userDetails.js'
+						],
+						'css' => 'dataTables.dataTables.min.css'
 					],
 					'accesses' => $accesses ?? []
 				]);

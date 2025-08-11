@@ -133,7 +133,7 @@
 <?php if (isRole('superadmin') || isset($accesses['users']['transactions'])): ?>
 	<?php if (!empty($userStats['transactions'])): ?>
         <h4><?= __('transactions') ?></h4>
-        <table class="table table-striped table-responsive table-hover mb-5">
+        <table class="table-transactions table table-striped table-responsive table-hover mb-5">
             <thead>
             <tr>
                 <th><?= __('id') ?></th>
