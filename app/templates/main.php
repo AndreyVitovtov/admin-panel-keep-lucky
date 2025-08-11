@@ -18,6 +18,15 @@ use App\Utility\Request; ?>
     <script src="<?= assets('js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= assets('js/jquery-3.7.1.min.js') ?>"></script>
     <script src="<?= assets('js/main.js') ?>"></script>
+
+    <script>
+        window.languages = window.languages || {};
+        window.languages.search = '<?= __('search') ?>';
+        window.languages.lengthMenu = '<?= __('lengthMenu') ?>';
+        window.languages.info = '<?= __('showing') ?>';
+        window.languages.by = '<?= __('by') ?>';
+    </script>
+
 	<?php
 	if (isset($assets['css'])) {
 		echo implode("\n", array_map(function ($v) {

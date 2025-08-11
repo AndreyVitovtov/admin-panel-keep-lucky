@@ -23,7 +23,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     $(document).ready(function () {
         let table = $('#table-users').DataTable({
-            pageLength: 100
+            pageLength: 100,
+            language: {
+                search: window.languages.search,
+                lengthMenu: window.languages.lengthMenu,
+                info: window.languages.info,
+            }
         });
 
         let columns = table.columns().header().toArray().map(h => $(h).text());
@@ -35,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
             select.append(`<option value="${index}">${name}</option>`);
         });
 
-        let by = $('<span class="search-by">by</span>');
+        let by = $('<span class="search-by">' + window.languages.by + '</span>');
 
         $('.dt-search').append(by);
         $('.dt-search').append(select);

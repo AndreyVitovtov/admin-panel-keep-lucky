@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     $('.table-transactions').DataTable({
-        pageLength: 10
+        pageLength: 10,
+        language: {
+            search: window.languages.search,
+            lengthMenu: window.languages.lengthMenu,
+            info: window.languages.info,
+        }
     });
 });
