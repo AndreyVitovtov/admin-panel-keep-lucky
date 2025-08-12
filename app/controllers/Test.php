@@ -13,7 +13,8 @@ class Test extends Controller
 	public function index()
 	{
 		$api = new API();
-		echo json_encode($api->filters('UA'));
+//		echo json_encode($api->filters('UA'));
+		echo json_encode($api->getTrafficStats('', 'Ternopil Oblast'));
 //		echo json_encode($api->createAdmin('TestAdmin', 'testadmin2', 'ADMIN', ['apk1'], ['shop1'], ['referral1']));
 //		echo json_encode($api->deleteAdmin(11));
 //		echo json_encode($api->getAdminAccessShop());

@@ -16,7 +16,7 @@
     </thead>
     <tbody>
 	<?php foreach ($response ?? [] as $row):
-		if (!empty($row['total_traffic'])) {
+		if (!is_null($row['total_traffic'])) {
 			$bytes = $row['total_traffic'];
 			$gigabytes = round(($bytes / 1073741824), 2) . ' ' . __('gb');
 		}
