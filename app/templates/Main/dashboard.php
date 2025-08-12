@@ -613,3 +613,19 @@
 <div class="mt-3 table-traffic-stats">
 	<?= html('Main/tableTrafficStats.php', $trafficStats ?? []) ?>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let table = $('#table-traffic-stats');
+        if (table.find('tbody tr').length > 10) {
+            table.DataTable({
+                pageLength: 10,
+                language: {
+                    search: window.languages.search,
+                    lengthMenu: window.languages.lengthMenu,
+                    info: window.languages.info,
+                }
+            });
+        }
+    });
+</script>

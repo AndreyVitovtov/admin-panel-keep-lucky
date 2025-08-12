@@ -219,6 +219,18 @@ async function updateDataTraffic(data) {
     elNumberOfUsers.innerHTML = data.total_users ?? '-';
     elNumberOfUsersOnline.innerHTML = data.total_online_users ?? '-';
     elTableTrafficStats.innerHTML = data.tableTrafficStats ?? '-';
+
+    let table = $('#table-traffic-stats');
+    if (table.find('tbody tr').length > 10) {
+        table.DataTable({
+            pageLength: 10,
+            language: {
+                search: window.languages.search,
+                lengthMenu: window.languages.lengthMenu,
+                info: window.languages.info,
+            }
+        });
+    }
 }
 
 async function loader(elements = []) {

@@ -1,4 +1,4 @@
-<table class="table table-striped table-responsive table-hover table-bordered">
+<table class="table table-striped table-responsive table-hover table-bordered" id="table-traffic-stats">
     <thead>
     <tr>
 		<?php if (isset($response[0]['date_from']) && isset($response[0]['date_to'])): ?>
