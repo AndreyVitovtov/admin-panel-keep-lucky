@@ -58,13 +58,17 @@ class Main extends Controller
 		if ($filters['status'] == 200) {
 			$countries = array_keys($filters['response']['country']);
 
-			$filters = $api->filters($country ?? '');
+			if (!empty($country)) {
+				$filters = $api->filters($country);
+			}
 			$regions = array_keys($filters['response']['region']);
 
-			$filters = $api->filters($country ?? '', $region ?? '');
+			if (!empty($region)) {
+				$filters = $api->filters($country ?? '', $region);
+			}
+
 			$cities = array_keys($filters['response']['city']);
 
-			$filters = $api->filters($country ?? '', $region ?? '');
 			$usersByCountries = $filters['response']['country'];
 			$usersByRegions = $filters['response']['region'];
 			$usersByCities = $filters['response']['city'];
