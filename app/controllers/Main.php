@@ -66,7 +66,6 @@ class Main extends Controller
 			if (!empty($region)) {
 				$filters = $api->filters($country ?? '', $region);
 			}
-
 			$cities = array_keys($filters['response']['city']);
 
 			$usersByCountries = $filters['response']['country'];
