@@ -177,7 +177,7 @@ class Api extends Controller
 		$trafficStats = $api->getTrafficStats($country ?? '', $region ?? '', $city ?? '',
 			$referralCode ?? '', $dateFrom ?? '', $dateTo ?? '', $sortedBy ?? '');
 		$usersStats = $api->getUsersStats($country ?? '', $region ?? '', $city ?? '');
-		$filters = $api->filters($country ?? '', $region ?? '');
+		$filters = $api->filters($country ?? '', $region ?? '', $city ?? '');
 
 		$data = [];
 
