@@ -6,6 +6,15 @@ use App\Utility\Request;
 
 class Api extends Controller
 {
+	public function __construct()
+	{
+		if(empty($_SESSION['adminId']) && !empty($_SESSION['id'])) {
+			$admin = new \App\Models\AdminModel();
+			$admin->find($_SESSION['id']);
+			$_SESSION['adminId'] = $admin->admin_id;
+		}
+	}
+
 	/**
 	 * @throws \Exception
 	 */

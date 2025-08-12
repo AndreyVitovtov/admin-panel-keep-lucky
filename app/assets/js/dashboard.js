@@ -43,8 +43,10 @@ document.addEventListener('DOMContentLoaded', function () {
     let inputReferralCode = document.querySelector('#referral-code');
     if (inputReferralCode) {
         inputReferralCode.addEventListener('blur', async function () {
-            await loader();
-            updateReferralCode();
+            if (inputReferralCode.value.length > 0) {
+                await loader();
+                updateReferralCode();
+            }
         });
     }
 
