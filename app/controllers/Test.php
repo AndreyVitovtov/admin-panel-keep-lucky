@@ -12,9 +12,10 @@ class Test extends Controller
 	 */
 	public function index()
 	{
+//        echo encryptData('25d55ad283aa400af464c76d713c07ad', CIPHER);
 		$api = new API();
 //		echo json_encode($api->filters('UA'));
-		echo json_encode($api->getTrafficStats('', 'Ternopil Oblast'));
+		echo json_encode($api->getAdminAccessShop());
 //		echo json_encode($api->createAdmin('TestAdmin', 'testadmin2', 'ADMIN', ['apk1'], ['shop1'], ['referral1']));
 //		echo json_encode($api->deleteAdmin(11));
 //		echo json_encode($api->getAdminAccessShop());

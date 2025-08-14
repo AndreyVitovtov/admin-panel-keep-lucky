@@ -40,7 +40,7 @@ class Admin extends Controller
 					exit;
 				} else {
 					if ($request->password == $request->repeatPassword) {
-						$admin->password = md5($request->password);
+						$admin->password = encryptData(md5($request->password), CIPHER);
 					} else {
 						redirect('/admin/settings', [
 							'error' => __('password mismatch')

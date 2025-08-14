@@ -497,7 +497,7 @@ class API
 			$password = $admin->password;
 
 			if (!empty($username) && !empty($password)) {
-				return base64_encode($username . ':' . $password);
+				return base64_encode($username . ':' . decryptData($password, CIPHER));
 			}
 		}
 		throw new Exception('Application not selected');

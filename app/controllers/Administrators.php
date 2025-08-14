@@ -118,7 +118,7 @@ class Administrators extends Controller
 
 							$admin->name = trim($request->name);
 							$admin->login = trim($request->login);
-							$admin->password = md5(trim($request->password));
+							$admin->password = encryptData(md5(trim($request->password)), CIPHER);
 							$admin->role = trim($request->role);
 							$admin->avatar = '';
 							$admin->admin_id = $adminId;
@@ -242,7 +242,7 @@ class Administrators extends Controller
 								]);
 								exit;
 							} else {
-								$password = md5($request->password);
+								$password = encryptData(md5($request->password), CIPHER);
 								$admin->password = $password;
 							}
 						}

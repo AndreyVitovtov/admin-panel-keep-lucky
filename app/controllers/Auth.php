@@ -40,10 +40,9 @@ class Auth extends Controller
 		$this->notAuth();
 		$admin = new AdminModel();
 		$adminData = $admin->getOne([
-			'login' => $request->login,
-			'password' => md5($request->password)
+			'login' => $request->login
 		]);
-		if (empty($adminData)) {
+        if(decryptData($adminData['password'], CIPHER) != md5($request->password)) {
 			redirect('/auth', [
 				'error' => __('incorrect login or password')
 			]);
