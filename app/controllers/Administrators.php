@@ -218,11 +218,14 @@ class Administrators extends Controller
 			$admin->find($id);
 			if (!is_null($request->name) && !is_null($request->login) && !is_null($request->role)) {
 				$api = new \App\API\API();
+				$referralCode = trim($request->referralCode ?? '');
+				if(empty($referralCode)) $referralCode = [];
+				else $referralCode = [$referralCode];
 				$res = $api->updateAdmin(
 					$admin->admin_id,
 					$request->apk ?? [],
 					$request->shop ?? [],
-					[$request->referralCode ?? '']
+					$referralCode
 				);
 				if ($res['status'] != 200) {
 					redirect('/administrators/edit/' . $id, [

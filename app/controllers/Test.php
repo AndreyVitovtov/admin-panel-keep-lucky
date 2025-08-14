@@ -14,8 +14,10 @@ class Test extends Controller
 	{
 //        echo encryptData('25d55ad283aa400af464c76d713c07ad', CIPHER);
 		$api = new API();
-//		echo json_encode($api->filters('UA'));
-		echo json_encode($api->getAdminAccessShop());
+//		echo json_encode($api->filters());
+//		echo json_encode($api->updateAdmin(18, [], [], []));
+//		echo json_encode($api->updateAdminLoginPassword(18, 'Admin222', '25d55ad283aa400af464c76d713c07ad'));
+		echo json_encode($api->getAdminById(18));
 //		echo json_encode($api->createAdmin('TestAdmin', 'testadmin2', 'ADMIN', ['apk1'], ['shop1'], ['referral1']));
 //		echo json_encode($api->deleteAdmin(11));
 //		echo json_encode($api->getAdminAccessShop());
