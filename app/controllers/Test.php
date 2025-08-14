@@ -17,7 +17,7 @@ class Test extends Controller
 //		echo json_encode($api->filters());
 //		echo json_encode($api->updateAdmin(18, [], [], []));
 //		echo json_encode($api->updateAdminLoginPassword(18, 'Admin222', '25d55ad283aa400af464c76d713c07ad'));
-		echo json_encode($api->getAdminById(18));
+		echo json_encode($api->getUsers());
 //		echo json_encode($api->createAdmin('TestAdmin', 'testadmin2', 'ADMIN', ['apk1'], ['shop1'], ['referral1']));
 //		echo json_encode($api->deleteAdmin(11));
 //		echo json_encode($api->getAdminAccessShop());

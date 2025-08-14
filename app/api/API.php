@@ -326,7 +326,7 @@ class API
 	 */
 	public function getAdminAccess(): array
 	{
-		return $this->get('admin/roles/access');
+		return $this->get('admin/roles/access/current');
 	}
 
 	/**
