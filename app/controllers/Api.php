@@ -8,7 +8,7 @@ class Api extends Controller
 {
 	public function __construct()
 	{
-		if(empty($_SESSION['adminId']) && !empty($_SESSION['id'])) {
+		if (empty($_SESSION['adminId']) && !empty($_SESSION['id'])) {
 			$admin = new \App\Models\AdminModel();
 			$admin->find($_SESSION['id']);
 			$_SESSION['adminId'] = $admin->admin_id;
@@ -273,6 +273,40 @@ class Api extends Controller
 			echo json_encode([
 				'regions' => [],
 				'cities' => []
+			]);
+		}
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function getStatsUsers(Request $request): void
+	{
+		$online = $request->get('online') ?? '';
+		$_SESSION['usersStatsOnline'] = $online;
+		if (!empty($_SESSION['country'])) $country = $_SESSION['country'];
+		if (!empty($_SESSION['region'])) $region = $_SESSION['region'];
+		if (!empty($_SESSION['city'])) $city = $_SESSION['city'];
+
+		$api = new \App\API\API();
+
+		if ($online) {
+			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
+		} else {
+			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
+		}
+
+		if ($res['status'] == 200) {
+			$res = $res['response'];
+			$data['usersByCountries'] = $res['country'];
+			$data['usersByRegions'] = $res['region'];
+			$data['usersByCities'] = $res['city'];
+			echo json_encode($data);
+		} else {
+			echo json_encode([
+				'usersByCountries' => [],
+				'usersByRegions' => [],
+				'usersByCities' => []
 			]);
 		}
 	}

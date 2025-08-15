@@ -68,6 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('date-to').addEventListener('change', async function () {
         await updateDate();
     });
+
+    document.getElementById('show-online-users').addEventListener('change', async function (e) {
+        updateStatsUsers(e.target.checked);
+    });
 });
 
 function updateRegionsByCountry(country, region) {
@@ -182,7 +186,6 @@ async function updateLocation() {
         await function (data) {
             updateDataTraffic(data);
             data = JSON.parse(data);
-            console.log(usersByCountries);
             renderChart('countryChart', data['usersByCountries']);
             renderChart('regionChart', data['usersByRegions'],);
             renderChart('cityChart', data['usersByCities']);
@@ -265,4 +268,17 @@ async function loader(elements = []) {
             el.appendChild(createLoader());
         });
     }
+}
+
+function updateStatsUsers(online) {
+    $.post(
+        '/api/getStatsUsers',
+        {online: online},
+        function (data) {
+            data = JSON.parse(data);
+            renderChart('countryChart', data['usersByCountries']);
+            renderChart('regionChart', data['usersByRegions'],);
+            renderChart('cityChart', data['usersByCities']);
+        }
+    );
 }
