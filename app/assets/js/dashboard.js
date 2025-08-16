@@ -127,11 +127,14 @@ function updateShops() {
     document.querySelectorAll('.shop-checkbox').forEach((el) => {
         if (el.checked) shops.push(el.value);
     });
+    clearCharts();
+    loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
         '/api/updateShops',
         {shops},
         async function (data) {
             await updateDataTraffic(data);
+            removeLoader();
             renderChart('countryChart', usersByCountries, data['usersByCountries']);
             renderChart('regionChart', usersByRegions, data['usersByRegions']);
             renderChart('cityChart', usersByCities, data['usersByCities']);
@@ -144,11 +147,14 @@ function updateApk() {
     document.querySelectorAll('.apk-checkbox').forEach((el) => {
         if (el.checked) apk.push(el.value);
     });
+    clearCharts();
+    loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
         '/api/updateApk',
         {apk},
         async function (data) {
             await updateDataTraffic(data);
+            removeLoader();
             renderChart('countryChart', usersByCountries, data['usersByCountries']);
             renderChart('regionChart', usersByRegions, data['usersByRegions']);
             renderChart('cityChart', usersByCities, data['usersByCities']);
@@ -159,11 +165,14 @@ function updateApk() {
 function updateReferralCode() {
     let elReferralCode = document.getElementById('referral-code');
     let referralCode = elReferralCode.value;
+    clearCharts();
+    loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
         '/api/updateReferralCode',
         {referralCode},
         async function (data) {
             await updateDataTraffic(data);
+            removeLoader();
             renderChart('countryChart', usersByCountries, data['usersByCountries']);
             renderChart('regionChart', usersByRegions, data['usersByRegions']);
             renderChart('cityChart', usersByCities, data['usersByCities']);
@@ -179,13 +188,15 @@ async function updateLocation() {
     let country = elCountry.value;
     let region = elRegion.value;
     let city = elCity.value;
-
+    clearCharts();
+    loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
         '/api/updateLocation',
         {country, region, city},
         await function (data) {
             updateDataTraffic(data);
             data = JSON.parse(data);
+            removeLoader();
             renderChart('countryChart', data['usersByCountries']);
             renderChart('regionChart', data['usersByRegions'],);
             renderChart('cityChart', data['usersByCities']);
@@ -251,6 +262,7 @@ async function loader(elements = []) {
     }
 
     if (elements.length === 0) {
+        // твои старые блоки оставляем как есть
         let elNumberOfUsers = document.querySelector('.number-of-users');
         elNumberOfUsers.innerHTML = '';
         elNumberOfUsers.appendChild(createLoader());
@@ -264,21 +276,50 @@ async function loader(elements = []) {
         elTableTrafficStats.appendChild(createLoader());
     } else {
         elements.forEach(el => {
-            el.innerHTML = '';
-            el.appendChild(createLoader());
+            // если внутри есть canvas → не трогаем, а добавляем loader поверх
+            if (el.querySelector('canvas')) {
+                let overlay = createLoader();
+                overlay.style.position = "absolute";
+                overlay.style.inset = "0";
+                overlay.style.display = "flex";
+                overlay.style.alignItems = "center";
+                overlay.style.justifyContent = "center";
+                overlay.style.background = "rgba(255,255,255,0.7)";
+                overlay.style.zIndex = "10";
+
+                el.style.position = "relative"; // чтобы overlay нормально встал
+                el.appendChild(overlay);
+            } else {
+                // обычные блоки можно очищать
+                el.innerHTML = '';
+                el.appendChild(createLoader());
+            }
         });
     }
 }
 
 function updateStatsUsers(online) {
+    clearCharts();
+    loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
         '/api/getStatsUsers',
         {online: online},
         function (data) {
             data = JSON.parse(data);
+            removeLoader();
             renderChart('countryChart', data['usersByCountries']);
-            renderChart('regionChart', data['usersByRegions'],);
+            renderChart('regionChart', data['usersByRegions']);
             renderChart('cityChart', data['usersByCities']);
         }
     );
+}
+
+function clearCharts() {
+    renderChart('countryChart', {});
+    renderChart('regionChart', {});
+    renderChart('cityChart', {});
+}
+
+function removeLoader() {
+    document.querySelectorAll('.chart-wrapper .loader').forEach(el => el.remove());
 }

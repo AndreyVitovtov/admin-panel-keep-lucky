@@ -482,6 +482,22 @@
         outline: none !important;
     }
 
+    .chart-wrapper {
+        position: relative;
+        min-height: 250px;
+    }
+
+    .chart-wrapper .loader {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.8);
+        z-index: 10;
+        margin-top: 100px;
+    }
+
 </style>
 
 <?php if (isRole('superadmin') || isset($accesses['traffic']['filters'])): ?>
@@ -580,14 +596,20 @@
 
 <div class="container my-4">
     <div class="row text-center">
-        <div class="col-md-4 mb-4">
-            <canvas id="countryChart"></canvas>
+        <div class="col-md-4 mb-4 chart-users">
+            <div class="chart-wrapper">
+                <canvas id="countryChart"></canvas>
+            </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <canvas id="regionChart"></canvas>
+        <div class="col-md-4 mb-4 chart-users">
+            <div class="chart-wrapper">
+                <canvas id="regionChart"></canvas>
+            </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <canvas id="cityChart"></canvas>
+        <div class="col-md-4 mb-4 chart-users">
+            <div class="chart-wrapper">
+                <canvas id="cityChart"></canvas>
+            </div>
         </div>
     </div>
 </div>
