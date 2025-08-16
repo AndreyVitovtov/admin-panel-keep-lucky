@@ -68,9 +68,17 @@ class Main extends Controller
 			}
 			$cities = array_keys($filters['response']['city']);
 
-			$usersByCountries = $filters['response']['country'];
-			$usersByRegions = $filters['response']['region'];
-			$usersByCities = $filters['response']['city'];
+			if ($_SESSION['usersStatsOnline']) {
+				$usersByCountries = $filters['response']['country'];
+				$usersByRegions = $filters['response']['region'];
+				$usersByCities = $filters['response']['city'];
+			} else {
+				$ipAddresses = $api->ipAddresses($_SESSION['country'] ?? '', $_SESSION['region'] ?? '', $_SESSION['city'] ?? '');
+
+				$usersByCountries = $ipAddresses['response']['country'];
+				$usersByRegions = $ipAddresses['response']['region'];
+				$usersByCities = $ipAddresses['response']['city'];
+			}
 		}
 
 		$apks = $api->getAdminAccessApk();

@@ -258,6 +258,30 @@ class API
 	/**
 	 * @throws Exception
 	 */
+	public function ipAddresses(string $country = '', string $region = '', string $city = ''): array
+	{
+		$params = [];
+		$shops = implode(',', $_SESSION['shops'] ?? []);
+		$apks = implode(',', $_SESSION['apks'] ?? []);
+		$referralCode = $_SESSION['referralCode'] ?? '';
+		$dateFrom = $_SESSION['dateFrom'] ?? '';
+		$dateTo = $_SESSION['dateTo'] ?? '';
+
+		if (!empty($referralCode)) $params['referral_code'] = $referralCode;
+		if (!empty($shops)) $params['shops'] = $shops;
+		if (!empty($apks)) $params['apks'] = $apks;
+		if (!empty($dateFrom)) $params['date_from'] = $dateFrom;
+		if (!empty($dateTo)) $params['date_to'] = $dateTo;
+		if (!empty($country)) $params['country'] = $country;
+		if (!empty($region)) $params['region'] = $region;
+		if (!empty($city)) $params['city'] = $city;
+
+		return $this->get('admin/search/ipAddresses', $params);
+	}
+
+	/**
+	 * @throws Exception
+	 */
 	public function createAdmin(string $login, string $password, string $role, array $apks, array $shops, array $referralCodes): array
 	{
 		return $this->post('admin/roles', json_encode([

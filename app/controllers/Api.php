@@ -186,7 +186,11 @@ class Api extends Controller
 		$trafficStats = $api->getTrafficStats($country ?? '', $region ?? '', $city ?? '',
 			$referralCode ?? '', $dateFrom ?? '', $dateTo ?? '', $sortedBy ?? '');
 		$usersStats = $api->getUsersStats($country ?? '', $region ?? '', $city ?? '');
-		$filters = $api->filters($country ?? '', $region ?? '', $city ?? '');
+		if (($_SESSION['usersStatsOnline'] ?? false)) {
+			$filters = $api->filters($country ?? '', $region ?? '', $city ?? '');
+		} else {
+			$filters = $api->ipAddresses($country ?? '', $region ?? '', $city ?? '');
+		}
 
 		$data = [];
 
@@ -283,17 +287,17 @@ class Api extends Controller
 	public function getStatsUsers(Request $request): void
 	{
 		$online = $request->get('online') ?? '';
-		$_SESSION['usersStatsOnline'] = $online;
+		$_SESSION['usersStatsOnline'] = ($online == 'true');
 		if (!empty($_SESSION['country'])) $country = $_SESSION['country'];
 		if (!empty($_SESSION['region'])) $region = $_SESSION['region'];
 		if (!empty($_SESSION['city'])) $city = $_SESSION['city'];
 
 		$api = new \App\API\API();
 
-		if ($online) {
+		if ($_SESSION['usersStatsOnline']) {
 			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
 		} else {
-			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
+			$res = $api->ipAddresses($country ?? '', $region ?? '', $city ?? '');
 		}
 
 		if ($res['status'] == 200) {

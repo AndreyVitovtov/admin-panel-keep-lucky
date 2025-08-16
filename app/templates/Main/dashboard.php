@@ -576,12 +576,6 @@
 
 <div class="mt-2">
     <h5><?= __('users stats') ?></h5>
-    <div class="mt-2 mb-2">
-        <input type="checkbox" class="form-check-input"
-               id="show-online-users" <?= (($_SESSION['usersStatsOnline'] ?? false) ? 'checked' : '') ?>>
-        -
-        <label for="show-online-users" class="form-check-label"><?= __('Online') ?></label>
-    </div>
     <table class="table table-striped table-hover table-bordered">
         <tr>
             <th><?= __('number of users') ?></th>
@@ -592,6 +586,13 @@
             <td class="number-of-users-online"><?= $dataForDashboard['total_online_users'] ?? '-' ?></td>
         </tr>
     </table>
+</div>
+
+<div class="mt-2 mb-2">
+    <input type="checkbox" class="form-check-input"
+           id="show-online-users" <?= (($_SESSION['usersStatsOnline'] ?? false) ? 'checked' : '') ?>>
+    -
+    <label for="show-online-users" class="form-check-label"><?= __('Online') ?></label>
 </div>
 
 <div class="container my-4">

@@ -12,10 +12,11 @@ class Test extends Controller
 	 */
 	public function index()
 	{
-		echo md5('Alel');
+
 //        echo decryptData('zL0oJ/1KDZh9242QaIdN2QZm0K5GSToQDmhXnsZf4vSocBZw59unUyVwTzOdHfCKIW4YyY1QtaAijXOjgy5FUg==', CIPHER);
 		$api = new API();
-//		echo json_encode($api->filters());
+		echo json_encode($api->filters());
+//		echo json_encode($api->ipAddresses());
 //		echo json_encode($api->updateAdmin(18, [], [], []));
 //		echo json_encode($api->updateAdminLoginPassword(18, 'Admin222', '25d55ad283aa400af464c76d713c07ad'));
 //		echo json_encode($api->getUsers());
