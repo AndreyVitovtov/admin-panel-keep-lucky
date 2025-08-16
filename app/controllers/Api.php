@@ -294,7 +294,7 @@ class Api extends Controller
 
 		$api = new \App\API\API();
 
-		if ($_SESSION['usersStatsOnline']) {
+		if (($_SESSION['usersStatsOnline'] ?? false)) {
 			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
 		} else {
 			$res = $api->ipAddresses($country ?? '', $region ?? '', $city ?? '');
