@@ -262,7 +262,6 @@ async function loader(elements = []) {
     }
 
     if (elements.length === 0) {
-        // твои старые блоки оставляем как есть
         let elNumberOfUsers = document.querySelector('.number-of-users');
         elNumberOfUsers.innerHTML = '';
         elNumberOfUsers.appendChild(createLoader());
@@ -276,7 +275,6 @@ async function loader(elements = []) {
         elTableTrafficStats.appendChild(createLoader());
     } else {
         elements.forEach(el => {
-            // если внутри есть canvas → не трогаем, а добавляем loader поверх
             if (el.querySelector('canvas')) {
                 let overlay = createLoader();
                 overlay.style.position = "absolute";
@@ -287,10 +285,9 @@ async function loader(elements = []) {
                 overlay.style.background = "rgba(255,255,255,0.7)";
                 overlay.style.zIndex = "10";
 
-                el.style.position = "relative"; // чтобы overlay нормально встал
+                el.style.position = "relative";
                 el.appendChild(overlay);
             } else {
-                // обычные блоки можно очищать
                 el.innerHTML = '';
                 el.appendChild(createLoader());
             }
