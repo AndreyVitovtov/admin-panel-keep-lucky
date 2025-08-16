@@ -68,7 +68,7 @@ class Main extends Controller
 			}
 			$cities = array_keys($filters['response']['city']);
 
-			if ($_SESSION['usersStatsOnline']) {
+			if (($_SESSION['usersStatsOnline'] ?? false)) {
 				$usersByCountries = $filters['response']['country'];
 				$usersByRegions = $filters['response']['region'];
 				$usersByCities = $filters['response']['city'];
