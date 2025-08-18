@@ -3,28 +3,34 @@ document.addEventListener('DOMContentLoaded', function () {
     const inputRegion = document.getElementById('region');
     const inputCity = document.getElementById('city');
 
-    inputCountry.addEventListener('change', async function () {
-        await loader();
-        $('#region').val('').selectpicker('val', '');
-        $('#city').val('').selectpicker('val', '');
-        updateRegionsByCountry($(inputCountry).val(), '');
-        await updateLocation();
-    });
+    if (inputCountry) {
+        inputCountry.addEventListener('change', async function () {
+            await loader();
+            $('#region').val('').selectpicker('val', '');
+            $('#city').val('').selectpicker('val', '');
+            updateRegionsByCountry($(inputCountry).val(), '');
+            await updateLocation();
+        });
+    }
 
-    inputRegion.addEventListener('change', async function () {
-        await loader();
-        $('#country').val('').selectpicker('val', '');
-        $('#city').val('').selectpicker('val', '');
-        updateRegionsByCountry('', $(inputRegion).val());
-        await updateLocation();
-    });
+    if (inputRegion) {
+        inputRegion.addEventListener('change', async function () {
+            await loader();
+            $('#country').val('').selectpicker('val', '');
+            $('#city').val('').selectpicker('val', '');
+            updateRegionsByCountry('', $(inputRegion).val());
+            await updateLocation();
+        });
+    }
 
-    inputCity.addEventListener('change', async function () {
-        await loader();
-        $('#country').val('').selectpicker('val', '');
-        $('#region').val('').selectpicker('val', '');
-        await updateLocation();
-    });
+    if (inputCity) {
+        inputCity.addEventListener('change', async function () {
+            await loader();
+            $('#country').val('').selectpicker('val', '');
+            $('#region').val('').selectpicker('val', '');
+            await updateLocation();
+        });
+    }
 
     document.querySelectorAll('.shop-checkbox').forEach((el) => {
         el.addEventListener('change', async function () {
@@ -74,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-function updateRegionsByCountry(country, region) {
+function updateRegionsByCountry(country = '', region = '') {
     const $region = $('#region');
     if (region.length === 0) {
         $region.selectpicker('destroy');

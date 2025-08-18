@@ -55,18 +55,27 @@ class Main extends Controller
 		if (!empty($_SESSION['region'])) $region = $_SESSION['region'];
 
 		$filters = $api->filters();
+		$ipAddresses = $api->ipAddresses();
 		if ($filters['status'] == 200) {
 			$countries = array_keys($filters['response']['country']);
+			$countries = array_merge(array_keys($ipAddresses['response']['country'] ?? []), $countries);
+			$countries = array_unique($countries);
 
 			if (!empty($country)) {
 				$filters = $api->filters($country);
+				$ipAddresses = $api->ipAddresses($country);
 			}
 			$regions = array_keys($filters['response']['region']);
+			$regions = array_merge(array_keys($ipAddresses['response']['region'] ?? []), $regions);
+			$regions = array_unique($regions);
 
 			if (!empty($region)) {
 				$filters = $api->filters($country ?? '', $region);
+				$ipAddresses = $api->ipAddresses($country ?? '', $region);
 			}
 			$cities = array_keys($filters['response']['city']);
+			$cities = array_merge(array_keys($ipAddresses['response']['city'] ?? []), $cities);
+			$cities = array_unique($cities);
 
 			if (($_SESSION['usersStatsOnline'] ?? false)) {
 				$usersByCountries = $filters['response']['country'];
@@ -108,12 +117,14 @@ class Main extends Controller
 			'pageTitle' => __('traffic'),
 			'assets' => [
 				'js' => [
+					'bootstrap-select.min.js',
 					'chart.umd.min.js',
 					'chartjs-plugin-datalabels.min.js',
 					'dataTables.min.js',
 					'dashboard.js'
 				],
 				'css' => [
+					'bootstrap-select.min.css',
 					'loader.css',
 					'dataTables.dataTables.min.css'
 				]

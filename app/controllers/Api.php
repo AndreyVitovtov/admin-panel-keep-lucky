@@ -258,18 +258,45 @@ class Api extends Controller
 
 		if (empty($country) && empty($region)) {
 			$res = $api->filters();
+			$regions = array_keys($res['response']['region'] ?? []);
+			$cities = array_keys($res['response']['city'] ?? []);
+			$res = $api->ipAddresses();
+			$regions = array_merge($regions, array_keys($res['response']['region'] ?? []));
+			$regions = array_unique($regions);
+			$regions = array_values($regions);
+			$cities = array_merge($cities, array_keys($res['response']['city'] ?? []));
+			$cities = array_unique($cities);
+			$cities = array_values($cities);
 		} else {
 			if (!empty($region)) {
 				$res = $api->filters('', $region);
+				$regions = array_keys($res['response']['region'] ?? []);
+				$cities = array_keys($res['response']['city'] ?? []);
+				$res = $api->ipAddresses('', $region);
+				$regions = array_merge($regions, array_keys($res['response']['region'] ?? []));
+				$regions = array_unique($regions);
+				$regions = array_values($regions);
+				$cities = array_merge($cities, array_keys($res['response']['city'] ?? []));
+				$cities = array_unique($cities);
+				$cities = array_values($cities);
 			} else {
 				$res = $api->filters($country);
+				$regions = array_keys($res['response']['region'] ?? []);
+				$cities = array_keys($res['response']['city'] ?? []);
+				$res = $api->ipAddresses($country);
+				$regions = array_merge($regions, array_keys($res['response']['region'] ?? []));
+				$regions = array_unique($regions);
+				$regions = array_values($regions);
+				$cities = array_merge($cities, array_keys($res['response']['city'] ?? []));
+				$cities = array_unique($cities);
+				$cities = array_values($cities);
 			}
 		}
 
 		if ($res['status'] == 200) {
 			echo json_encode([
-				'regions' => array_keys($res['response']['region']),
-				'cities' => array_keys($res['response']['city']),
+				'regions' => $regions,
+				'cities' => $cities,
 				'country' => $country,
 				'region' => $region
 			]);
