@@ -141,9 +141,10 @@ function updateShops() {
         async function (data) {
             await updateDataTraffic(data);
             removeLoader();
-            renderChart('countryChart', usersByCountries, data['usersByCountries']);
-            renderChart('regionChart', usersByRegions, data['usersByRegions']);
-            renderChart('cityChart', usersByCities, data['usersByCities']);
+            data = JSON.parse(data);
+            renderChart('countryChart', data['usersByCountries']);
+            renderChart('regionChart', data['usersByRegions']);
+            renderChart('cityChart', data['usersByCities']);
         }
     );
 }
@@ -161,9 +162,10 @@ function updateApk() {
         async function (data) {
             await updateDataTraffic(data);
             removeLoader();
-            renderChart('countryChart', usersByCountries, data['usersByCountries']);
-            renderChart('regionChart', usersByRegions, data['usersByRegions']);
-            renderChart('cityChart', usersByCities, data['usersByCities']);
+            data = JSON.parse(data);
+            renderChart('countryChart', data['usersByCountries']);
+            renderChart('regionChart', data['usersByRegions']);
+            renderChart('cityChart', data['usersByCities']);
         }
     );
 }
@@ -179,9 +181,10 @@ function updateReferralCode() {
         async function (data) {
             await updateDataTraffic(data);
             removeLoader();
-            renderChart('countryChart', usersByCountries, data['usersByCountries']);
-            renderChart('regionChart', usersByRegions, data['usersByRegions']);
-            renderChart('cityChart', usersByCities, data['usersByCities']);
+            data = JSON.parse(data);
+            renderChart('countryChart', data['usersByCountries']);
+            renderChart('regionChart', data['usersByRegions']);
+            renderChart('cityChart', data['usersByCities']);
         }
     );
 }
@@ -233,7 +236,6 @@ async function updateDate() {
 async function updateDataTraffic(data) {
     data = JSON.parse(data);
 
-    console.log(data);
     let elNumberOfUsers = document.querySelector('.number-of-users');
     let elNumberOfUsersOnline = document.querySelector('.number-of-users-online');
     let elTableTrafficStats = document.querySelector('.table-traffic-stats');
