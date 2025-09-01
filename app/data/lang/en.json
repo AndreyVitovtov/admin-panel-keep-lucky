@@ -124,5 +124,7 @@
   "lengthMenu": "_MENU_ entries per page",
   "by": "by",
   "showing": "Showing _START_ to _END_ of _TOTAL_ entries",
-  "on all": "All"
+  "on all": "All",
+  "number of users offline": "Number of users offline",
+  "was online recently": "Was online recently"
 }

@@ -46,9 +46,11 @@ class Main extends Controller
 		}
 
 		$usersStats = $api->getUsersStats($_SESSION['country'] ?? '', $_SESSION['region'] ?? '', $_SESSION['city'] ?? '');
+
 		if ($usersStats['status'] == 200) {
 			$totalUsers = $usersStats['response']['total_users'];
 			$onlineUsers = $usersStats['response']['total_online_users'];
+			$offlineUsers = $usersStats['response']['total_offline_users'];
 		}
 
 		if (!empty($_SESSION['country'])) $country = $_SESSION['country'];
@@ -84,9 +86,9 @@ class Main extends Controller
 			} else {
 				$ipAddresses = $api->ipAddresses($_SESSION['country'] ?? '', $_SESSION['region'] ?? '', $_SESSION['city'] ?? '');
 
-				$usersByCountries = $ipAddresses['response']['country'];
-				$usersByRegions = $ipAddresses['response']['region'];
-				$usersByCities = $ipAddresses['response']['city'];
+				$usersByCountries = $ipAddresses['response']['country'] ?? [];
+				$usersByRegions = $ipAddresses['response']['region'] ?? [];
+				$usersByCities = $ipAddresses['response']['city'] ?? [];
 			}
 		}
 
@@ -131,6 +133,7 @@ class Main extends Controller
 			],
 			'totalUsers' => $totalUsers ?? 0,
 			'onlineUsers' => $onlineUsers ?? 0,
+			'offlineUsers' => $offlineUsers ?? 0,
 			'usersByCountries' => $usersByCountries ?? [],
 			'usersByRegions' => $usersByRegions ?? [],
 			'usersByCities' => $usersByCities ?? [],

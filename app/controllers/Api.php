@@ -321,10 +321,39 @@ class Api extends Controller
 
 		$api = new \App\API\API();
 
-		if (($_SESSION['usersStatsOnline'] ?? false)) {
+		if (($_SESSION['usersStatsOnline'])) {
+			unset($_SESSION['wasOnlineRecently']);
 			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
 		} else {
 			$res = $api->ipAddresses($country ?? '', $region ?? '', $city ?? '');
+		}
+
+		if ($res['status'] == 200) {
+			$res = $res['response'];
+			$data['usersByCountries'] = $res['country'];
+			$data['usersByRegions'] = $res['region'];
+			$data['usersByCities'] = $res['city'];
+			echo json_encode($data);
+		} else {
+			echo json_encode([
+				'usersByCountries' => [],
+				'usersByRegions' => [],
+				'usersByCities' => []
+			]);
+		}
+	}
+
+	public function getStatsUsersWasOnlineRecently(Request $request)
+	{
+		$wasOnlineRecently = $request->get('wasOnlineRecently') ?? false;
+		$_SESSION['wasOnlineRecently'] = ($wasOnlineRecently == 'true');
+
+		$api = new \App\API\API();
+
+		if (($_SESSION['wasOnlineRecently'])) {
+			$res = $api->ipAddresses($country ?? '', $region ?? '', $city ?? '', !$wasOnlineRecently);
+		} else {
+			$res = $api->filters($country ?? '', $region ?? '', $city ?? '');
 		}
 
 		if ($res['status'] == 200) {

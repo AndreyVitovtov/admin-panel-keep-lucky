@@ -258,7 +258,7 @@ class API
 	/**
 	 * @throws Exception
 	 */
-	public function ipAddresses(string $country = '', string $region = '', string $city = ''): array
+	public function ipAddresses(string $country = '', string $region = '', string $city = '', bool $includeAll = true): array
 	{
 		$params = [];
 		$shops = implode(',', $_SESSION['shops'] ?? []);
@@ -275,6 +275,8 @@ class API
 		if (!empty($country)) $params['country'] = $country;
 		if (!empty($region)) $params['region'] = $region;
 		if (!empty($city)) $params['city'] = $city;
+
+		$params['include_all'] = $includeAll;
 
 		return $this->get('admin/search/ipAddresses', $params);
 	}

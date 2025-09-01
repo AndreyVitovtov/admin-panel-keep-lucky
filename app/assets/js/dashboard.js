@@ -78,6 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('show-online-users').addEventListener('change', async function (e) {
         updateStatsUsers(e.target.checked);
     });
+
+    document.getElementById('show-was-online-recently').addEventListener('change', async function (e) {
+        getStatsUsersWasOnlineRecently(e.target.checked);
+    });
 });
 
 function updateRegionsByCountry(country = '', region = '') {
@@ -238,10 +242,12 @@ async function updateDataTraffic(data) {
 
     let elNumberOfUsers = document.querySelector('.number-of-users');
     let elNumberOfUsersOnline = document.querySelector('.number-of-users-online');
+    let elNumberOfUsersOffline = document.querySelector('.number-of-users-offline');
     let elTableTrafficStats = document.querySelector('.table-traffic-stats');
 
     elNumberOfUsers.innerHTML = data.total_users ?? '-';
     elNumberOfUsersOnline.innerHTML = data.total_online_users ?? '-';
+    elNumberOfUsersOffline.innerHTML = data.total_offline_users ?? '-';
     elTableTrafficStats.innerHTML = data.tableTrafficStats ?? '-';
 
     let table = $('#table-traffic-stats');
@@ -304,11 +310,38 @@ async function loader(elements = []) {
 }
 
 function updateStatsUsers(online) {
+    if(online) {
+        $('#show-was-online-recently').prop('checked', false);
+        $('#show-was-online-recently').prop('disabled', true);
+    } else {
+        $('#show-was-online-recently').prop('disabled', false);
+    }
+
     clearCharts();
     loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
         '/api/getStatsUsers',
-        {online: online},
+        {
+            online: online
+        },
+        function (data) {
+            data = JSON.parse(data);
+            removeLoader();
+            renderChart('countryChart', data['usersByCountries']);
+            renderChart('regionChart', data['usersByRegions']);
+            renderChart('cityChart', data['usersByCities']);
+        }
+    );
+}
+
+function getStatsUsersWasOnlineRecently(wasOnlineRecently) {
+    clearCharts();
+    loader(document.querySelectorAll('.chart-wrapper'));
+    $.post(
+        '/api/getStatsUsersWasOnlineRecently',
+        {
+            wasOnlineRecently: wasOnlineRecently
+        },
         function (data) {
             data = JSON.parse(data);
             removeLoader();
