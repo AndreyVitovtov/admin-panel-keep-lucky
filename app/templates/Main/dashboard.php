@@ -581,7 +581,7 @@
             <td class="number-of-users-online"><?= $dataForDashboard['total_online_users'] ?? '-' ?></td>
         </tr>
         <tr>
-            <th><?= __('number of users offline') ?></th>
+            <th><?= __('was online recently') ?></th>
             <td class="number-of-users-offline"><?= $dataForDashboard['total_offline_users'] ?? '-' ?></td>
         </tr>
     </table>
@@ -596,8 +596,7 @@
 
 <div class="mt-2 mb-2">
     <input type="checkbox" class="form-check-input"
-           id="show-was-online-recently" <?= (($_SESSION['wasOnlineRecently'] ?? false) ? 'checked' : '') ?>
-            <?= (($_SESSION['usersStatsOnline'] ?? false) ? 'disabled' : '') ?>>
+           id="show-was-online-recently" <?= (($_SESSION['wasOnlineRecently'] ?? false) ? 'checked' : '') ?>>
     -
     <label for="show-was-online-recently" class="form-check-label"><?= __('was online recently') ?></label>
 </div>

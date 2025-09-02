@@ -284,6 +284,10 @@ async function loader(elements = []) {
         elNumberOfUsersOnline.innerHTML = '';
         elNumberOfUsersOnline.appendChild(createLoader());
 
+        let elNumberOfUsersOffline = document.querySelector('.number-of-users-offline');
+        elNumberOfUsersOffline.innerHTML = '';
+        elNumberOfUsersOffline.appendChild(createLoader());
+
         let elTableTrafficStats = document.querySelector('.table-traffic-stats');
         elTableTrafficStats.innerHTML = '';
         elTableTrafficStats.appendChild(createLoader());
@@ -310,12 +314,7 @@ async function loader(elements = []) {
 }
 
 function updateStatsUsers(online) {
-    if(online) {
-        $('#show-was-online-recently').prop('checked', false);
-        $('#show-was-online-recently').prop('disabled', true);
-    } else {
-        $('#show-was-online-recently').prop('disabled', false);
-    }
+    $('#show-was-online-recently').prop('checked', false);
 
     clearCharts();
     loader(document.querySelectorAll('.chart-wrapper'));
@@ -335,6 +334,8 @@ function updateStatsUsers(online) {
 }
 
 function getStatsUsersWasOnlineRecently(wasOnlineRecently) {
+    $('#show-online-users').prop('checked', false);
+
     clearCharts();
     loader(document.querySelectorAll('.chart-wrapper'));
     $.post(
