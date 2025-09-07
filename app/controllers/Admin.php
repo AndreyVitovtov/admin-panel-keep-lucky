@@ -50,6 +50,9 @@ class Admin extends Controller
 				}
 			}
 
+			$api = new \App\API\API();
+			$res = $api->updateAdminLoginPassword($admin->admin_id, $admin->login, $admin->password);
+
 			if (!empty($_FILES['avatar']['name'])) {
 				$errors = [];
 				$fileName = $_FILES['avatar']['name'];
@@ -100,9 +103,6 @@ class Admin extends Controller
 
 			$admin->update();
 
-			$api = new \App\API\API();
-			$res = $api->updateAdminLoginPassword($admin->admin_id, $admin->login, $admin->password);
-dd($res);
 			sessionUpdate([
 				'login' => $admin->login,
 				'name' => $admin->name,
