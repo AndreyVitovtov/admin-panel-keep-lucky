@@ -107,8 +107,10 @@ class Administrators extends Controller
 						$role = (new Role)->getOne(['id' => $roleId]);
 						$role = ($role['title'] == 'admin' ? 'ADMIN' : ($role['title'] == 'superadmin' ? 'SUPER_ADMIN' : 'ADMIN'));
 
+						$password = encryptData(md5(trim($request->password)), CIPHER);
+
 						$api = new \App\API\API();
-						$res = $api->createAdmin(trim($request->login), encryptData(md5($request->password), CIPHER), $role, $apk, $shops, $arrReferralCode);
+						$res = $api->createAdmin(trim($request->login), $password, $role, $apk, $shops, $arrReferralCode);
 						if ($res['status'] != 201) {
 							redirect('/administrators/add', [
 								'error' => $res['response']['message']
@@ -118,7 +120,7 @@ class Administrators extends Controller
 
 							$admin->name = trim($request->name);
 							$admin->login = trim($request->login);
-							$admin->password = encryptData(md5(trim($request->password)), CIPHER);
+							$admin->password = $password;
 							$admin->role = trim($request->role);
 							$admin->avatar = '';
 							$admin->admin_id = $adminId;
